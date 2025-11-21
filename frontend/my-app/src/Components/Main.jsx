@@ -8,7 +8,7 @@ function Main() {
     useEffect(() => {
         const parseData = async() => {
             try {
-                const response = await axios.get("http://localhost:8000/api/products/");
+                const response = await axios.get("http://10.124.215.133:8000/api/posts/");
                 return response.data.results; 
             } catch (error) {
                 console.error("Ошибка при загрузке данных:", error);
@@ -17,10 +17,10 @@ function Main() {
         }
         
         parseData().then(result => {
-            // setData(result);
-            setData([1,2,3]);
+            setData(result);
         });
     }, []);
+    let i = 0;
     return ( 
         <>
 
@@ -43,7 +43,7 @@ function Main() {
                 <div className="main_body">
                     {/* <Post/>   */}
                     {data.map((element)=>(
-                        <div>HELLO</div>
+                        <Post data={data[i++]}/>
                     )
                     )}
                     

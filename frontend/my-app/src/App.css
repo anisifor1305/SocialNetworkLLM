@@ -15,7 +15,7 @@ svg {
     border-radius: 15px;
     overflow: hidden;
     border: 2px solid black;
-    height: 100vh;
+    /* height: 100vh; */
     background-color: #fffef9;
 }
 header{
@@ -89,15 +89,15 @@ header{
     width: 66%;
     padding-left: 17%;
     padding-right: 17%;
-    border-bottom: 1px solid rgb(43, 39, 39);
+    /* border-bottom: 1px solid rgb(43, 39, 39); */
     padding-bottom: 2vw;
 }
 .profile__img{
-    height: 4rem;
-    width: 4rem;
+    height: 2.5rem;
+    width: 2.5rem;
 }
 .post__userinfo{
-    font-size: 1.5rem;
+    font-size: 1rem;
     /* color: #fefefe; */
     display: flex;
     gap: 20px;
@@ -125,6 +125,7 @@ header{
 .reactions{
     width: 100%;
     display: flex;
+    align-items: center;
     justify-content: start;
     margin-top: 2%;
     gap: 5vw;
@@ -135,6 +136,7 @@ header{
 }
 .bottom__panel{
     border-top: 2px solid rgb(191, 191, 191);
+    background-color: #f2f2f0;
     padding-top: 1vh;
     box-sizing: border-box;
     position: fixed;
@@ -159,3 +161,20 @@ header{
 .afterheader__item:hover{
     border-bottom: 3px solid rgb(43, 39, 39);
 }
+.heart-svg {
+      width: 120px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+
+.likes-count{
+    font-size: 1.2rem;
+    color: #F5AF8B;
+}
+.likes{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+} 
