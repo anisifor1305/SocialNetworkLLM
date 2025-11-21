@@ -9,7 +9,7 @@ function Main() {
         const parseData = async() => {
             try {
                 const token = localStorage.getItem('access')
-                const response = await axios.get("http://10.124.215.133:8000/api/posts/feed/", {
+                const response = await axios.get("http://192.168.3.27:8000/api/posts/feed/", {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }

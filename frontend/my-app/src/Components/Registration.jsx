@@ -9,7 +9,7 @@ function Registration() {
     const [nickname, setNickname] = useState('')
     const [password, setPassword] = useState('')
     
-    const url = "http://10.124.215.133:8000/auth/users/"
+    const url = "http://192.168.3.27:8000/auth/users/"
     const valuesChanged = ()=>{
         setNickname(document.getElementById('1').value)   
         setUsername(document.getElementById('2').value)
@@ -68,7 +68,7 @@ function Registration() {
                     <input className={styles.registration_Handler} type="text" id='3' name='email' onChange={valuesChanged} placeholder="Почта"/>
                 </div>
                 <div className={styles.registration_EmailForm}>
-                    <input className={styles.registration_Email} type="text" id='4' name='password' onChange={valuesChanged} placeholder="Пароль"/>
+                    <input className={styles.registration_Email} type="password" id='4' name='password' onChange={valuesChanged} placeholder="Пароль"/>
                 </div>
                 {/* <div className={styles.registration_PasswordForm}>
                     <input className={styles.registration_Password} type="text" placeholder="Пароль"/>
