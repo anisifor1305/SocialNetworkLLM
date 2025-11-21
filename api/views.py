@@ -188,6 +188,16 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         target_id = self.request.data.get('target_user_id')
         if target_id and int(target_id) == self.request.user.id:
             raise PermissionDenied("Нельзя подписаться на себя")
+
+        if target_id:
+            already_subscribed = Subscription.objects.filter(
+                subscriber=self.request.user,
+                target_user_id=int(target_id)
+            ).exists()
+
+            if already_subscribed:
+                raise PermissionDenied("Вы уже подписаны на этого пользователя")
+
         serializer.save(subscriber=self.request.user)
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
