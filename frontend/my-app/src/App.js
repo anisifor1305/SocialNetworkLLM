@@ -8,6 +8,7 @@ import Registration from './Components/Registration';
 import ProtectedRoute from './Components/ProtectedRoute'
 import { AuthProvider } from './Contexts/AuthContext';
 import NotYourProfile from './Components/NotYourProfile'
+import MyProfile from './Components/MyProfile';
 function App() {
   return (
     <div className="App">
@@ -20,6 +21,7 @@ function App() {
           <Route path="/registration" element={<Registration/>}></Route>
           <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
           <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+          <Route path="/myprofile" element={<ProtectedRoute><MyProfile/></ProtectedRoute>} />
         </Routes>
         </AuthProvider>
         </BrowserRouter>
