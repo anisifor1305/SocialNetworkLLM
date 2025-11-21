@@ -190,6 +190,34 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             raise PermissionDenied("Нельзя подписаться на себя")
         serializer.save(subscriber=self.request.user)
 
+    @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
+    def unfollow(self, request):
+        """Отписаться от пользователя по его ID"""
+        target_user_id = request.data.get('target_user_id')
+
+        if not target_user_id:
+            return Response({'detail': 'Укажите target_user_id'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        # ✅ ИСПРАВЛЕНИЕ: Преобразуем в int
+        try:
+            target_user_id = int(target_user_id)
+        except (ValueError, TypeError):
+            return Response({'detail': 'Неверный формат target_user_id'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            subscription = Subscription.objects.get(
+                subscriber=request.user,
+                target_user_id=target_user_id  # Теперь это точно число
+            )
+            subscription.delete()
+            return Response({'detail': 'Вы отписались'},
+                            status=status.HTTP_200_OK)  # Изменил на 200 вместо 204
+        except Subscription.DoesNotExist:
+            return Response({'detail': 'Вы не были подписаны на этого пользователя'},
+                            status=status.HTTP_404_NOT_FOUND)
+
 
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer

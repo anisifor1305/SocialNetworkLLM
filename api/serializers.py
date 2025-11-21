@@ -53,10 +53,45 @@ class CustomUserCreateSerializer(BaseUserCreateSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     handle = serializers.ReadOnlyField(source='user.username')
     email = serializers.ReadOnlyField(source='user.email')
+    posts_count = serializers.SerializerMethodField()
+    friends_count = serializers.SerializerMethodField()
+    friends = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ['id', 'handle', 'nickname', 'email', 'bio', 'avatar', 'status']
+        fields = ['id', 'handle', 'nickname', 'email', 'bio', 'avatar', 'status',
+                  'posts_count', 'friends_count', 'friends']
+
+    def get_posts_count(self, obj):
+        return obj.user.posts.filter(is_published=True).count()
+
+    def get_friends_count(self, obj):
+        """Количество друзей (взаимные подписки)"""
+        from django.db.models import Q
+
+        user_following = obj.user.following.values_list('target_user_id', flat=True)
+
+        friends_count = Subscription.objects.filter(
+            subscriber_id__in=user_following,
+            target_user=obj.user
+        ).count()
+
+        return friends_count
+
+    def get_friends(self, obj):  # ← Переименовал с get_friends_preview на get_friends
+        """Превью друзей"""
+        # Получаем ID людей, на кого подписан пользователь
+        user_following = obj.user.following.values_list('target_user_id', flat=True)
+
+        friends_subscriptions = Subscription.objects.filter(
+            subscriber_id__in=user_following,
+            target_user=obj.user
+        ).select_related('subscriber', 'subscriber__profile')
+
+        friends = [sub.subscriber for sub in friends_subscriptions]
+
+        return UserShortSerializer(friends, many=True, context=self.context).data
+
 
 
 class TopicSerializer(serializers.ModelSerializer):

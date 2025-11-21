@@ -141,6 +141,19 @@ def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
 
 
+def get_user_friends(user):
+
+    user_following_ids = Subscription.objects.filter(
+        subscriber=user
+    ).values_list('target_user_id', flat=True)
+
+    friends_ids = Subscription.objects.filter(
+        subscriber_id__in=user_following_ids,
+        target_user=user
+    ).values_list('subscriber_id', flat=True)
+
+    return User.objects.filter(id__in=friends_ids)
+
 class Comment(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
