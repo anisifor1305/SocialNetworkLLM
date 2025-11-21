@@ -239,7 +239,7 @@ header{
     margin-top: 5vh;
     display: flex;        /* элементы идут в ряд */
     align-items: center;  /* выравнивание по высоте */
-    gap: 10px; 
+    gap: 10px;
     justify-content: center;
 }
 .BtnRegistration{

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+  <!-- Circle with thin outline -->
+  <circle cx="250" cy="250" r="230" fill="#E8A684" stroke="black" stroke-width="10"/>
+
+  <!-- Thinner plus sign -->
+  <line x1="250" y1="150" x2="250" y2="350" stroke="black" stroke-width="25" stroke-linecap="round"/>
+  <line x1="150" y1="250" x2="350" y2="250" stroke="black" stroke-width="25" stroke-linecap="round"/>
+</svg>
