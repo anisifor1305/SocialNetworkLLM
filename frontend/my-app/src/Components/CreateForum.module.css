@@ -24,7 +24,7 @@ svg {
     border-radius: 15px;
     overflow: hidden;
     /* position: flex;  ← убрать, это невалидно */
-    height: 70vh;
+    height: 80vh;
     width: 70vh;
     background-color: #fffef9;
     box-shadow:
@@ -56,13 +56,13 @@ header{
     gap: 9vw;
     padding-bottom: 2vh;
 }
-.registration_afterheader__item{
+.crtfrm_registration_afterheader__item{
     font-size: 1.25rem;
     font-weight: 600;
     border-bottom: 3px solid transparent;
     transition: all .2s;
 }
-.registration_header-left--item{
+.crtfrm_registration_header-left--item{
     padding-top: 3vh;
     padding-left: 50px;
     width: 50vw;
@@ -73,7 +73,7 @@ header{
     display: flex;
     justify-content: flex;
 }
-.registration_header-right--item{
+.crtfrm_registration_header_right__item{
     padding-top: 1vh;
     gap: 3vw;
     width: 50vw;
@@ -85,22 +85,25 @@ header{
     justify-content: flex-end;
     padding-right: 50px;
 }
-.registration_header__img{
+.crtfrm_registration_header__img{
     width: 3rem;
     height: 3rem;
 }
-.registration_main_body{
+.crtfrm_registration_main_body{
 
 }
-.registration_part1{
+.crtfrm_registration_part1{
     display: flex;
     flex-direction: column;
 }
-.registration_header__img_logo{
+.crtfrm_registration_header_left__item{
+    margin: 2vh;
+}
+.crtfrm_registration_header__img_logo{
     height: 4.5rem;
     width: auto;
 }
-.registration_post{
+.crtfrm_registration_post{
     margin-top: 2vw;
     width: 66%;
     padding-left: 17%;
@@ -108,22 +111,22 @@ header{
     border-bottom: 1px solid rgb(43, 39, 39);
     padding-bottom: 2vw;
 }
-.registration_profile__img{
+.crtfrm_registration_profile__img{
     height: 4rem;
     width: 4rem;
 }
-.registration_post__userinfo{
+.crtfrm_registration_post__userinfo{
     font-size: 1.5rem;
     /* color: #fefefe; */
     display: flex;
     gap: 20px;
     justify-content: start;
 }
-.registration_post__username{
+.crtfrm_registration_post__username{
     /* width: 100%; */
     font-weight: 600;
 }
-.registration_post__user__miniinf{
+.crtfrm_registration_post__user__miniinf{
     color: rgb(108, 108, 108);
     gap: 20px;
     /* width: 100%; */
@@ -132,11 +135,11 @@ header{
 }
 
 
-.registration_afterheader__item:hover{
+.crtfrm_registration_afterheader__item:hover{
     border-bottom: 3px solid rgb(43, 39, 39);
 }
 
-.registration_Entry{
+.crtfrm_registration_Entry{
     font-size: 3rem;
     display: flex;
     align-items: center;
@@ -144,7 +147,7 @@ header{
     justify-content: center;
     padding: 4vh 0 4vh 0;
 }
-.registration_Email{
+.crtfrm_registration_Email{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -162,7 +165,7 @@ header{
 
     transition: 0.25s ease;
 }
-.registration_Password{
+.crtfrm_registration_Password{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -180,7 +183,7 @@ header{
 
     transition: 0.25s ease;
 }
-.registration_Nik{
+.crtfrm_registration_Nik{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -198,7 +201,7 @@ header{
 
     transition: 0.25s ease;
 }
-.registration_Handler{
+.crtfrm_registration_Description{
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
 
@@ -216,16 +219,16 @@ header{
     transition: 0.25s ease;
 }
 
-.registration_EmailForm,
-.registration_PasswordForm,
-.registration_HandlerForm,
-.registration_NikForm {
+.crtfrm_registration_EmailForm,
+.crtfrm_registration_PasswordForm,
+.crtfrm_registration_DescriptionForm,
+.crtfrm_registration_NikForm {
     padding: 1vh 5vh;
 }
-.registration_EnterBtn{
+.crtfrm_registration_EnterBtn{
     padding: 1.5vh 5vh;
 }
-.registration_ButtonEnter{
+.crtfrm_registration_ButtonEnter{
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
     background: #f8ad8d;
@@ -241,23 +244,23 @@ header{
 
     transition: 0.25s ease;
 }
-.registration_ButtonEnter:hover{
+.crtfrm_registration_ButtonEnter:hover{
     cursor: pointer; 
     background-color: #f8a17c; 
 }
-.registration_ButtonEnter:active {
+.crtfrm_registration_ButtonEnter:active {
     transform: scale(0.95);    /* эффект нажатия */
     opacity: 0.7;              /* можно добавить лёгкое затемнение */
 }
 
-.registration_bottom__panel{
+.crtfrm_registration_bottom__panel{
     margin-top: 5vh;
     display: flex;        /* элементы идут в ряд */
     align-items: center;  /* выравнивание по высоте */
     gap: 10px;
     justify-content: center;
 }
-.registration_BtnRegistration{
+.crtfrm_registration_BtnRegistration{
     background: none;       /* убираем фон */
     border: none;           /* убираем рамку */
     padding: 0;             /* убираем отступы */
@@ -267,6 +270,45 @@ header{
     outline: none;
     color: gray;
 }
-.registration_BtnFrgtPswrd:hover{
+.crtfrm_registration_BtnFrgtPswrd:hover{
     text-decoration: underline; 
+}
+
+
+.crtfrm_LowerElements{
+    margin-top: 1vh;
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+}
+.crtfrm_AvaPhotoButton{
+    background-color: #f3f3f3;
+    border-radius: 15px;
+    padding: 9vh 5vh;
+    border: 1.5px solid #d9d9d9;
+    color: rgb(108, 108, 108);
+}
+
+.crtfrm_checkbox_button{
+
+}
+.crtfrm_Tags{
+    display: flex;
+    justify-content: space-around;
+}
+.crtfrm_firstTags{
+    display: flex;
+    flex-direction: column;
+}
+.crtfrm_secondTags{
+    display: flex;
+    flex-direction: column;
+}
+.crtfrm_checkbox_button{
+    padding: 0.5vh;
+    margin: 0.5vh 1vh;
+    background-color: #f3f3f3;
+    border-radius: 15px;
+    border: 1.5px solid #d9d9d9;
+    color: rgb(108, 108, 108);
 }
