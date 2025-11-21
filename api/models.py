@@ -15,7 +15,16 @@ class Profile(models.Model):
     def __str__(self):
         return f"Профиль {self.user.username}"
 
+class Topic(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название тематики")
+
+
+    def __str__(self):
+        return self.name
+
 class Community(models.Model):
+    topic = models.ForeignKey(Topic, on_delete=models.SET_NULL, null=True, related_name='communities',
+                              verbose_name="Тематика")
     title = models.CharField(max_length=200, verbose_name="Название")
     description = models.TextField(blank=True, verbose_name="Описание")
     avatar = models.ImageField(upload_to='community_avatars/', blank=True, null=True)
@@ -62,6 +71,18 @@ class Post(models.Model):
     def __str__(self):
         return f"Post by {self.author.username}"
 
+
+class Like(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='likes')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        # Уникальность: Один юзер может лайкнуть один пост только 1 раз
+        unique_together = ('user', 'post')
+
+    def __str__(self):
+        return f"{self.user.username} liked {self.post.id}"
 
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):

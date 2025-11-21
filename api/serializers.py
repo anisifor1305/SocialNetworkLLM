@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Profile, Community, Subscription, Post
+from .models import Profile, Community, Subscription, Post, Like, Topic
 
 
 # для отображения не айди, а красиво юзера
@@ -23,15 +23,22 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['id', 'username', 'bio', 'avatar', 'status']
 
+class TopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Topic
+        fields = ['id', 'name']
+
 
 class CommunitySerializer(serializers.ModelSerializer):
     creator = UserShortSerializer(read_only=True)
     members = UserShortSerializer(many=True, read_only=True)
     members_count = serializers.IntegerField(source='members.count', read_only=True)
 
+    topic = serializers.StringRelatedField()
+
     class Meta:
         model = Community
-        fields = ['id', 'title', 'description', 'avatar', 'created_at', 'creator', 'members', 'members_count']
+        fields = ['id', 'title', 'description', 'avatar', 'topic', 'created_at', 'creator', 'members', 'members_count']
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
@@ -51,8 +58,20 @@ class PostSerializer(serializers.ModelSerializer):
     author = UserShortSerializer(read_only=True)
     community_title = serializers.ReadOnlyField(source='community.title')
 
+    likes_count = serializers.IntegerField(source='likes.count', read_only=True)
+    is_liked = serializers.SerializerMethodField()  # Вычисляемое поле
+
     class Meta:
         model = Post
-        fields = ['id', 'text', 'image', 'created_at', 'author', 'community', 'community_title', 'is_published']
+        fields = ['id', 'text', 'image', 'created_at',
+                  'author', 'community', 'community_title',
+                  'is_published', 'is_liked', 'likes_count']
         # community оставляем как ID, чтобы при создании поста можно было указать id группы
         read_only_fields = ['is_published']
+
+    def get_is_liked(self, obj):
+        user = self.context['request'].user
+        if user.is_anonymous:
+            return False
+        # Проверяем, есть ли лайк от этого юзера на этом посте
+        return Like.objects.filter(user=user, post=obj).exists()
