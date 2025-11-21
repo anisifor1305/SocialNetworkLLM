@@ -19,15 +19,18 @@ class ProfileViewSet(viewsets.ModelViewSet):
     serializer_class = ProfileSerializer
     permission_classes = [IsProfileOwnerOrReadOnly]
     filter_backends = [filters.SearchFilter]
-    search_fields = ['user__username']
+    search_fields = ['user__username', 'nickname']
 
 
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
-    filter_backends = [filters.SearchFilter]
-    search_fields = ['title']
+
+    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
+    search_fields = ['title', 'description']
+
+    filterset_fields = ['members']
 
     def perform_create(self, serializer):
         community = serializer.save(creator=self.request.user)
@@ -57,7 +60,7 @@ class PostViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['author', 'community']
-    search_fields = ['text', 'author__username']
+    search_fields = ['text', 'author__username', 'author__profile__nickname']
     ordering_fields = ['created_at']
     ordering = ['-created_at']
 

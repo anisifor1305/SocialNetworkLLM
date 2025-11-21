@@ -31,19 +31,17 @@ class Command(BaseCommand):
         # --- 2. ПОЛЬЗОВАТЕЛИ ---
         self.stdout.write('bust_in_silhouette Создаем пользователей...')
         users = []
-        for _ in range(15):  # Создаем 15 юзеров
-            # Генерируем уникальный ник
+        for _ in range(15):
+            # 1. Генерируем @handle (на английском, без пробелов)
             username = fake.unique.user_name()
-            email = fake.email()
 
             user = User.objects.create_user(
                 username=username,
-                email=email,
-                password='password123'  # Пароль для всех одинаковый
+                email=fake.email(),
+                password='password123'
             )
 
-            # Обновляем профиль (он создался автоматически через signal)
-            user.profile.bio = fake.sentence(nb_words=10)
+            user.profile.nickname = fake.name()
             user.profile.status = random.choice(['В сети', 'Кодит', 'Спит', 'На хакатоне', 'Отдыхает'])
             user.profile.save()
 

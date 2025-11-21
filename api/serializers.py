@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Profile, Community, Subscription, Post, Like, Topic
-
+from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 
 # для отображения не айди, а красиво юзера
 class UserShortSerializer(serializers.ModelSerializer):
@@ -9,19 +9,40 @@ class UserShortSerializer(serializers.ModelSerializer):
     avatar = serializers.ImageField(source='profile.avatar', read_only=True)
     status = serializers.CharField(source='profile.status', read_only=True)
 
+    nickname = serializers.CharField(source='profile.nickname', read_only=True)
+    handle = serializers.CharField(source='username', read_only=True)
+
     class Meta:
         model = User
-        fields = ['id', 'username', 'avatar', 'status']
+        fields = ['id', 'handle', 'nickname', 'avatar', 'status']
 
+
+class CustomUserCreateSerializer(BaseUserCreateSerializer):
+    nickname = serializers.CharField(required=True)
+
+    class Meta(BaseUserCreateSerializer.Meta):
+        model = User
+        fields = ('id', 'email', 'username', 'password', 'nickname')
+
+    def create(self, validated_data):
+        nickname = validated_data.pop('nickname')
+
+        user = super().create(validated_data)
+
+        user.profile.nickname = nickname
+        user.profile.save()
+
+        return user
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    username = serializers.ReadOnlyField(source='user.username')
+    handle = serializers.ReadOnlyField(source='user.username')
     email = serializers.ReadOnlyField(source='user.email')
 
     class Meta:
         model = Profile
-        fields = ['id', 'username', 'email', 'bio', 'avatar', 'status']
+        fields = ['id', 'handle', 'nickname', 'email', 'bio', 'avatar', 'status']
+
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:

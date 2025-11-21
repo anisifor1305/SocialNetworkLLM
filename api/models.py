@@ -8,12 +8,13 @@ from django.dispatch import receiver
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
 
+    nickname = models.CharField(max_length=100, verbose_name="Имя (Никнейм)")
     bio = models.TextField(max_length=500, blank=True, verbose_name="О себе")
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватарка")
     status = models.CharField(max_length=100, blank=True, default="В сети", verbose_name="Статус")
 
     def __str__(self):
-        return f"Профиль {self.user.username}"
+        return f"Профиль: Имя:{self.nickname} Уникальный Хэндл{self.user.username}"
 
 class Topic(models.Model):
     name = models.CharField(max_length=100, verbose_name="Название тематики")
