@@ -26,12 +26,13 @@ function Main() {
         });
     }, []);
     let i = 0;
+
     return ( 
         <>
 
         <div className={styles.main_out_container}>
             <div className={styles.main_container}>
-                <header>
+                <div className={styles.main_header}>
                     <div className={styles.main_header_left}>
                         <div className={styles.main_item}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
@@ -39,10 +40,10 @@ function Main() {
                         <div className={styles.main_item}><img className={styles.main_header__img} src="images/search.svg" alt="search" /></div>
                         <div className={styles.main_item}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
-                </header>
+                </div>
                 <div className={styles.main_afterheader}>
                     <div className={styles.main_afterheader__item}>Home</div>
-                    <div className={styles.main_afterheader__item}>Explore</div>
+                    {/* <div className={styles.main_afterheader__item}>Explore</div> */}
                     <div className={styles.main_afterheader__item}>Message</div>
                 </div>
                 <div className={styles.main_body}>

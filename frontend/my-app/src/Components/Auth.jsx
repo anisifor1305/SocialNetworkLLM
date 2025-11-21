@@ -15,6 +15,10 @@ function Auth() {
         setUsername(document.getElementById('1').value)
         setPassword(document.getElementById('3').value)
     }
+    const gotoRegistration = (e)=>{
+        e.preventDefault();
+        navigate('/registration');
+    }
     const login = async(e)=>{
             e.preventDefault()
             const resp = await axios.post(url, {
@@ -55,7 +59,7 @@ function Auth() {
                     <div className={styles.auth_EnterBtn}><button onClick={(e)=>login(e)} className={styles.auth_ButtonEnter}>Войти</button></div>
                     <div className={styles.auth_bottom__panel}>
                         <div>Нет аккаунта?</div>
-                        <div className={styles.auth_RegistrationB}><button className={styles.auth_BtnRegistration}>Регистрация</button></div>
+                        <div className={styles.auth_RegistrationB}><button className={styles.auth_BtnRegistration} onClick={(e)=>gotoRegistration(e)}>Регистрация</button></div>
                     </div> 
                     </form>
                 </div>

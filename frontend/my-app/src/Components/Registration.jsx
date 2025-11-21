@@ -2,8 +2,9 @@ import styles from  "./Registration.module.css"
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+
 function Registration() {
-        const navigate = useNavigate();
+    const navigate = useNavigate();
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [nickname, setNickname] = useState('')
