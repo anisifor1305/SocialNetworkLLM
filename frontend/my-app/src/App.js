@@ -5,19 +5,23 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Auth from './Components/Auth';
 import Main from './Components/Main';
 import Registration from './Components/Registration';
-import NotYourProfile from './Components/NotYourProfile';
-
+import ProtectedRoute from './Components/ProtectedRoute'
+import { AuthProvider } from './Contexts/AuthContext';
+import NotYourProfile from './Components/NotYourProfile'
 function App() {
   return (
     <div className="App">
 
         <BrowserRouter>
+        <AuthProvider>
         <Routes>
-          <Route path="/" element={<Main/>}></Route>
+          {/* <Route path="/" element={<Main/>}></Route> */}
           <Route path="/auth" element={<Auth/>}></Route>
           <Route path="/registration" element={<Registration/>}></Route>
-          <Route path="/handler" element={<NotYourProfile/>}></Route>
+          <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
+          <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
         </Routes>
+        </AuthProvider>
         </BrowserRouter>
     </div>
   );
