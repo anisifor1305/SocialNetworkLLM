@@ -21,7 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ['id', 'username', 'bio', 'avatar', 'status']
+        fields = ['id', 'username', 'email', 'bio', 'avatar', 'status']
 
 class TopicSerializer(serializers.ModelSerializer):
     class Meta:
@@ -34,11 +34,15 @@ class CommunitySerializer(serializers.ModelSerializer):
     members = UserShortSerializer(many=True, read_only=True)
     members_count = serializers.IntegerField(source='members.count', read_only=True)
 
-    topic = serializers.StringRelatedField()
+    topic = serializers.StringRelatedField(read_only=True)
+
+    topic_id = serializers.PrimaryKeyRelatedField(
+        queryset=Topic.objects.all(), source='topic', write_only=True
+    )
 
     class Meta:
         model = Community
-        fields = ['id', 'title', 'description', 'avatar', 'topic', 'created_at', 'creator', 'members', 'members_count']
+        fields = ['id', 'title', 'description', 'avatar', 'topic', 'topic_id', 'created_at', 'creator', 'members', 'members_count']
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):

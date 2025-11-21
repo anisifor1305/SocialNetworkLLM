@@ -1,14 +1,14 @@
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from rest_framework.exceptions import PermissionDenied
 
 from .models import Profile, Community, Post, Subscription, Like, Topic
 from .serializers import (
-    ProfileSerializer, CommunitySerializer, PostSerializer, SubscriptionSerializer
+    ProfileSerializer, CommunitySerializer, PostSerializer, SubscriptionSerializer, TopicSerializer
 )
 from .permissions import IsAuthorOrReadOnly, IsProfileOwnerOrReadOnly
 
@@ -30,7 +30,8 @@ class CommunityViewSet(viewsets.ModelViewSet):
     search_fields = ['title']
 
     def perform_create(self, serializer):
-        serializer.save(creator=self.request.user)
+        community = serializer.save(creator=self.request.user)
+        community.members.add(self.request.user)
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def join(self, request, pk=None):
@@ -138,3 +139,9 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         if target_id and int(target_id) == self.request.user.id:
             raise PermissionDenied("Нельзя подписаться на себя")
         serializer.save(subscriber=self.request.user)
+
+
+class TopicViewSet(viewsets.ReadOnlyModelViewSet): # ReadOnly - темы менять нельзя через API
+    queryset = Topic.objects.all()
+    serializer_class = TopicSerializer
+    permission_classes = [AllowAny]
