@@ -8,7 +8,7 @@
 svg {
     fill: rgb(43, 39, 39);
 }
-.out_container{
+.main_out_container{
     display: flex;              /* делаем flex-контейнер */
     align-items: center;        /* центр по вертикали */
     justify-content: center;    /* центр по горизонтали */
@@ -20,7 +20,7 @@ svg {
     min-height: 100vh;
 }
 
-.container{
+.main_container{
     border-radius: 15px;
     overflow: hidden;
     /* position: flex;  ← убрать, это невалидно */
@@ -45,7 +45,7 @@ header{
     background-color: #fffef9;
     border-bottom: 2px solid rgb(191, 191, 191);
 }
-.afterheader{
+.main_afterheader{
     height: 5vh;
     background-color: #fffef9;
     width: 100%;
@@ -56,13 +56,13 @@ header{
     gap: 9vw;
     padding-bottom: 2vh;
 }
-.afterheader__item{
+.main_afterheader__item{
     font-size: 1.25rem;
     font-weight: 600;
     border-bottom: 3px solid transparent;
     transition: all .2s;
 }
-.header_left{
+.main_header_left{
     padding-top: 3vh;
     padding-left: 50px;
     width: 50vw;
@@ -73,7 +73,7 @@ header{
     display: flex;
     justify-content: flex;
 }
-.header_right{
+.main_header_right{
     padding-top: 1vh;
     gap: 3vw;
     width: 50vw;
@@ -85,22 +85,22 @@ header{
     justify-content: flex-end;
     padding-right: 50px;
 }
-.header__img{
+.main_header__img{
     width: 3rem;
     height: 3rem;
 }
-.main_body{
+.main_main_body{
 
 }
-.part1{
+.main_part1{
     display: flex;
     flex-direction: column;
 }
-.header__img_logo{
+.main_header__img_logo{
     height: 4.5rem;
     width: auto;
 }
-.post{
+.main_post{
     margin-top: 2vw;
     width: 66%;
     padding-left: 17%;
@@ -108,22 +108,22 @@ header{
     border-bottom: 1px solid rgb(43, 39, 39);
     padding-bottom: 2vw;
 }
-.profile__img{
+.main_profile__img{
     height: 4rem;
     width: 4rem;
 }
-.post__userinfo{
+.main_post__userinfo{
     font-size: 1.5rem;
     /* color: #fefefe; */
     display: flex;
     gap: 20px;
     justify-content: start;
 }
-.post__username{
+.main_post__username{
     /* width: 100%; */
     font-weight: 600;
 }
-.post__user__miniinf{
+.main_post__user__miniinf{
     color: rgb(108, 108, 108);
     gap: 20px;
     /* width: 100%; */
@@ -132,11 +132,11 @@ header{
 }
 
 
-.afterheader__item:hover{
+.main_afterheader__item:hover{
     border-bottom: 3px solid rgb(43, 39, 39);
 }
 
-.Entry{
+.main_Entry{
     font-size: 3rem;
     display: flex;
     align-items: center;
@@ -144,7 +144,7 @@ header{
     justify-content: center;
     padding: 4vh 0 4vh 0;
 }
-.Email{
+.main_Email{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -162,7 +162,7 @@ header{
 
     transition: 0.25s ease;
 }
-.Password{
+.main_Password{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -181,18 +181,18 @@ header{
     transition: 0.25s ease;
 }
 
-.EmailForm,
-.PasswordForm {
+.main_EmailForm,
+.main_PasswordForm {
     padding: 1vh 5vh;
 }
 
-.FrgtPsswrd{
+.main_FrgtPsswrd{
     display: flex;
     align-items: right;
     justify-content: flex-end;
     
 }
-.BtnFrgtPswrd{
+.main_BtnFrgtPswrd{
     background: none;       /* убираем фон */
     border: none;           /* убираем рамку */
     padding: 0;             /* убираем отступы */
@@ -203,13 +203,13 @@ header{
     color: gray;
     padding: 1vh 5vh 0 0;
 }
-.BtnFrgtPswrd:hover{
+.main_BtnFrgtPswrd:hover{
     text-decoration: underline; 
 }
-.EnterBtn{
+.main_EnterBtn{
     padding: 3vh 5vh;
 }
-.ButtonEnter{
+.main_ButtonEnter{
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
 
@@ -226,23 +226,23 @@ header{
 
     transition: 0.25s ease;
 }
-.ButtonEnter:hover{
+.main_ButtonEnter:hover{
     cursor: pointer; 
     background-color: #f8a17c; 
 }
-.ButtonEnter:active {
+.main_ButtonEnter:active {
     transform: scale(0.95);    /* эффект нажатия */
     opacity: 0.7;              /* можно добавить лёгкое затемнение */
 }
 
-.bottom__panel{
+.main_bottom__panel{
     margin-top: 5vh;
     display: flex;        /* элементы идут в ряд */
     align-items: center;  /* выравнивание по высоте */
     gap: 10px;
     justify-content: center;
 }
-.BtnRegistration{
+.main_BtnRegistration{
     background: none;       /* убираем фон */
     border: none;           /* убираем рамку */
     padding: 0;             /* убираем отступы */
@@ -252,6 +252,6 @@ header{
     outline: none;
     color: gray;
 }
-.BtnFrgtPswrd:hover{
+.main_BtnFrgtPswrd:hover{
     text-decoration: underline; 
 }
