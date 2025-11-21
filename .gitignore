@@ -1,0 +1,31 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Django ---
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# --- Виртуальное окружение (ОБЯЗАТЕЛЬНО) ---
+# Папка весит много и у каждого своя
+venv/
+env/
+.venv/
+
+# --- Среда и секреты ---
+.env
+
+# --- IDE (Настройки редакторов) ---
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# --- OS ---
+.DS_Store
+Thumbs.db
