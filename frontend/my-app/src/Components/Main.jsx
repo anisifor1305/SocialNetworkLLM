@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Post from "./Post";
-
+import styles from  "./Main.module.css"
 function Main() {
 
     const [data, setData] = useState([]);
@@ -24,23 +24,23 @@ function Main() {
     return ( 
         <>
 
-        <div className="out_container">
-            <div className="container">
+        <div className={styles.out_container}>
+            <div className={styles.container}>
                 <header>
-                    <div className="header-left--item">
-                        <div className="item item_logo"><img className="header__img_logo" src="images/logo.svg" alt="search" /></div>
+                    <div className={styles.header_left}>
+                        <div className={styles.item}><img className={styles.header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
-                    <div className="header-right--item">
-                        <div className="item item_3"><img className="header__img" src="images/search.svg" alt="search" /></div>
-                        <div className="item item_4"><img className="header__img" src="images/profile.svg" alt="home" /></div>
+                    <div className={styles.header_right}>
+                        <div className={styles.item}><img className={styles.header__img} src="images/search.svg" alt="search" /></div>
+                        <div className={styles.item}><img className={styles.header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
                 </header>
-                <div className="afterheader">
-                    <div className="afterheader__item">Home</div>
-                    <div className="afterheader__item">Explore</div>
-                    <div className="afterheader__item">Message</div>
+                <div className={styles.afterheader}>
+                    <div className={styles.afterheader__item}>Home</div>
+                    <div className={styles.afterheader__item}>Explore</div>
+                    <div className={styles.afterheader__item}>Message</div>
                 </div>
-                <div className="main_body">
+                <div className={styles.main_body}>
                     {/* <Post/>   */}
                     {data.map((element)=>(
                         <Post data={data[i++]}/>
@@ -48,12 +48,12 @@ function Main() {
                     )}
                     
                 </div>
-                <div className="bottom__panel">
-                        <div className="bottom__item bottom__item1"><img className="bottom__img" src="images/home.svg" alt="" /></div>
-                        <div className="bottom__item bottom__item2"><img className="bottom__img" src="images/searchZh.svg" alt="" /></div>
-                        <div className="bottom__item bottom__item3"><img className="plus__img" src="images/plus.svg" alt="" /></div>
-                        <div className="bottom__item bottom__item4"><img className="bottom__img" src="images/message.svg" alt="" /></div>
-                        <div className="bottom__item bottom__item5"><img className="bottom__img" src="images/message.svg" alt="" /></div>
+                <div className={styles.bottom__panel}>
+                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/home.svg" alt="" /></div>
+                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/searchZh.svg" alt="" /></div>
+                        <div className={styles.bottom__item}><img className={styles.plus__img} src="images/plus.svg" alt="" /></div>
+                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/message.svg" alt="" /></div>
+                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/message.svg" alt="" /></div>
                 </div>
             </div>
         </div>
