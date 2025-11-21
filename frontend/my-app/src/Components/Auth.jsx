@@ -25,8 +25,8 @@ function Auth() {
                 console.log(resp);
                 localStorage.setItem('refresh', resp.data.refresh)
                 localStorage.setItem('access', resp.data.access)
+                navigate('/')
             }
-            navigate('/')
 
     }
     return ( 

@@ -1,5 +1,46 @@
 import styles from  "./Registration.module.css"
+import axios from "axios"
+import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 function Registration() {
+        const navigate = useNavigate();
+    const [email, setEmail] = useState('')
+    const [username, setUsername] = useState('')
+    const [nickname, setNickname] = useState('')
+    const [password, setPassword] = useState('')
+    
+    const url = "http://10.124.215.133:8000/auth/users/"
+    const valuesChanged = ()=>{
+        setNickname(document.getElementById('1').value)   
+        setUsername(document.getElementById('2').value)
+        setEmail(document.getElementById('3').value)
+        setPassword(document.getElementById('4').value)
+    }
+    const reg = async(e)=>{
+            e.preventDefault()
+            try{
+                const resp = await axios.post(url, {
+                username: username,
+                email: email,
+                nickname: nickname,
+                password: password,
+            })
+            if(resp.status==201){
+                console.log(resp);
+                navigate('/auth')
+            }
+            else{
+                const el = document.getElementById('5');
+                el.style.display = 'block';
+            }
+            }
+
+            catch(e){
+                const el = document.getElementById('5');
+                el.style.display = 'block';
+            }
+
+    }
     return ( 
         <>
             <div className={styles.registration_out_container}>
@@ -15,20 +56,25 @@ function Registration() {
             </header>
             <div className={styles.registration_main_body}>
                 <div className={styles.registration_Entry}>Регистрация</div>
+                <div class={styles.registration_incorrect_data} id='5'>Данные некорректны</div>
+                <form action="">
                  <div className={styles.registration_NikForm}>
-                    <input className={styles.registration_Nik} type="text" placeholder="Никнейм"/>
+                    <input className={styles.registration_Nik} type="text"  id='1' name='nickname' onChange={valuesChanged} placeholder="Никнейм"/>
+                </div>
+                 <div className={styles.registration_PasswordForm}>
+                    <input className={styles.registration_Password} type="text" id='2' name='username' onChange={valuesChanged} placeholder="Username"/>
                 </div>
                 <div className={styles.registration_HandlerForm}>
-                    <input className={styles.registration_Handler} type="text" placeholder="Уникальное имя пользователя"/>
+                    <input className={styles.registration_Handler} type="text" id='3' name='email' onChange={valuesChanged} placeholder="Почта"/>
                 </div>
                 <div className={styles.registration_EmailForm}>
-                    <input className={styles.registration_Email} type="text" placeholder="Эллектронная почта"/>
+                    <input className={styles.registration_Email} type="text" id='4' name='password' onChange={valuesChanged} placeholder="Пароль"/>
                 </div>
-                <div className={styles.registration_PasswordForm}>
+                {/* <div className={styles.registration_PasswordForm}>
                     <input className={styles.registration_Password} type="text" placeholder="Пароль"/>
-                </div>
-                <div className={styles.registration_EnterBtn}><button className={styles.registration_ButtonEnter}>Зарегистрироваться</button></div>
-                
+                </div> */}
+                <div className={styles.registration_EnterBtn}><button onClick={(e)=>reg(e)}className={styles.registration_ButtonEnter}>Зарегистрироваться</button></div>
+                </form>
             </div>
         </div>
     </div>

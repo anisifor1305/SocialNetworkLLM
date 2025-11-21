@@ -24,7 +24,6 @@ svg {
     border-radius: 15px;
     overflow: hidden;
     /* position: flex;  ← убрать, это невалидно */
-    height: 70vh;
     width: 70vh;
     background-color: #fffef9;
     box-shadow:
@@ -269,4 +268,9 @@ header{
 }
 .registration_BtnFrgtPswrd:hover{
     text-decoration: underline; 
+}
+.registration_incorrect_data{
+    color: rgb(255, 80, 80);
+    padding-left: 5vh;
+    display: none;
 }
