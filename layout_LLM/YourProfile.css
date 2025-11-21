@@ -1,0 +1,224 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: 'Onest';
+    box-sizing: border-box;
+}
+svg {
+    fill: rgb(43, 39, 39);
+}
+.profile_out_container{
+    padding: 5vh 10vh 0 10vh;
+    background-color: #fffae4;
+}
+
+.profile_container{
+    border-radius: 15px 15px 0 0;
+    overflow: hidden;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    height: 100vh;
+    background-color: #fffef9;
+}
+
+header{
+    display: flex;
+    /* justify-content: space-around; */
+    /* width: 96vw;
+    margin-left: 2vw;
+    margin-top: 2vw; */
+    height: 13vh;
+    background-color: #fffef9;
+    border-bottom: 2px solid rgb(191, 191, 191);
+}
+
+
+.profile_header-left--item{
+    padding-top: 3vh;
+    padding-left: 50px;
+    width: 50vw;
+    font-size: 4rem;
+    text-align: center;
+    align-items: center;
+    color: rgb(43, 39, 39);
+    display: flex;
+    justify-content: flex;
+}
+.profile_header-right--item{
+    padding-top: 1vh;
+    gap: 3vw;
+    width: 50vw;
+    font-size: 3rem;
+    align-items: center;
+    text-align: center;
+    color: aliceblue;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 50px;
+}
+.profile_header__img{
+    width: 3rem;
+    height: 3rem;
+}
+.profile_main_body{
+
+}
+.profile_part1{
+    display: flex;
+    flex-direction: column;
+}
+.profile_header__img_logo{
+    height: 4.5rem;
+    width: auto;
+}
+.profile_post{
+    margin-top: 2vw;
+    width: 66%;
+    padding-left: 17%;
+    padding-right: 17%;
+    border-bottom: 1px solid rgb(43, 39, 39);
+    padding-bottom: 2vw;
+}
+.profile_profile__img{
+    height: 4rem;
+    width: 4rem;
+}
+.profile_post__userinfo{
+    font-size: 1.5rem;
+    /* color: #fefefe; */
+    display: flex;
+    gap: 20px;
+    justify-content: start;
+}
+.profile_post__username{
+    /* width: 100%; */
+    font-weight: 600;
+}
+.profile_post__user__miniinf{
+    color: rgb(108, 108, 108);
+    gap: 20px;
+    /* width: 100%; */
+    display: flex;
+    justify-content: space-between;
+}
+
+/*  */
+.profile_UserPhoto{
+    display: flex;
+    justify-content: center;
+    margin-top:5vh;
+}
+.profile_profile__img{
+    height: 10rem;
+    width: 10rem;
+}
+
+
+.profile_NickName{
+    display: flex;
+    justify-content: center;
+    margin-top:5vh;
+    font-size: 3rem;
+}
+
+.profile_Handler{
+    color:#7b7b7b;
+    display: flex;
+    justify-content: center;
+    margin-top:0.1vh;
+    font-size: 1.5rem;
+}
+
+
+.profile_Description{
+    color:#4d4d4d;
+    display: flex;
+    justify-content: center;
+    margin-top:0.5vh;
+    font-size: 2rem;
+}
+
+.profile_SomeInfo{
+    margin-top:3vh;
+    gap: 10vh;
+    display:flex;
+    justify-content: center;
+}
+.profile_number_post{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.profile_ChisloPostov{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+}
+.profile_StringPosts{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.profile_number_friends{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.profile_ChisloFriends{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 2rem;
+}
+.profile_StringFriends{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+
+.profile_ButtonTwo{
+    margin-top:5vh;
+    gap: 15vh;
+    display:flex;
+    justify-content: center;
+}
+.profile_EditProfileButton{
+    border-radius:50px;
+    width: 30vh;
+    height: 7vh;
+    font-size: 1.3rem;
+    background: #caddd0;
+    border: none;
+}
+
+
+.profile_afterheader{
+    height: 5vh;
+    background-color: #fffef9;
+    width: 100%;
+    border-top:2px solid rgb(191, 191, 191);
+    border-bottom:2px solid rgb(191, 191, 191);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9vw;
+    margin-top: 2vh;
+    padding-top: 2vh;
+    padding-bottom: 2vh;
+}
+.profile_afterheader__item{
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+}
+.profile_afterheader__item:hover{
+    border-bottom: 3px solid rgb(43, 39, 39);
+}
