@@ -18,7 +18,7 @@ svg {
     /* height: 100vh; */
     background-color: #fffef9;
 }
-header{
+.main_header{
     display: flex;
     /* justify-content: space-around; */
     /* width: 96vw;

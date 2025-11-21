@@ -1,8 +1,10 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import styles from "./Main.module.css"
+import { useNavigate } from "react-router-dom";
 
 function Post(props) {
+    const navigate = useNavigate();
     const [isLiked, setIsLiked] = useState(props.data.is_liked);
     const [likesCount, setLikesCount] = useState(props.data.likes_count);
     const [isLoading, setIsLoading] = useState(false);
@@ -59,7 +61,7 @@ function Post(props) {
                 <div className={styles.main_post__userinfo__text}>
                     <div className={styles.main_post__username}>{props.data.author.nickname}</div>
                     <div className={styles.main_post__user__miniinf}>
-                        <div className={styles.main_post__user__handle}>{props.data.author.handle}</div>
+                        <div className={styles.main_post__user__handle} onClick={(e)=>navigate(`/${e.target.textContent.slice(1)}`)}>@{props.data.author.handle}</div>
                         <div className={styles.main_post__user__online}>{props.data.author.status}</div>
                     </div>
                 </div>

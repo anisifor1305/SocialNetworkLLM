@@ -7,19 +7,39 @@ function NotYourProfile() {
     const [res, setRes] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { id } = useParams();
-
-    useEffect(() => {
-        const fetchProfile = async () => {
-            try {
+    const { handle } = useParams();
+    const makeFriend = async(e) => {
+        e.preventDefault();
+         try {
                 setLoading(true);
-                const result = await axios.get(`http://192.168.3.27:8000/api/profiles/${id}/`, {
+                const result = await axios.post('http://192.168.3.27:8000/api/subscriptions/',{
+                    "target_user_id" : e.target.closest(`.${styles.nyprofile_BlockOfInformation}`).getAttribute('id')
+                },
+                 {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('access')}`
                     }
                 });
                 setRes(result.data);
-                console.log(result.data); // ✅ Логируем здесь, а не res
+                console.log(result.data);
+            } catch (err) {
+                setError(err.response?.data || 'Ошибка загрузки профиля');
+                console.error('Ошибка:', err);
+            } finally {
+                setLoading(false);
+            }
+    }
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                setLoading(true);
+                const result = await axios.get(`http://192.168.3.27:8000/api/profiles/?search=${handle}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('access')}`
+                    }
+                });
+                setRes(result.data);
+                console.log(result.data);
             } catch (err) {
                 setError(err.response?.data || 'Ошибка загрузки профиля');
                 console.error('Ошибка:', err);
@@ -29,7 +49,7 @@ function NotYourProfile() {
         };
 
         fetchProfile();
-    }, [id]);
+    }, [handle]);
 
     // Показываем загрузку или ошибку
     if (loading) return <div className={styles.loading}>Загрузка профиля...</div>;
@@ -48,13 +68,13 @@ function NotYourProfile() {
                     </div>
                 </header>
                 
-                <div className={styles.nyprofile_BlockOfInformation}>
+                <div className={styles.nyprofile_BlockOfInformation} id={res.results[0].id}>
                     <div className={styles.nyprofile_UserPhoto}>
                         <img className={styles.nyprofile_profile__img} src={res.avatar || "images/profile.svg"} alt="Profile" />
                     </div>
-                    <div className={styles.nyprofile_NickName}>{res.nickname || "Без имени"}</div>
-                    <div className={styles.nyprofile_Handler}>@{res.handle || "user"}</div>
-                    <div className={styles.nyprofile_Description}>{res.bio || "Нет описания"}</div>
+                    <div className={styles.nyprofile_NickName}>{res.results[0].nickname || "Без имени"}</div>
+                    <div className={styles.nyprofile_Handler}>@{res.results[0].handle || "user"}</div>
+                    <div className={styles.nyprofile_Description}>{res.results[0].bio || "Нет описания"}</div>
                     
                     <div className={styles.nyprofile_SomeInfo}>
                         <div className={styles.nyprofile_number_post}>
@@ -68,7 +88,7 @@ function NotYourProfile() {
                     </div>
                     
                     <div className={styles.nyprofile_ButtonTwo}>
-                        <button className={styles.nyprofile_MakeFriendButton}>Make Friend</button>
+                        <button className={styles.nyprofile_MakeFriendButton} onClick={(e)=>makeFriend(e)}>Make Friend</button>
                         <button className={styles.nyprofile_MessageButton}>Message</button>
                     </div>
                 </div>
