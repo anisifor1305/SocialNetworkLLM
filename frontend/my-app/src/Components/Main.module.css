@@ -28,6 +28,7 @@ header{
     background-color: #fffef9;
 }
 .main_afterheader{
+    margin-top: 2vw;
     height: 5vh;
     background-color: #fffef9;
     width: 100%;
@@ -86,7 +87,7 @@ header{
 }
 .main_post{
     margin-top: 2vw;
-    width: 66%;
+    /* width: 66%; */
     padding-left: 17%;
     padding-right: 17%;
     /* border-bottom: 1px solid rgb(43, 39, 39); */
@@ -119,6 +120,7 @@ header{
     font-size: 2rem;
 }
 .main_post__text{
+    width: 100%;
     margin-top: 1rem;
     text-align: justify;
 }
@@ -168,7 +170,7 @@ header{
     }
 
 
-.main_likes-count{
+.main_likes_count{
     font-size: 1.2rem;
     color: #F5AF8B;
 }

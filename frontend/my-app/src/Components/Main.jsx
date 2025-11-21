@@ -8,7 +8,12 @@ function Main() {
     useEffect(() => {
         const parseData = async() => {
             try {
-                const response = await axios.get("http://10.124.215.133:8000/api/posts/");
+                const token = localStorage.getItem('access')
+                const response = await axios.get("http://10.124.215.133:8000/api/posts/feed/", {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                }
+                });
                 return response.data.results; 
             } catch (error) {
                 console.error("Ошибка при загрузке данных:", error);
@@ -30,7 +35,7 @@ function Main() {
                     <div className={styles.main_header_left}>
                         <div className={styles.main_item}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
-                    <div className={styles.header_right}>
+                    <div className={styles.main_header_right}>
                         <div className={styles.main_item}><img className={styles.main_header__img} src="images/search.svg" alt="search" /></div>
                         <div className={styles.main_item}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
