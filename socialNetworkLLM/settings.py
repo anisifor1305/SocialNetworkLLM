@@ -144,12 +144,28 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 5,
 }
 
+DJOSER = {
+    'SERIALIZERS': {
+        # Говорим Djoser: "Для регистрации используй НАШ класс, а не стандартный"
+        'user_create': 'api.serializers.CustomUserCreateSerializer',
+
+        # (Опционально) Чтобы при GET /auth/users/me/ данные тоже были красивыми
+        'current_user': 'api.serializers.UserShortSerializer',
+    },
+    # Если хочешь, чтобы логин был по email, раскомментируй:
+    # 'LOGIN_FIELD': 'email',
+}
+
 # --- JWT ---
 SIMPLE_JWT = {
    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
    'AUTH_HEADER_TYPES': ('Bearer',),
 }
+
+
+
+
 
 # --- CORS ---
 # Разрешаем всё на время хакатона

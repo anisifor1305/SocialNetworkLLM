@@ -18,11 +18,26 @@ class UserShortSerializer(serializers.ModelSerializer):
 
 
 class CustomUserCreateSerializer(BaseUserCreateSerializer):
-    nickname = serializers.CharField(required=True)
+    nickname = serializers.CharField(required=True, write_only=True)
 
     class Meta(BaseUserCreateSerializer.Meta):
         model = User
         fields = ('id', 'email', 'username', 'password', 'nickname')
+
+    # --- 1. ДОБАВЛЯЕМ ЭТОТ МЕТОД ---
+    def validate(self, attrs):
+        # Вырезаем nickname перед тем, как отдать данные Djoser-у
+        # (чтобы он не пытался запихнуть его в модель User при проверке)
+        nickname = attrs.pop('nickname', None)
+
+        # Запускаем стандартную проверку Djoser (пароль и т.д.)
+        attrs = super().validate(attrs)
+
+        # Возвращаем nickname обратно, чтобы он дошел до метода create
+        if nickname:
+            attrs['nickname'] = nickname
+
+        return attrs
 
     def create(self, validated_data):
         nickname = validated_data.pop('nickname')
