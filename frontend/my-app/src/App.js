@@ -16,6 +16,7 @@ function App() {
           <Route path="/" element={<Main/>}></Route>
           <Route path="/auth" element={<Auth/>}></Route>
           <Route path="/registration" element={<Registration/>}></Route>
+          <Route path="/handler" element={<NotYourProfile/>}></Route>
         </Routes>
         </BrowserRouter>
     </div>
