@@ -5,6 +5,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Auth from './Components/Auth';
 import Main from './Components/Main';
 import Registration from './Components/Registration';
+import NotYourProfile from './Components/NotYourProfile';
 
 function App() {
   return (
