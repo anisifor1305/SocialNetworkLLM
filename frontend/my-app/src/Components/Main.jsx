@@ -24,21 +24,21 @@ function Main() {
     return ( 
         <>
 
-        <div className={styles.out_container}>
-            <div className={styles.container}>
+        <div className={styles.main_out_container}>
+            <div className={styles.main_container}>
                 <header>
-                    <div className={styles.header_left}>
-                        <div className={styles.item}><img className={styles.header__img_logo} src="images/logo.svg" alt="search" /></div>
+                    <div className={styles.main_header_left}>
+                        <div className={styles.main_item}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
                     <div className={styles.header_right}>
-                        <div className={styles.item}><img className={styles.header__img} src="images/search.svg" alt="search" /></div>
-                        <div className={styles.item}><img className={styles.header__img} src="images/profile.svg" alt="home" /></div>
+                        <div className={styles.main_item}><img className={styles.main_header__img} src="images/search.svg" alt="search" /></div>
+                        <div className={styles.main_item}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
                 </header>
-                <div className={styles.afterheader}>
-                    <div className={styles.afterheader__item}>Home</div>
-                    <div className={styles.afterheader__item}>Explore</div>
-                    <div className={styles.afterheader__item}>Message</div>
+                <div className={styles.main_afterheader}>
+                    <div className={styles.main_afterheader__item}>Home</div>
+                    <div className={styles.main_afterheader__item}>Explore</div>
+                    <div className={styles.main_afterheader__item}>Message</div>
                 </div>
                 <div className={styles.main_body}>
                     {/* <Post/>   */}
@@ -48,12 +48,12 @@ function Main() {
                     )}
                     
                 </div>
-                <div className={styles.bottom__panel}>
-                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/home.svg" alt="" /></div>
-                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/searchZh.svg" alt="" /></div>
-                        <div className={styles.bottom__item}><img className={styles.plus__img} src="images/plus.svg" alt="" /></div>
-                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/message.svg" alt="" /></div>
-                        <div className={styles.bottom__item}><img className={styles.bottom__img} src="images/message.svg" alt="" /></div>
+                <div className={styles.main_bottom__panel}>
+                        <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/home.svg" alt="" /></div>
+                        <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/searchZh.svg" alt="" /></div>
+                        <div className={styles.main_bottom__item}><img className={styles.main_plus__img} src="images/plus.svg" alt="" /></div>
+                        <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/message.svg" alt="" /></div>
+                        <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/message.svg" alt="" /></div>
                 </div>
             </div>
         </div>

@@ -8,7 +8,7 @@
 svg {
     fill: rgb(43, 39, 39);
 }
-.main_out_container{
+.auth_out_container{
     display: flex;              /* делаем flex-контейнер */
     align-items: center;        /* центр по вертикали */
     justify-content: center;    /* центр по горизонтали */
@@ -20,7 +20,7 @@ svg {
     min-height: 100vh;
 }
 
-.main_container{
+.auth_container{
     border-radius: 15px;
     overflow: hidden;
     /* position: flex;  ← убрать, это невалидно */
@@ -45,7 +45,7 @@ header{
     background-color: #fffef9;
     border-bottom: 2px solid rgb(191, 191, 191);
 }
-.main_afterheader{
+.auth_afterheader{
     height: 5vh;
     background-color: #fffef9;
     width: 100%;
@@ -56,13 +56,13 @@ header{
     gap: 9vw;
     padding-bottom: 2vh;
 }
-.main_afterheader__item{
+.auth_afterheader__item{
     font-size: 1.25rem;
     font-weight: 600;
     border-bottom: 3px solid transparent;
     transition: all .2s;
 }
-.main_header_left{
+.auth_header_left{
     padding-top: 3vh;
     padding-left: 50px;
     width: 50vw;
@@ -73,7 +73,7 @@ header{
     display: flex;
     justify-content: flex;
 }
-.main_header_right{
+.auth_header_right{
     padding-top: 1vh;
     gap: 3vw;
     width: 50vw;
@@ -85,22 +85,22 @@ header{
     justify-content: flex-end;
     padding-right: 50px;
 }
-.main_header__img{
+.auth_header__img{
     width: 3rem;
     height: 3rem;
 }
-.main_main_body{
+.auth_auth_body{
 
 }
-.main_part1{
+.auth_part1{
     display: flex;
     flex-direction: column;
 }
-.main_header__img_logo{
+.auth_header__img_logo{
     height: 4.5rem;
     width: auto;
 }
-.main_post{
+.auth_post{
     margin-top: 2vw;
     width: 66%;
     padding-left: 17%;
@@ -108,22 +108,22 @@ header{
     border-bottom: 1px solid rgb(43, 39, 39);
     padding-bottom: 2vw;
 }
-.main_profile__img{
+.auth_profile__img{
     height: 4rem;
     width: 4rem;
 }
-.main_post__userinfo{
+.auth_post__userinfo{
     font-size: 1.5rem;
     /* color: #fefefe; */
     display: flex;
     gap: 20px;
     justify-content: start;
 }
-.main_post__username{
+.auth_post__username{
     /* width: 100%; */
     font-weight: 600;
 }
-.main_post__user__miniinf{
+.auth_post__user__miniinf{
     color: rgb(108, 108, 108);
     gap: 20px;
     /* width: 100%; */
@@ -132,11 +132,11 @@ header{
 }
 
 
-.main_afterheader__item:hover{
+.auth_afterheader__item:hover{
     border-bottom: 3px solid rgb(43, 39, 39);
 }
 
-.main_Entry{
+.auth_Entry{
     font-size: 3rem;
     display: flex;
     align-items: center;
@@ -144,7 +144,7 @@ header{
     justify-content: center;
     padding: 4vh 0 4vh 0;
 }
-.main_Email{
+.auth_Email{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -162,7 +162,7 @@ header{
 
     transition: 0.25s ease;
 }
-.main_Password{
+.auth_Password{
     
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
@@ -181,18 +181,18 @@ header{
     transition: 0.25s ease;
 }
 
-.main_EmailForm,
-.main_PasswordForm {
+.auth_EmailForm,
+.auth_PasswordForm {
     padding: 1vh 5vh;
 }
 
-.main_FrgtPsswrd{
+.auth_FrgtPsswrd{
     display: flex;
     align-items: right;
     justify-content: flex-end;
     
 }
-.main_BtnFrgtPswrd{
+.auth_BtnFrgtPswrd{
     background: none;       /* убираем фон */
     border: none;           /* убираем рамку */
     padding: 0;             /* убираем отступы */
@@ -203,13 +203,13 @@ header{
     color: gray;
     padding: 1vh 5vh 0 0;
 }
-.main_BtnFrgtPswrd:hover{
+.auth_BtnFrgtPswrd:hover{
     text-decoration: underline; 
 }
-.main_EnterBtn{
+.auth_EnterBtn{
     padding: 3vh 5vh;
 }
-.main_ButtonEnter{
+.auth_ButtonEnter{
     width: 100%;
     height: 6vh;                  /* ← высота теперь в vh */
 
@@ -226,23 +226,23 @@ header{
 
     transition: 0.25s ease;
 }
-.main_ButtonEnter:hover{
+.auth_ButtonEnter:hover{
     cursor: pointer; 
     background-color: #f8a17c; 
 }
-.main_ButtonEnter:active {
+.auth_ButtonEnter:active {
     transform: scale(0.95);    /* эффект нажатия */
     opacity: 0.7;              /* можно добавить лёгкое затемнение */
 }
 
-.main_bottom__panel{
+.auth_bottom__panel{
     margin-top: 5vh;
     display: flex;        /* элементы идут в ряд */
     align-items: center;  /* выравнивание по высоте */
     gap: 10px;
     justify-content: center;
 }
-.main_BtnRegistration{
+.auth_BtnRegistration{
     background: none;       /* убираем фон */
     border: none;           /* убираем рамку */
     padding: 0;             /* убираем отступы */
@@ -252,6 +252,6 @@ header{
     outline: none;
     color: gray;
 }
-.main_BtnFrgtPswrd:hover{
+.auth_BtnFrgtPswrd:hover{
     text-decoration: underline; 
 }

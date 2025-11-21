@@ -23,31 +23,31 @@ function Auth() {
     }
     return ( 
         <>
-        <div className={styles.main_out_container}>
-            <div className={styles.main_container}>
+        <div className={styles.auth_out_container}>
+            <div className={styles.auth_container}>
                 <header>
-                    <div className={styles.main_header_left}>
-                        <div className={styles.item}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
+                    <div className={styles.auth_header_left}>
+                        <div className={styles.item}><img className={styles.auth_header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
-                    <div className={styles.main_header_right}>
-                        <div className={styles.item}><img className={styles.main_header__img} src="images/search.svg" alt="search" /></div>
-                        <div className={styles.item}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
+                    <div className={styles.auth_header_right}>
+                        <div className={styles.item}><img className={styles.auth_header__img} src="images/search.svg" alt="search" /></div>
+                        <div className={styles.item}><img className={styles.auth_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
                 </header>
-                <div className={styles.main_main_body}>
-                    <div className={styles.main_Entry}>Вход</div>
-                    <div className={styles.main_EmailForm}>
-                        <input className={styles.main_Email} type="text" placeholder="Эллектронная почта"/>
+                <div className={styles.auth_auth_body}>
+                    <div className={styles.auth_Entry}>Вход</div>
+                    <div className={styles.auth_EmailForm}>
+                        <input className={styles.auth_Email} type="text" placeholder="Эллектронная почта"/>
                     </div>
-                    <div className={styles.main_PasswordForm}>
-                        <input className={styles.main_Password} type="text" placeholder="Пароль"/>
+                    <div className={styles.auth_PasswordForm}>
+                        <input className={styles.auth_Password} type="text" placeholder="Пароль"/>
                     </div>
-                    <div className={styles.main_FrgtPsswrd}><button className={styles.main_BtnFrgtPswrd}>Забыли пароль?</button></div>
-                    <div className={styles.main_EnterBtn}><button className={styles.main_ButtonEnter}>Войти</button></div>
-                    <div className={styles.main_bottom__panel}>
+                    <div className={styles.auth_FrgtPsswrd}><button className={styles.auth_BtnFrgtPswrd}>Забыли пароль?</button></div>
+                    <div className={styles.auth_EnterBtn}><button className={styles.auth_ButtonEnter}>Войти</button></div>
+                    <div className={styles.auth_bottom__panel}>
                         <div>Нет аккаунта?</div>
-                        <div className={styles.main_RegistrationB}><button className={styles.main_BtnRegistration}>Регистрация</button></div>
-                    </div>  
+                        <div className={styles.auth_RegistrationB}><button className={styles.auth_BtnRegistration}>Регистрация</button></div>
+                    </div> 
                 </div>
             </div>
         </div>
