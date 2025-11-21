@@ -6,18 +6,19 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from rest_framework.exceptions import PermissionDenied
 
-from .models import Profile, Community, Post, Subscription, Like, Topic
+from .models import Profile, Community, Post, Subscription, Like, Topic, Notification
 from .serializers import (
-    ProfileSerializer, CommunitySerializer, PostSerializer, SubscriptionSerializer, TopicSerializer
+    ProfileSerializer, CommunitySerializer, PostSerializer, SubscriptionSerializer, TopicSerializer,
+    NotificationSerializer
 )
-from .permissions import IsAuthorOrReadOnly, IsProfileOwnerOrReadOnly
+from .permissions import IsAuthorOrReadOnly, IsProfileOwnerOrReadOnly, IsCommunityCreatorOrReadOnly
 
 
 
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsProfileOwnerOrReadOnly]
+    permission_classes = [IsAuthenticated, IsProfileOwnerOrReadOnly]
     filter_backends = [filters.SearchFilter]
     search_fields = ['user__username', 'nickname']
 
@@ -25,7 +26,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
 class CommunityViewSet(viewsets.ModelViewSet):
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated, IsCommunityCreatorOrReadOnly]
 
     filter_backends = [filters.SearchFilter, DjangoFilterBackend]
     search_fields = ['title', 'description']
@@ -57,7 +58,7 @@ class CommunityViewSet(viewsets.ModelViewSet):
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['author', 'community']
     search_fields = ['text', 'author__username', 'author__profile__nickname']
@@ -91,42 +92,88 @@ class PostViewSet(viewsets.ModelViewSet):
             return queryset.filter(is_published=True)
         return queryset
 
-    # ЭКШЕН ЛАЙКА
+
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
         post = self.get_object()
         like_obj, created = Like.objects.get_or_create(user=request.user, post=post)
         if created:
-            return Response({'status': 'liked'})
+            return Response({'status': 'liked',
+                             'likes_count': post.likes.count(),
+                             'is_liked': True})
         else:
             like_obj.delete()
-            return Response({'status': 'unliked'})
+
+            return Response({'status': 'unliked',
+                             'likes_count': post.likes.count(),
+                             'is_liked': False})
 
     # УМНАЯ ЛЕНТА (Смешивание)
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def feed(self, request):
         user = request.user
 
-        # 1. Подписки
-        subscribed_posts = Post.objects.filter(
-            Q(author__followers__subscriber=user) | Q(community__members=user),
-            is_published=True
-        ).order_by('-created_at').distinct()
+        # Настройки пагинации (сколько постов за раз грузить)
+        page_size = 10
 
-        # 2. Рекомендации (по темам)
+        # --- 1. ПОСТЫ ПОДПИСОК ---
+        subscribed_posts = Post.objects.filter(
+            Q(author__followers__subscriber=user) |
+            Q(community__members=user),
+            is_published=True
+        ).distinct()
+
+        # --- 2. ПОСТЫ РЕКОМЕНДАЦИЙ (по темам) ---
         user_topics = Community.objects.filter(members=user).values_list('topic', flat=True)
         recommended_posts = Post.objects.filter(
-            community__topic__in=user_topics, is_published=True
-        ).exclude(community__members=user).order_by('-created_at')
+            community__topic__in=user_topics,
+            is_published=True
+        ).exclude(
+            community__members=user
+        ).exclude(
+            id__in=subscribed_posts.values('id')  # Исключаем те, что уже попали в подписки
+        )
 
-        # Смешиваем (упрощенно)
-        # В реале тут нужна пагинация с миксером, но для MVP можно просто сложить
-        # и взять срез (например, первые 20)
-        mixed_feed = list(subscribed_posts[:10]) + list(recommended_posts[:3])
+        # --- СБОРКА И ПАГИНАЦИЯ ---
+        # Берем, например, последние 50 постов от друзей и 20 рекомендаций
+        # (С запасом, чтобы потом перемешать)
+        pool_subs = list(subscribed_posts.order_by('-created_at')[:10])
+        pool_recs = list(recommended_posts.order_by('-created_at')[:5])
+
+        # Складываем
+        mixed_feed = pool_subs + pool_recs
+
+        # Сортируем по дате (свежие сверху)
         mixed_feed.sort(key=lambda x: x.created_at, reverse=True)
 
+        # Обрезаем до размера страницы (например, берем топ-10)
+        mixed_feed = mixed_feed[:page_size]
+
+        # --- 3. ЗАПОЛНИТЕЛЬ (RANDOM) ---
+        # Если набралось меньше 10 постов (например, юзер новый),
+        # добиваем список рандомными постами.
+        missing_count = page_size - len(mixed_feed)
+
+        if missing_count > 0:
+            # Собираем ID тех постов, которые мы УЖЕ нашли, чтобы не было дублей
+            existing_ids = [p.id for p in mixed_feed]
+
+            # Ищем любые опубликованные посты, кроме тех, что уже есть
+            # order_by('?') - это сортировка в случайном порядке
+            random_posts = Post.objects.filter(is_published=True) \
+                .exclude(id__in=existing_ids) \
+                .order_by('?')[:missing_count]
+
+            # Добавляем их в конец ленты
+            mixed_feed.extend(list(random_posts))
+
+        # Сериализуем и отдаем
         serializer = self.get_serializer(mixed_feed, many=True)
-        return Response(serializer.data)
+
+        return Response({
+            'count': len(mixed_feed),  # Сколько отдали сейчас
+            'results': serializer.data
+        })
 
 
 # --- 4. ПОДПИСКИ ---
@@ -144,7 +191,42 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         serializer.save(subscriber=self.request.user)
 
 
+class NotificationViewSet(viewsets.ModelViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'patch', 'delete']
+
+    def get_queryset(self):
+        return Notification.objects.filter(recipient=self.request.user).order_by('-created_at')
+
+    @action(detail=False, methods=['post'])
+    def mark_all_read(self, request):
+        self.get_queryset().update(is_read=True)
+        return Response({'status': 'All marked as read'})
+
+
+
 class TopicViewSet(viewsets.ReadOnlyModelViewSet): # ReadOnly - темы менять нельзя через API
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = [AllowAny]
+
+
+from .models import Comment  # Импорт
+from .serializers import CommentSerializer  # Импорт
+
+
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+    permission_classes = [IsAuthenticated, IsAuthorOrReadOnly]
+
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    filterset_fields = ['post', 'author']
+    ordering_fields = ['created_at']
+    ordering = ['-created_at']
+
+    # Авто-авторство
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)

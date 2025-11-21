@@ -23,3 +23,14 @@ class IsProfileOwnerOrReadOnly(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
         return obj.user == request.user
+
+
+class IsCommunityCreatorOrReadOnly(permissions.BasePermission):
+    """
+    - Читать (GET) разрешено всем (безопасные методы).
+    - Изменять/Удалять (PUT, DELETE) разрешено только СОЗДАТЕЛЮ группы.
+    """
+    def has_object_permission(self, request, view, obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return obj.creator == request.user

@@ -54,6 +54,51 @@ class Subscription(models.Model):
     def __str__(self):
         return f"{self.subscriber.username} -> {self.target_user.username}"
 
+class Notification(models.Model):
+    recipient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_notifications')
+    text = models.CharField(max_length=150)
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return f"{self.recipient.username} -> {self.sender.username}"
+
+
+@receiver(post_save, sender=Subscription)
+def create_subscription_notification(sender, instance, created, **kwargs):
+    if created:
+        # 1. Создаем уведомление о подписке
+        Notification.objects.create(
+            recipient=instance.target_user,
+            sender=instance.subscriber,
+            text=f"Пользователь {instance.subscriber.username} подписался на вас!"
+        )
+
+        # 2. Проверяем ВЗАИМНОСТЬ (Стали ли они друзьями?)
+        # Ищем: есть ли подписка в обратную сторону?
+        is_mutual = Subscription.objects.filter(
+            subscriber=instance.target_user,  # Тот, на кого подписались
+            target_user=instance.subscriber  # Тот, кто подписался
+        ).exists()
+
+        if is_mutual:
+            # Если взаимно - отправляем уведомление "Вы теперь друзья!" ОБОИМ
+
+            # Тому, кто только что подписался
+            Notification.objects.create(
+                recipient=instance.subscriber,
+                sender=instance.target_user,
+                text=f"Ура! Вы теперь друзья с {instance.target_user.username}!"
+            )
+
+            # Тому, на кого подписались
+            Notification.objects.create(
+                recipient=instance.target_user,
+                sender=instance.subscriber,
+                text=f"Ура! Вы теперь друзья с {instance.subscriber.username}!"
+            )
 
 class Post(models.Model):
     text = models.TextField(verbose_name="Текст поста")
@@ -94,3 +139,13 @@ def create_user_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.profile.save()
+
+
+class Comment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField(verbose_name="Текст комментария")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Comment by {self.author.username} on {self.post}"

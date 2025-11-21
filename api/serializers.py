@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Profile, Community, Subscription, Post, Like, Topic
+from .models import Profile, Community, Subscription, Post, Like, Topic, Comment, Notification
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 
 # для отображения не айди, а красиво юзера
@@ -94,18 +94,27 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         fields = ['id', 'subscriber', 'target_user', 'target_user_id', 'created_at']
 
 
+class NotificationSerializer(serializers.ModelSerializer):
+    # Показываем отправителя красиво (с аватаркой)
+    sender = UserShortSerializer(read_only=True)
+
+    class Meta:
+        model = Notification
+        fields = ['id', 'text', 'sender', 'is_read', 'created_at']
+
 class PostSerializer(serializers.ModelSerializer):
     author = UserShortSerializer(read_only=True)
     community_title = serializers.ReadOnlyField(source='community.title')
 
     likes_count = serializers.IntegerField(source='likes.count', read_only=True)
     is_liked = serializers.SerializerMethodField()  # Вычисляемое поле
+    comments_count = serializers.IntegerField(source='comments.count', read_only=True)
 
     class Meta:
         model = Post
         fields = ['id', 'text', 'image', 'created_at',
                   'author', 'community', 'community_title',
-                  'is_published', 'is_liked', 'likes_count']
+                  'is_published', 'is_liked', 'likes_count', 'comments_count']
         # community оставляем как ID, чтобы при создании поста можно было указать id группы
         read_only_fields = ['is_published']
 
@@ -115,3 +124,9 @@ class PostSerializer(serializers.ModelSerializer):
             return False
         # Проверяем, есть ли лайк от этого юзера на этом посте
         return Like.objects.filter(user=user, post=obj).exists()
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = UserShortSerializer(read_only=True)
+    class Meta:
+        model = Comment
+        fields = ['id', 'text', 'author', 'post', 'created_at']
