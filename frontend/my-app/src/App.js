@@ -4,6 +4,7 @@ import logo from './logo.svg';
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import Auth from './Components/Auth';
 import Main from './Components/Main';
+import Registration from './Components/Registration';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Main/>}></Route>
           <Route path="/auth" element={<Auth/>}></Route>
+          <Route path="/registration" element={<Registration/>}></Route>
         </Routes>
         </BrowserRouter>
     </div>
