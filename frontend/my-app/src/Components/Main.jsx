@@ -26,6 +26,7 @@ function Main() {
         });
     }, []);
     let i = 0;
+
     return ( 
         <>
 
@@ -42,7 +43,7 @@ function Main() {
                 </header>
                 <div className={styles.main_afterheader}>
                     <div className={styles.main_afterheader__item}>Home</div>
-                    <div className={styles.main_afterheader__item}>Explore</div>
+                    {/* <div className={styles.main_afterheader__item}>Explore</div> */}
                     <div className={styles.main_afterheader__item}>Message</div>
                 </div>
                 <div className={styles.main_body}>

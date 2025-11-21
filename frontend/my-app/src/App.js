@@ -19,7 +19,7 @@ function App() {
           <Route path="/auth" element={<Auth/>}></Route>
           <Route path="/registration" element={<Registration/>}></Route>
           <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
-          <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+          <Route path="/:id" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
         </Routes>
         </AuthProvider>
         </BrowserRouter>
