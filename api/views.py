@@ -26,19 +26,11 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 class CommunityViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet для работы с сообществами.
-    """
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_queryset(self):
-        """
-        Для списка всех сообществ (вкладка "Сообщества") делаем рандомную сортировку.
-        NOTE: order_by('?') тяжелая операция для БД, в реальном HighLoad
-        используют отдельные алгоритмы рекомендаций, но для старта это ОК.
-        """
         if self.action == 'list':
             return Community.objects.order_by('?')
         return Community.objects.all()
@@ -55,10 +47,6 @@ class CommunityViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated], url_path='my')
     def my_communities(self, request):
-        """
-        Эндпоинт: /api/communities/my/
-        Возвращает только те сообщества, на которые подписан текущий юзер.
-        """
         user = request.user
         my_groups = Community.objects.filter(members=user)
 
@@ -80,8 +68,6 @@ class CommunityViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Не в группе'}, status=status.HTTP_400_BAD_REQUEST)
         group.members.remove(request.user)
         return Response({'detail': 'Вышли'})
-
-
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
@@ -120,7 +106,6 @@ class PostViewSet(viewsets.ModelViewSet):
             return queryset.filter(is_published=True)
         return queryset
 
-
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def like(self, request, pk=None):
         post = self.get_object()
@@ -140,16 +125,13 @@ class PostViewSet(viewsets.ModelViewSet):
     def feed(self, request):
         user = request.user
 
-
         page_size = 10
-
 
         subscribed_posts = Post.objects.filter(
             Q(author__followers__subscriber=user) |
             Q(community__members=user),
             is_published=True
         ).distinct()
-
 
         user_topics = Community.objects.filter(members=user).values_list('topic', flat=True)
         recommended_posts = Post.objects.filter(
@@ -161,25 +143,20 @@ class PostViewSet(viewsets.ModelViewSet):
             id__in=subscribed_posts.values('id')
         )
 
-
         pool_subs = list(subscribed_posts.order_by('-created_at')[:10])
         pool_recs = list(recommended_posts.order_by('-created_at')[:5])
 
-        # Складываем
         mixed_feed = pool_subs + pool_recs
 
         mixed_feed.sort(key=lambda x: x.created_at, reverse=True)
 
-
         mixed_feed = mixed_feed[:page_size]
-
 
         missing_count = page_size - len(mixed_feed)
 
         if missing_count > 0:
 
             existing_ids = [p.id for p in mixed_feed]
-
 
             random_posts = Post.objects.filter(is_published=True) \
                 .exclude(id__in=existing_ids) \
@@ -198,10 +175,6 @@ class PostViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=['get'])
     def random(self, request):
-        """
-        Эндпоинт: /api/posts/random/
-        Возвращает ОДИН случайный пост (объект, не список).
-        """
         random_post = self.get_queryset().order_by('?').first()
 
         if not random_post:
@@ -232,20 +205,6 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 
         serializer.save(subscriber=self.request.user)
 
-        # target_id = self.request.data.get('target_user_id')
-        # if target_id and int(target_id) == self.request.user.id:
-        #     raise PermissionDenied("Нельзя подписаться на себя")
-        #
-        # if target_id:
-        #     already_subscribed = Subscription.objects.filter(
-        #         subscriber=self.request.user,
-        #         target_user_id=int(target_id)
-        #     ).exists()
-        #
-        #     if already_subscribed:
-        #         raise PermissionDenied("Вы уже подписаны на этого пользователя")
-        #
-        # serializer.save(subscriber=self.request.user)
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def unfollow(self, request):
@@ -278,7 +237,7 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
-    http_method_names = ['get', 'patch', 'delete']
+    http_method_names = ['get', 'post', 'patch', 'delete']
 
     def get_queryset(self):
         return Notification.objects.filter(recipient=self.request.user).order_by('-created_at')
@@ -345,7 +304,6 @@ class MessageViewSet(viewsets.ModelViewSet):
 
         target_user = None
 
-        # 1. Пытаемся найти пользователя
         if partner_id:
             target_user = get_object_or_404(User, id=partner_id)
         elif partner_handle:
@@ -356,20 +314,16 @@ class MessageViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        # 2. Загружаем сообщения
         messages = Message.objects.filter(
             Q(sender=user, receiver=target_user) |
             Q(sender=target_user, receiver=user)
         ).order_by('created_at')
 
-        # 3. Отмечаем прочитанными (только входящие)
         unread_messages = messages.filter(receiver=user, is_read=False)
         unread_messages.update(is_read=True)
 
         serializer = self.get_serializer(messages, many=True)
 
-        # 4. Добавляем инфу о собеседнике (чтобы фронт мог сразу отрисовать шапку)
-        # Используем UserShortSerializer для краткой инфы
         partner_data = UserShortSerializer(target_user, context={'request': request}).data
 
         return Response({
@@ -384,8 +338,7 @@ class MessageViewSet(viewsets.ModelViewSet):
         """
         user = request.user
 
-        # Получаем последние сообщения для каждого диалога
-        # (Это упрощенная версия, для продакшена лучше использовать annotate и Subquery)
+
         messages = Message.objects.filter(
             Q(sender=user) | Q(receiver=user)
         ).order_by('-created_at')

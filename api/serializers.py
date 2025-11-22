@@ -19,8 +19,6 @@ class UserShortSerializer(serializers.ModelSerializer):
         fields = ['id', 'handle', 'nickname', 'avatar', 'status']
 
 
-
-
 class CustomUserCreateSerializer(BaseUserCreateSerializer):
     nickname = serializers.CharField(required=True, write_only=True)
     birth_date = serializers.CharField(required=True, write_only=True)
@@ -30,11 +28,6 @@ class CustomUserCreateSerializer(BaseUserCreateSerializer):
         fields = ('id', 'email', 'username', 'password', 'nickname', 'birth_date')
 
     def validate(self, attrs):
-        """
-        FIX: Djoser пытается создать инстанс User(**attrs) для проверки пароля.
-        Поля nickname и birth_date отсутствуют в модели User, что вызывает TypeError.
-        Мы временно удаляем их перед валидацией родительского класса и возвращаем обратно после.
-        """
         nickname = attrs.pop('nickname', None)
         birth_date = attrs.pop('birth_date', None)
 
@@ -48,7 +41,7 @@ class CustomUserCreateSerializer(BaseUserCreateSerializer):
         return attrs
 
     def validate_birth_date(self, value):
-        """Валидация даты рождения: формат и проверка на будущее"""
+
         date_formats = ['%d.%m.%Y', '%Y-%m-%d']
         parsed_date = None
 
