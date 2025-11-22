@@ -13,11 +13,8 @@ import MyProfile from './Components/MyProfile'
 import Communities from './Components/Communities';
 import CreateForum from './Components/CreateForum';
 import Notifications from './Components/Notifications'
-<<<<<<< HEAD
 import Messanger from './Components/Messanger'
-=======
 import EditProfile from './Components/EditProfile';
->>>>>>> 161b7a3f633ff90cfd6585c5426fa6f7ca7bf260
 function App() {
   return (
     <div className="App">
@@ -45,12 +42,9 @@ function App() {
           <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-<<<<<<< HEAD
           <Route path="/messanger" element={<ProtectedRoute><Messanger /></ProtectedRoute>} />
-=======
           <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
 
->>>>>>> 161b7a3f633ff90cfd6585c5426fa6f7ca7bf260
 
         </Routes>
         </AuthProvider>
