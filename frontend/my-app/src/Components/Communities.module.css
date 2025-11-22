@@ -211,3 +211,26 @@
     padding-left: 20px;
     margin-bottom: 15px;
 }
+.communities_bottom__panel{
+    border-top: 2px solid rgb(191, 191, 191);
+    background-color: #f2f2f0;
+    padding-top: 1vh;
+    box-sizing: border-box;
+    position: fixed;
+    right: 10vh;
+    left: 10vh;
+    gap: 7vw;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.communities_plus__img{
+    width: 3rem;
+    height: 3rem;
+}
+.communities_bottom__img{
+    width: 2rem;
+    height: 2rem;
+}
