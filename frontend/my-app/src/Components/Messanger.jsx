@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -21,6 +22,7 @@ const Messanger = () => {
     const [isSearching, setIsSearching] = useState(false);
 
     const messagesEndRef = useRef(null);
+    const messagesContainerRef = useRef(null);
 
     // --- 1. Инициализация ---
     useEffect(() => {
@@ -29,16 +31,13 @@ const Messanger = () => {
             if (!token) return navigate('/login');
 
             try {
-                // Кто я?
                 const meResp = await axios.get('http://10.124.215.133:8000/auth/users/me/', {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setCurrentUserId(meResp.data.id);
 
-                // Грузим список диалогов
                 fetchInbox(token);
 
-                // Если в URL есть ?chat=username, открываем его сразу
                 const chatHandle = searchParams.get('chat');
                 if (chatHandle) {
                     loadChatByHandle(chatHandle, token);
@@ -50,11 +49,21 @@ const Messanger = () => {
         init();
     }, []);
 
+    // --- POLLING 1: Обновляем список чатов каждые 5 секунд ---
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchInbox(); // Тихий запрос без лоадеров
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
+
     const fetchInbox = async (token = localStorage.getItem('access')) => {
         try {
             const resp = await axios.get('http://10.124.215.133:8000/api/messages/inbox/', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            // Чтобы не перерисовывать зря, можно сравнивать длину или ID последнего сообщения
+            // Но для простоты пока просто обновляем стейт
             setInbox(resp.data);
         } catch (err) {
             console.error(err);
@@ -62,26 +71,21 @@ const Messanger = () => {
     };
 
     // --- 2. Логика открытия чата ---
-    
-    // Открытие по клику из списка
     const handleChatClick = (partner) => {
         setActiveChat(partner);
-        setSearchParams({ chat: partner.handle }); // Обновляем URL
-        loadMessages(partner.id);
-        setIsSearching(false); // Закрываем поиск
+        setSearchParams({ chat: partner.handle });
+        loadMessages(partner.id, true); // true = показать лоадер
+        setIsSearching(false);
         setSearchQuery("");
     };
 
-    // Загрузка чата по хендлу (из URL или поиска)
     const loadChatByHandle = async (handle, token = localStorage.getItem('access')) => {
         setLoading(true);
         try {
-            // Используем новый метод бэка, который умеет искать по handle
             const resp = await axios.get(`http://10.124.215.133:8000/api/messages/conversation/?handle=${handle}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
-            
-            // Бэк теперь возвращает { partner: {...}, messages: [...] }
+            console.log(resp);
             setActiveChat(resp.data.partner);
             setMessages(resp.data.messages);
             scrollToBottom();
@@ -92,25 +96,42 @@ const Messanger = () => {
         }
     };
 
-    // Обычная загрузка сообщений по ID (если кликнули из списка)
-    const loadMessages = async (partnerId) => {
-        setLoading(true);
+    const loadMessages = async (partnerId, showLoader = false) => {
+        if (showLoader) setLoading(true);
         try {
             const resp = await axios.get(`http://10.124.215.133:8000/api/messages/conversation/?with=${partnerId}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
-            // Тут бэк возвращает объект { partner, messages }, берем messages
             setMessages(resp.data.messages); 
-            scrollToBottom();
+            if (showLoader) scrollToBottom();
         } catch (err) {
             console.error(err);
         } finally {
-            setLoading(false);
+            if (showLoader) setLoading(false);
         }
     };
 
 
-    // --- 3. Поиск пользователей ---
+
+
+    // --- POLLING 2: Обновляем активный чат каждые 3 секунды ---
+    useEffect(() => {
+        if (!activeChat) return;
+
+        const interval = setInterval(() => {
+            // Делаем "тихий" запрос, чтобы не мигал лоадер
+            loadMessages(activeChat.id, false);
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, [activeChat]);
+
+    // Скролл вниз только если мы уже внизу (или при первом открытии)
+    // Для простоты пока скроллим всегда при отправке, а при поллинге оставляем как есть
+    // Но можно добавить логику: 
+    // const isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+
+    // --- 3. Поиск ---
     const handleSearch = async (query) => {
         setSearchQuery(query);
         if (query.length < 2) {
@@ -123,7 +144,6 @@ const Messanger = () => {
             const resp = await axios.get(`http://10.124.215.133:8000/api/profiles/?search=${query}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
-            // API профилей возвращает список профилей, нам нужно преобразовать в формат для списка
             setSearchResults(resp.data.results || []);
         } catch (err) {
             console.error(err);
@@ -142,10 +162,10 @@ const Messanger = () => {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
 
-            setMessages([...messages, resp.data]);
+            setMessages(prev => [...prev, resp.data]);
             setText("");
             scrollToBottom();
-            fetchInbox(); // Обновляем список слева, чтобы чат прыгнул вверх
+            fetchInbox(); // Сразу обновляем левую колонку
         } catch (err) {
             alert("Ошибка отправки");
         }
@@ -173,7 +193,6 @@ const Messanger = () => {
                         <div className={styles.msngr_logo} onClick={() => navigate('/')}>
                             <img className={styles.msngr_logoImg} src="images/logo.svg" alt="logo"/>
                         </div>
-                        {/* Поиск */}
                         <div className={styles.searchWrapper}>
                             <input 
                                 className={styles.searchInput} 
@@ -186,8 +205,9 @@ const Messanger = () => {
                     </div>
 
 
+
+
                     <div className={styles.msngr_chats}>
-                        {/* Если ищем - показываем результаты поиска, иначе - Inbox */}
                         {isSearching ? (
                             searchResults.length > 0 ? (
                                 searchResults.map((profile) => (
@@ -195,12 +215,8 @@ const Messanger = () => {
                                         key={profile.id} 
                                         className={styles.msngr_chat}
                                         onClick={() => handleChatClick({
-                                            id: profile.id, // ВАЖНО: API профилей может отдавать user_id внутри, проверь структуру!
-                                            // Обычно: profile.id - это ID профиля, а нам нужен ID юзера.
-                                            // Если бэк API profiles возвращает вложенный user, бери profile.user.id.
-                                            // Если просто данные профиля, убедись что там есть поле handle/username.
-                                            // Для примера считаю, что id профиля совпадает или API отдает нужный id.
-                                            ...profile // Распыляем все данные (nickname, avatar и т.д.)
+                                            id: profile.id, 
+                                            ...profile 
                                         })}
                                     >
                                         <div className={styles.msngr_ProfileIconForm}>
@@ -216,7 +232,6 @@ const Messanger = () => {
                                 <div className={styles.emptyState}>Никого не нашли 🤷‍♂️</div>
                             )
                         ) : (
-                            // Обычный список диалогов
                             inbox.length > 0 ? inbox.map((chat, index) => (
                                 <div 
                                     key={index} 
@@ -240,7 +255,6 @@ const Messanger = () => {
                                             </div>
                                             <div className={styles.msngr_Dot}>∙</div>
                                             <div className={styles.msngr_Time}>{formatTime(chat.last_message.created_at)}</div>
-
                                         </div>
                                     </div>
                                 </div>
@@ -257,12 +271,15 @@ const Messanger = () => {
                         <>
                             <div className={styles.msngr_headRight}>
                                 <div className={styles.msngr_ProfileIconForm}>
-                                    <img 
+                                    <img
+
+
+
                                         className={styles.msngr_ProfileIcon} 
                                         src={activeChat.avatar || "images/profile.svg"} 
                                         alt="profile"
                                         onError={(e)=>{e.target.src="images/profile.svg"}}
-                                        onClick={() => navigate(`/${activeChat.handle}`)} // Переход в профиль
+                                        onClick={() => navigate(`/${activeChat.handle}`)}
                                         style={{cursor: 'pointer'}}
                                     />
                                 </div>
@@ -274,8 +291,10 @@ const Messanger = () => {
                                 </div>
                             </div>
 
-                            <div className={styles.msngr_BottomRight}>
+                            <div className={styles.msngr_BottomRight} ref={messagesContainerRef}>
                                 <div className={styles.msngr_Messages}> 
+                                    {loading && <div style={{textAlign:'center', padding: '10px'}}>Загрузка истории...</div>}
+                                    
                                     {messages.map((msg) => {
                                         const isMe = (msg.sender.id === currentUserId) || (msg.sender === currentUserId);
                                         return (
@@ -290,7 +309,6 @@ const Messanger = () => {
                                     <div ref={messagesEndRef} />
                                 </div>
                             </div>
-
 
                             <div className={styles.msngr_Sender}>
                                 <div className={styles.msngr_FormInput} style={{width: '100%'}}>
