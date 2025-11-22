@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Communities.module.css';
 import CommunityCard from './CommunityCard';
 import { useAuth } from '../Contexts/AuthContext';
+import NotificationBell from './NotificationBell';
+import {API_CONFIG} from '../config'
 
 const Communities = () => {
     const navigate = useNavigate();
@@ -19,13 +21,13 @@ const Communities = () => {
                 const token = localStorage.getItem('access');
                 
                 // 1. Узнаем, кто мы (чтобы правильно рисовать кнопки "Вступить/Выйти")
-                const meResp = await axios.get('http://10.124.215.133:8000/auth/users/me/', {
+                const meResp = await axios.get(`${API_CONFIG.BASE_URL}/auth/users/me/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setCurrentUserId(meResp.data.id);
 
                 // 2. Грузим сообщества
-                const commResp = await axios.get('http://10.124.215.133:8000/api/communities/', {
+                const commResp = await axios.get(`${API_CONFIG.BASE_URL}/api/communities/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setCommunities(commResp.data.results || commResp.data || []);
@@ -50,7 +52,7 @@ const Communities = () => {
                     </div>
                     <div className={styles.main_header_right}>
                         <div className={styles.main_item} onClick={() => navigate('/notifications')}>
-                            <img className={styles.main_header__img } src="/images/bell.svg" alt="notifications" />
+                            <NotificationBell/>
                         </div>
                         <div className={styles.main_item}>
                             <img className={styles.main_header__img} src="/images/back.svg" alt="back" onClick={() => navigate(-1)} />

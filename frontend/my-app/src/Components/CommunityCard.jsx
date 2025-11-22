@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styles from './Communities.module.css';
+import {API_CONFIG} from '../config' //1
 
 const MiniPost = ({ post }) => {
     if (!post) return null; // Если поста нет, просто ничего не показываем, чтобы не портить дизайн
@@ -29,7 +30,7 @@ const CommunityCard = ({ community }) => {
         }   
         const fetchLastPost = async () => {
             try {
-                const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?community=${community.id}&limit=1`, {
+                const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/posts/?community=${community.id}&limit=1`, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
                 });
                 const posts = resp.data.results || resp.data;
@@ -46,7 +47,7 @@ const CommunityCard = ({ community }) => {
     const handleJoin = async (e) => {
         e.stopPropagation();
         try {
-            await axios.post(`http://10.124.215.133:8000/api/communities/${community.id}/join/`, {}, {
+            await axios.post(`${API_CONFIG.BASE_URL}/api/communities/${community.id}/join/`, {}, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             setIsMember(true);
@@ -56,7 +57,7 @@ const CommunityCard = ({ community }) => {
     const handleLeave = async (e) => {
         e.stopPropagation();
         try {
-            await axios.post(`http://10.124.215.133:8000/api/communities/${community.id}/leave/`, {}, {
+            await axios.post(`${API_CONFIG.BASE_URL}/api/communities/${community.id}/leave/`, {}, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             setIsMember(false);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from "./MyProfile.module.css"; // Используем те же стили для консистентности
 import axios from 'axios';
+import {API_CONFIG} from '../config' //1
 
 function EditProfile() {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ function EditProfile() {
         const fetchUserData = async () => {
             try {
                 const token = localStorage.getItem('access');
-                const response = await axios.get('http://10.124.215.133:8000/auth/users/me/', {
+                const response = await axios.get(`${API_CONFIG.BASE_URL}/auth/users/me/`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 
@@ -94,7 +95,7 @@ function EditProfile() {
                 dataToSend.append('avatar', avatarFile);
             }
 
-            await axios.put('http://10.124.215.133:8000/auth/users/me/', dataToSend, {
+            await axios.put(`${API_CONFIG.BASE_URL}/auth/users/me/`, dataToSend, {
                 headers: {
                     "Authorization": `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"

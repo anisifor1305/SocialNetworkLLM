@@ -2,15 +2,17 @@ import axios from "axios"
 import { useState } from "react"
 import styles from "./Auth.module.css"
 import { useNavigate } from "react-router-dom"
-
+import { useAuth } from "../Contexts/AuthContext"
+import {API_CONFIG} from '../config' //1
 
 function Auth() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [email, setEmail] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     
-    const url = "http://10.124.215.133:8000/auth/jwt/create/"
+    const url = `${API_CONFIG.BASE_URL}/auth/jwt/create/`
     const valuesChanged = ()=>{
         setUsername(document.getElementById('1').value)
         setPassword(document.getElementById('3').value)
@@ -19,7 +21,7 @@ function Auth() {
         e.preventDefault();
         navigate('/registration');
     }
-    const login = async(e)=>{
+    const login2 = async(e)=>{
             e.preventDefault()
             try{
             const resp = await axios.post(url, {
@@ -30,9 +32,10 @@ function Auth() {
                 console.log(resp);
                 localStorage.setItem('refresh', resp.data.refresh)
                 localStorage.setItem('access', resp.data.access)
-                navigate('/')
+                login(resp.data.access);
+                navigate('/');
             }
-                        else{
+            else{
                 const el = document.getElementById('5');
                 el.style.display = 'block';
             }
@@ -67,7 +70,7 @@ function Auth() {
                         <input className={styles.auth_Password} id='3' onChange={valuesChanged} name="password" type="password" placeholder="Пароль"/>
                     </div>
                     <div className={styles.auth_FrgtPsswrd}><button className={styles.auth_BtnFrgtPswrd}>Забыли пароль?</button></div>
-                    <div className={styles.auth_EnterBtn}><button onClick={(e)=>login(e)} className={styles.auth_ButtonEnter}>Войти</button></div>
+                    <div className={styles.auth_EnterBtn}><button onClick={(e)=>login2(e)} className={styles.auth_ButtonEnter}>Войти</button></div>
                     <div className={styles.auth_bottom__panel}>
                         <div>Нет аккаунта?</div>
                         <div className={styles.auth_RegistrationB}><button className={styles.auth_BtnRegistration} onClick={(e)=>gotoRegistration(e)}>Регистрация</button></div>

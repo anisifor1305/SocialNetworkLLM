@@ -3,6 +3,8 @@ import styles from "./NotYourProfile.module.css"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Post from "./Post";
+import NotificationBell from "./NotificationBell";
+import {API_CONFIG} from '../config' //1
 
 function NotYourProfile({ part = 'posts' }) {
     const [profile, setProfile] = useState(null);
@@ -43,7 +45,7 @@ function NotYourProfile({ part = 'posts' }) {
         }
         setFriendLoading(true);
         try {
-            await axios.post('http://10.124.215.133:8000/api/subscriptions/', {
+            await axios.post(`${API_CONFIG.BASE_URL}/api/subscriptions/`, {
                 "target_user_id": profile.results[0].id
             }, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
@@ -64,7 +66,7 @@ function NotYourProfile({ part = 'posts' }) {
     // Функция для получения количества постов пользователя
     const fetchPostsCount = async (userId) => {
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?author=${userId}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/posts/?author=${userId}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             // Если API возвращает пагинацию с count, используем его, иначе считаем длину массива
@@ -82,7 +84,7 @@ function NotYourProfile({ part = 'posts' }) {
         const id = profile.results[0].id;
         
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/subscriptions/?subscriber=${id}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/subscriptions/?subscriber=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             // Аналогично постам - используем count или длину массива
@@ -98,7 +100,7 @@ function NotYourProfile({ part = 'posts' }) {
         if (!profile?.results?.[0]?.id) return;
         const id = profile.results[0].id;
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?author=${id}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/posts/?author=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             const posts = resp.data.results || resp.data || [];
@@ -116,7 +118,7 @@ function NotYourProfile({ part = 'posts' }) {
         const id = profile.results[0].id;
 
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/subscriptions/?subscriber=${id}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/subscriptions/?subscriber=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             
@@ -145,7 +147,7 @@ function NotYourProfile({ part = 'posts' }) {
                     setLoading(false);
                     return;
                 }
-                const result = await axios.get(`http://10.124.215.133:8000/api/profiles/?search=${handle}`, {
+                const result = await axios.get(`${API_CONFIG.BASE_URL}/api/profiles/?search=${handle}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (!result.data?.results?.length) {
@@ -207,7 +209,7 @@ function NotYourProfile({ part = 'posts' }) {
                     </div>
                     <div className={styles.nyprofile_header_right__item}>
                         <div className={styles.nyprofile_item}>
-                            <img className={styles.nyprofile_header__img} src="/images/bell.svg" alt="notifications" onClick={() => navigate('/notifications')} />
+                            <NotificationBell/>
                         </div>
                         <div className={styles.nyprofile_item}>
                             <img className={styles.nyprofile_header__img} src="/images/profile.svg" alt="profile" onClick={() => navigate('/myprofile')} />

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import styles from "./Messanger.module.css";
+import {API_CONFIG} from '../config' //1
 
 const Messanger = () => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const Messanger = () => {
             if (!token) return navigate('/login');
 
             try {
-                const meResp = await axios.get('http://10.124.215.133:8000/auth/users/me/', {
+                const meResp = await axios.get(`${API_CONFIG.BASE_URL}/auth/users/me/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setCurrentUserId(meResp.data.id);
@@ -59,7 +60,7 @@ const Messanger = () => {
 
     const fetchInbox = async (token = localStorage.getItem('access')) => {
         try {
-            const resp = await axios.get('http://10.124.215.133:8000/api/messages/inbox/', {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/messages/inbox/`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             // Чтобы не перерисовывать зря, можно сравнивать длину или ID последнего сообщения
@@ -82,7 +83,7 @@ const Messanger = () => {
     const loadChatByHandle = async (handle, token = localStorage.getItem('access')) => {
         setLoading(true);
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/messages/conversation/?handle=${handle}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/messages/conversation/?handle=${handle}`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             console.log(resp);
@@ -99,7 +100,7 @@ const Messanger = () => {
     const loadMessages = async (partnerId, showLoader = false) => {
         if (showLoader) setLoading(true);
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/messages/conversation/?with=${partnerId}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/messages/conversation/?with=${partnerId}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             setMessages(resp.data.messages); 
@@ -141,7 +142,7 @@ const Messanger = () => {
         
         setIsSearching(true);
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/profiles/?search=${query}`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/profiles/?search=${query}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             setSearchResults(resp.data.results || []);
@@ -155,7 +156,7 @@ const Messanger = () => {
         if (!text.trim() || !activeChat) return;
 
         try {
-            const resp = await axios.post('http://10.124.215.133:8000/api/messages/', {
+            const resp = await axios.post(`${API_CONFIG.BASE_URL}/api/messages/`, {
                 receiver_id: activeChat.id,
                 text: text
             }, {

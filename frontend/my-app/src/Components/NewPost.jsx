@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './NewPost.module.css';
 import { useNavigate } from 'react-router-dom';
+import {API_CONFIG} from '../config' //1
 
 const NewPost = () => {
     const navigate = useNavigate();
@@ -35,7 +36,7 @@ const NewPost = () => {
         }
 
         try {
-            const response = await axios.post('http://10.124.215.133:8000/api/posts/', formData, {
+            const response = await axios.post(`${API_CONFIG.BASE_URL}/api/posts/`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     // Если используешь JWT токены, раскомментируй строку ниже и добавь логику получения токена

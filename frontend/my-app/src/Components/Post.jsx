@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import styles from "./Main.module.css"
 import { useNavigate } from "react-router-dom";
+import {API_CONFIG} from '../config' //1
 
 function Post(props) {
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ function Post(props) {
 
         try {
             const resp = await axios.post(
-                `http://10.124.215.133:8000/api/posts/${props.data.id}/like/`,
+                `${API_CONFIG.BASE_URL}/api/posts/${props.data.id}/like/`,
                 {},
                 {
                     headers: {
