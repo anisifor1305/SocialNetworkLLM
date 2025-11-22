@@ -6,10 +6,10 @@ from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
 from rest_framework.exceptions import PermissionDenied
 
-from .models import Profile, Community, Post, Subscription, Like, Topic, Notification
+from .models import Profile, Community, Post, Subscription, Like, Topic, Notification, Message
 from .serializers import (
     ProfileSerializer, CommunitySerializer, PostSerializer, SubscriptionSerializer, TopicSerializer,
-    NotificationSerializer
+    NotificationSerializer, MessageSerializer, UserShortSerializer
 )
 from .permissions import IsAuthorOrReadOnly, IsProfileOwnerOrReadOnly, IsCommunityCreatorOrReadOnly
 
@@ -72,13 +72,13 @@ class PostViewSet(viewsets.ModelViewSet):
         if community_id:
             try:
                 community = Community.objects.get(id=community_id)
-                # Если модерация выключена ИЛИ автор - админ группы -> Публикуем
+
                 if not community.needs_moderation or community.creator == self.request.user:
                     is_published = True
             except Community.DoesNotExist:
                 pass
         else:
-            is_published = True  # На личной стене сразу публикуем
+            is_published = True
 
         serializer.save(author=self.request.user, is_published=is_published)
 
@@ -86,7 +86,7 @@ class PostViewSet(viewsets.ModelViewSet):
         user = self.request.user
         queryset = Post.objects.all()
         if self.action == 'list':
-            # Показываем опубликованные ИЛИ мои (даже скрытые)
+
             if user.is_authenticated:
                 return queryset.filter(Q(is_published=True) | Q(author=user))
             return queryset.filter(is_published=True)
@@ -108,22 +108,21 @@ class PostViewSet(viewsets.ModelViewSet):
                              'likes_count': post.likes.count(),
                              'is_liked': False})
 
-    # УМНАЯ ЛЕНТА (Смешивание)
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def feed(self, request):
         user = request.user
 
-        # Настройки пагинации (сколько постов за раз грузить)
+
         page_size = 10
 
-        # --- 1. ПОСТЫ ПОДПИСОК ---
+
         subscribed_posts = Post.objects.filter(
             Q(author__followers__subscriber=user) |
             Q(community__members=user),
             is_published=True
         ).distinct()
 
-        # --- 2. ПОСТЫ РЕКОМЕНДАЦИЙ (по темам) ---
+
         user_topics = Community.objects.filter(members=user).values_list('topic', flat=True)
         recommended_posts = Post.objects.filter(
             community__topic__in=user_topics,
@@ -131,47 +130,41 @@ class PostViewSet(viewsets.ModelViewSet):
         ).exclude(
             community__members=user
         ).exclude(
-            id__in=subscribed_posts.values('id')  # Исключаем те, что уже попали в подписки
+            id__in=subscribed_posts.values('id')
         )
 
-        # --- СБОРКА И ПАГИНАЦИЯ ---
-        # Берем, например, последние 50 постов от друзей и 20 рекомендаций
-        # (С запасом, чтобы потом перемешать)
+
         pool_subs = list(subscribed_posts.order_by('-created_at')[:10])
         pool_recs = list(recommended_posts.order_by('-created_at')[:5])
 
         # Складываем
         mixed_feed = pool_subs + pool_recs
 
-        # Сортируем по дате (свежие сверху)
         mixed_feed.sort(key=lambda x: x.created_at, reverse=True)
 
-        # Обрезаем до размера страницы (например, берем топ-10)
+
         mixed_feed = mixed_feed[:page_size]
 
-        # --- 3. ЗАПОЛНИТЕЛЬ (RANDOM) ---
-        # Если набралось меньше 10 постов (например, юзер новый),
-        # добиваем список рандомными постами.
+
         missing_count = page_size - len(mixed_feed)
 
         if missing_count > 0:
-            # Собираем ID тех постов, которые мы УЖЕ нашли, чтобы не было дублей
+
             existing_ids = [p.id for p in mixed_feed]
 
-            # Ищем любые опубликованные посты, кроме тех, что уже есть
-            # order_by('?') - это сортировка в случайном порядке
+
             random_posts = Post.objects.filter(is_published=True) \
                 .exclude(id__in=existing_ids) \
                 .order_by('?')[:missing_count]
 
-            # Добавляем их в конец ленты
+
             mixed_feed.extend(list(random_posts))
 
-        # Сериализуем и отдаем
+
         serializer = self.get_serializer(mixed_feed, many=True)
 
         return Response({
-            'count': len(mixed_feed),  # Сколько отдали сейчас
+            'count': len(mixed_feed),
             'results': serializer.data
         })
 
@@ -209,7 +202,6 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
             return Response({'detail': 'Укажите target_user_id'},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        # ✅ ИСПРАВЛЕНИЕ: Преобразуем в int
         try:
             target_user_id = int(target_user_id)
         except (ValueError, TypeError):
@@ -219,11 +211,11 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
         try:
             subscription = Subscription.objects.get(
                 subscriber=request.user,
-                target_user_id=target_user_id  # Теперь это точно число
+                target_user_id=target_user_id
             )
             subscription.delete()
             return Response({'detail': 'Вы отписались'},
-                            status=status.HTTP_200_OK)  # Изменил на 200 вместо 204
+                            status=status.HTTP_200_OK)
         except Subscription.DoesNotExist:
             return Response({'detail': 'Вы не были подписаны на этого пользователя'},
                             status=status.HTTP_404_NOT_FOUND)
@@ -244,14 +236,14 @@ class NotificationViewSet(viewsets.ModelViewSet):
 
 
 
-class TopicViewSet(viewsets.ReadOnlyModelViewSet): # ReadOnly - темы менять нельзя через API
+class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Topic.objects.all()
     serializer_class = TopicSerializer
     permission_classes = [AllowAny]
 
 
-from .models import Comment  # Импорт
-from .serializers import CommentSerializer  # Импорт
+from .models import Comment
+from .serializers import CommentSerializer
 
 
 class CommentViewSet(viewsets.ModelViewSet):
@@ -265,6 +257,82 @@ class CommentViewSet(viewsets.ModelViewSet):
     ordering_fields = ['created_at']
     ordering = ['-created_at']
 
-    # Авто-авторство
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class MessageViewSet(viewsets.ModelViewSet):
+    serializer_class = MessageSerializer
+    permission_classes = [IsAuthenticated]
+    http_method_names = ['get', 'post', 'delete']
+
+    def get_queryset(self):
+        user = self.request.user
+        return Message.objects.filter(Q(sender=user) | Q(receiver=user))
+
+    def perform_create(self, serializer):
+        serializer.save(sender=self.request.user)
+
+    @action(detail=False, methods=['get'])
+    def conversation(self, request):
+        """
+        Получить переписку с конкретным пользователем.
+        Использование: /api/messages/conversation/?with=ID_SOBESEDNIKA
+        """
+        user = request.user
+        partner_id = request.query_params.get('with')
+
+        if not partner_id:
+            return Response({'detail': 'Параметр "with" обязателен (ID собеседника).'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        messages = Message.objects.filter(
+            Q(sender=user, receiver_id=partner_id) |
+            Q(sender_id=partner_id, receiver=user)
+        ).order_by('created_at')
+
+        unread_messages = messages.filter(receiver=user, is_read=False)
+        unread_messages.update(is_read=True)
+
+        serializer = self.get_serializer(messages, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def inbox(self, request):
+        """
+        Список диалогов (Inbox).
+        Возвращает список пользователей, с которыми была переписка,
+        плюс последнее сообщение от каждого.
+        """
+        user = request.user
+
+
+        messages = Message.objects.filter(
+            Q(sender=user) | Q(receiver=user)
+        ).order_by('-created_at')
+
+
+        conversations = []
+        processed_partners = set()
+
+        for message in messages:
+
+            if message.sender == user:
+                partner = message.receiver
+            else:
+                partner = message.sender
+
+            if partner.id not in processed_partners:
+
+                conversations.append({
+                    'partner': UserShortSerializer(partner).data,
+                    'last_message': {
+                        'text': message.text,
+                        'is_read': message.is_read,
+                        'created_at': message.created_at,
+                        'am_i_sender': message.sender == user
+                    }
+                })
+                processed_partners.add(partner.id)
+
+        return Response(conversations)

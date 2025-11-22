@@ -35,9 +35,6 @@ class Community(models.Model):
 
     members = models.ManyToManyField(User, related_name='communities', blank=True)
 
-    # Настройка группы: Нужна ли премодерация?
-    # Если False - посты появляются сразу (как в чате).
-    # Если True - посты ждут одобрения.
     needs_moderation = models.BooleanField(default=True, verbose_name="Предмодерация постов")
     def __str__(self):
         return self.title
@@ -69,31 +66,26 @@ class Notification(models.Model):
 @receiver(post_save, sender=Subscription)
 def create_subscription_notification(sender, instance, created, **kwargs):
     if created:
-        # 1. Создаем уведомление о подписке
+
         Notification.objects.create(
             recipient=instance.target_user,
             sender=instance.subscriber,
             text=f"Пользователь {instance.subscriber.username} подписался на вас!"
         )
 
-        # 2. Проверяем ВЗАИМНОСТЬ (Стали ли они друзьями?)
-        # Ищем: есть ли подписка в обратную сторону?
         is_mutual = Subscription.objects.filter(
-            subscriber=instance.target_user,  # Тот, на кого подписались
-            target_user=instance.subscriber  # Тот, кто подписался
+            subscriber=instance.target_user,
+            target_user=instance.subscriber
         ).exists()
 
         if is_mutual:
-            # Если взаимно - отправляем уведомление "Вы теперь друзья!" ОБОИМ
 
-            # Тому, кто только что подписался
             Notification.objects.create(
                 recipient=instance.subscriber,
                 sender=instance.target_user,
                 text=f"Ура! Вы теперь друзья с {instance.target_user.username}!"
             )
 
-            # Тому, на кого подписались
             Notification.objects.create(
                 recipient=instance.target_user,
                 sender=instance.subscriber,
@@ -106,12 +98,8 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
 
-    # Если поле пустое (null) -> это пост на личной стене юзера
-    # Если заполнено -> это пост в группе
     community = models.ForeignKey(Community, on_delete=models.CASCADE, related_name='posts', blank=True, null=True)
 
-    # Статус поста.
-    # True = Виден всем. False = Виден только автору и админам (ждет одобрения).
     is_published = models.BooleanField(default=False)
 
     def __str__(self):
@@ -124,7 +112,6 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        # Уникальность: Один юзер может лайкнуть один пост только 1 раз
         unique_together = ('user', 'post')
 
     def __str__(self):
@@ -134,11 +121,6 @@ class Like(models.Model):
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
-
-
-# @receiver(post_save, sender=User)
-# def save_user_profile(sender, instance, **kwargs):
-#     instance.profile.save()
 
 
 def get_user_friends(user):
@@ -164,3 +146,15 @@ class Comment(models.Model):
         return f"Comment by {self.author.username} on {self.post}"
 
 
+class Message(models.Model):
+    sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
+    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
+    text = models.TextField(verbose_name="Текст сообщения")
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['created_at']
+
+    def __str__(self):
+        return f"Message from {self.sender} to {self.receiver}"

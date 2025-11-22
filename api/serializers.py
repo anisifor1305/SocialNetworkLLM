@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import Profile, Community, Subscription, Post, Like, Topic, Comment, Notification
+from .models import Profile, Community, Subscription, Post, Like, Topic, Comment, Notification, Message
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 
-# для отображения не айди, а красиво юзера
+
 class UserShortSerializer(serializers.ModelSerializer):
 
     avatar = serializers.ImageField(source='profile.avatar', read_only=True)
@@ -24,16 +24,12 @@ class CustomUserCreateSerializer(BaseUserCreateSerializer):
         model = User
         fields = ('id', 'email', 'username', 'password', 'nickname')
 
-    # --- 1. ДОБАВЛЯЕМ ЭТОТ МЕТОД ---
+
     def validate(self, attrs):
-        # Вырезаем nickname перед тем, как отдать данные Djoser-у
-        # (чтобы он не пытался запихнуть его в модель User при проверке)
         nickname = attrs.pop('nickname', None)
 
-        # Запускаем стандартную проверку Djoser (пароль и т.д.)
         attrs = super().validate(attrs)
 
-        # Возвращаем nickname обратно, чтобы он дошел до метода create
         if nickname:
             attrs['nickname'] = nickname
 
@@ -67,7 +63,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_friends_count(self, obj):
         """Количество друзей (взаимные подписки)"""
-        from django.db.models import Q
 
         user_following = obj.user.following.values_list('target_user_id', flat=True)
 
@@ -80,7 +75,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def get_friends(self, obj):  # ← Переименовал с get_friends_preview на get_friends
         """Превью друзей"""
-        # Получаем ID людей, на кого подписан пользователь
         user_following = obj.user.following.values_list('target_user_id', flat=True)
 
         friends_subscriptions = Subscription.objects.filter(
@@ -130,7 +124,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 
 class NotificationSerializer(serializers.ModelSerializer):
-    # Показываем отправителя красиво (с аватаркой)
     sender = UserShortSerializer(read_only=True)
 
     class Meta:
@@ -142,7 +135,7 @@ class PostSerializer(serializers.ModelSerializer):
     community_title = serializers.ReadOnlyField(source='community.title')
 
     likes_count = serializers.IntegerField(source='likes.count', read_only=True)
-    is_liked = serializers.SerializerMethodField()  # Вычисляемое поле
+    is_liked = serializers.SerializerMethodField()
     comments_count = serializers.IntegerField(source='comments.count', read_only=True)
 
     class Meta:
@@ -150,14 +143,12 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['id', 'text', 'image', 'created_at',
                   'author', 'community', 'community_title',
                   'is_published', 'is_liked', 'likes_count', 'comments_count']
-        # community оставляем как ID, чтобы при создании поста можно было указать id группы
         read_only_fields = ['is_published']
 
     def get_is_liked(self, obj):
         user = self.context['request'].user
         if user.is_anonymous:
             return False
-        # Проверяем, есть ли лайк от этого юзера на этом посте
         return Like.objects.filter(user=user, post=obj).exists()
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -165,3 +156,17 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'text', 'author', 'post', 'created_at']
+
+
+
+class MessageSerializer(serializers.ModelSerializer):
+    sender = UserShortSerializer(read_only=True)
+    receiver = UserShortSerializer(read_only=True)
+
+    receiver_id = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(), source='receiver', write_only=True
+    )
+
+    class Meta:
+        model = Message
+        fields = ['id', 'sender', 'receiver', 'receiver_id', 'text', 'is_read', 'created_at']
