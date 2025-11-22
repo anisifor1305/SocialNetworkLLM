@@ -3,8 +3,10 @@ import { useEffect, useState } from "react";
 import Post from "./Post";
 import styles from  "./Main.module.css"
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../Contexts/AuthContext';
 
 function Main() {
+    const { logout } = useAuth();
     const navigate = useNavigate();
     const [data, setData] = useState([]);
     useEffect(() => {
@@ -40,7 +42,8 @@ function Main() {
                     </div>
                     <div className={styles.main_header_right}>
                         <div className={styles.main_item} onClick={(e)=>navigate('/notifications')}><img className={styles.main_header__img} src="images/bell.svg" alt="notification" /></div>
-                        <div className={styles.main_item} onClick={(e)=>navigate('/myprofile/')}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/myprofile')}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
+                        <div className={styles.main_item} onClick={logout}><img className={styles.main_header__img} src="images/logout.svg" alt="home" /></div>
                     </div>
                 </div>
                 <div className={styles.main_afterheader}>
