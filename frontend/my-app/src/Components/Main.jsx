@@ -36,11 +36,11 @@ function Main() {
             <div className={styles.main_container}>
                 <div className={styles.main_header}>
                     <div className={styles.main_header_left}>
-                        <div className={styles.main_item}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
                     <div className={styles.main_header_right}>
-                        <div className={styles.main_item}><img className={styles.main_header__img} src="images/bell.svg" alt="search" /></div>
-                        <div className={styles.main_item}><img className={styles.main_header__img} onClick={(e)=>navigate('/myprofile/')}src="images/profile.svg" alt="home" /></div>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/notifications')}><img className={styles.main_header__img} src="images/bell.svg" alt="notification" /></div>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/myprofile/')}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
                 </div>
                 <div className={styles.main_afterheader}>

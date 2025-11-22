@@ -1,19 +1,22 @@
+import { useNavigate } from "react-router-dom";
 import styles from "./Forums.module.css"
 
+
 function Forums() {
+    const navigate = useNavigate();
     return ( 
         <>
         <div className={styles.forums_out_container}>
-            <div className={styles.forums_container}>
-                <header>
-                    <div className={styles.forums_header_left}>
-                        <div className={styles.forums_item}><img className={styles.forums_header__img_logo} src="/images/logo.svg" alt="search" /></div>
+            <div className={styles.main_container}>
+                <div className={styles.main_header}>
+                    <div className={styles.main_header_left}>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
                     </div>
-                    <div className={styles.forums_header_right}>
-                        <div className={styles.forums_item}><img className={styles.forums_header__img} src="/images/search.svg" alt="search" /></div>
-                        <div className={styles.forums_item}><img className={styles.forums_header__img} src="images/profile.svg" alt="home" /></div>
+                    <div className={styles.main_header_right}>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/notifications')}><img className={styles.main_header__img} src="images/bell.svg" alt="notification" /></div>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/myprofile/')}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
-                </header>
+                </div>
                 <div className={styles.forums_afterheader}>
                     <div className={styles.forums_imgShapka}><img className={styles.forums_imgHat} src="/images/ForumHatExample.png" alt="The hat didn't load:("></img></div>
                 </div>
@@ -56,11 +59,10 @@ function Forums() {
                 </div>
                 </div>
                 <div className={styles.forums_bottom__panel}>
-                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} src="images/home.svg" alt="" /></div>
-                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} src="images/searchZh.svg" alt="" /></div>
-                        <div className={styles.forums_bottom__item}><img className={styles.forums_plus__img} src="images/plus.svg" alt="" /></div>
-                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} src="images/message.svg" alt="" /></div>
-                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} src="images/message.svg" alt="" /></div>
+                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} onClick={(e)=>navigate('/')} src="images/home.svg" alt="" /></div>
+                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} onClick={(e)=>navigate('/search')} src="images/searchZh.svg" alt="" /></div>
+                        <div className={styles.forums_bottom__item}><img className={styles.forums_plus__img} onClick={(e)=>navigate('/newpost')} src="images/plus.svg" alt="" /></div>
+                        <div className={styles.forums_bottom__item}><img className={styles.forums_bottom__img} onClick={(e)=>navigate('/messages')} src="images/message.svg" alt="" /></div>
                 </div>
             </div>
         </div>
