@@ -53,11 +53,11 @@ function MyProfile() {
                     {/* Данные */}
                     <div className={styles.InfoBlock}>
                         <div className={styles.Row}>
-                            <span className={styles.Label}>Username: {userdata?.username? userdata.username : "Не найдено"}</span>
+                            <span className={styles.Label}>Ник: {userdata?.nickname? userdata.nickname : "Не найдено"}</span>
                             <span className={styles.Value}></span>
                         </div>
                         <div className={styles.Row}>
-                            <span className={styles.Label}>Handle: {userdata?.handle? userdata.handle : "Не найдено"}</span>
+                            <span className={styles.Label}>Хэндл: {userdata?.handle? userdata.handle : "Не найдено"}</span>
                             <span className={styles.Value}></span>
                         </div>
                         <div className={styles.Row}>
@@ -72,7 +72,7 @@ function MyProfile() {
 
                     {/* Кнопка */}
                     <div className={styles.ButtonPlace}>
-                        <button className={styles.Button}>Изменить Профиль</button>
+                        <button className={styles.Button} onClick={(e)=>{navigate('/profile/edit')}}>Изменить Профиль</button>
                     </div>
                 </div>
 

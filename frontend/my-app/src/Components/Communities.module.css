@@ -1,0 +1,354 @@
+/* === ОСНОВНЫЕ СТИЛИ === */
+* {
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: 'Onest', sans-serif;
+    box-sizing: border-box;
+}
+
+.communities_out_container {
+    padding: 10vh 10vh 15vh 10vh; /* Отступ снизу для меню */
+    background-color: #fffae4;
+    min-height: 100vh;
+    display: block;
+}
+
+.main_container {
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid black;
+    min-height: 100vh;
+    background-color: #fffef9;
+    position: relative;
+}
+
+/* === ШАПКА === */
+.main_header {
+    display: flex;
+    height: 13vh;
+    background-color: #fffef9;
+    border-bottom: 2px solid rgb(191, 191, 191);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.main_header_left {
+    padding-left: 50px;
+    width: 50vw;
+    font-size: 4rem;
+    text-align: center;
+    align-items: center;
+    color: rgb(43, 39, 39);
+    display: flex;
+    justify-content: flex-start;
+}
+
+.main_header_right {
+    gap: 3vw;
+    width: 50vw;
+    font-size: 3rem;
+    align-items: center;
+    text-align: center;
+    color: aliceblue;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 50px;
+}
+
+.main_header__img {
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.main_header__img:hover {
+    transform: scale(1.1);
+}
+
+.main_header__img_logo {
+    height: 4.5rem;
+    width: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.main_header__img_logo:hover {
+    transform: scale(1.05);
+}
+
+.main_item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+/* === ЗАГОЛОВОК / БАННЕР === */
+.main_afterheader {
+    margin-top: 2vw;
+    height: 5vh;
+    background-color: #fffef9;
+    width: 100%;
+    border-bottom: 2px solid rgb(191, 191, 191);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9vw;
+    padding-bottom: 2vh;
+}
+
+.main_afterheader__item {
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+    cursor: pointer;
+    color: #333;
+}
+
+.main_afterheader__item:hover {
+    border-bottom: 3px solid rgb(43, 39, 39);
+}
+
+/* === СПИСОК СООБЩЕСТВ === */
+.communities_body {
+    padding: 20px 0;
+}
+
+/* === КАРТОЧКА СООБЩЕСТВА === */
+.community_InfoForum {
+    min-height: 15vh;
+    border-bottom: 2px solid #D9D9D9;
+    padding: 20px;
+    background-color: #fffef9;
+    transition: background-color 0.2s;
+}
+
+.community_InfoForum:hover {
+    background-color: #fdfbf0;
+}
+
+.community_FormsUp {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2vh;
+    padding-bottom: 1vh;
+}
+
+.community_FormsUpLeft {
+    display: flex;
+    align-items: center;
+    gap: 2vh;
+    cursor: pointer;
+}
+
+.community_FormImgForum {
+    display: flex;
+    align-items: center;
+}
+
+.community_ImgForum {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 10px;
+    object-fit: cover;
+    border: 1px solid #333;
+}
+
+.community_FormNameForum {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2c2c2c;
+}
+
+.community_FormButtonSubscribe {
+    margin-right: 2vh;
+}
+
+.community_ButtonSubscribe {
+    height: 6vh;
+    background: #fffae4;
+    border: 1.5px solid #D9D9D9;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #2c2c2c;
+    padding: 0 4vh;
+    box-sizing: border-box;
+    outline: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.community_ButtonSubscribe:hover {
+    cursor: pointer;
+    background-color: #e4e0cc;
+    transform: translateY(-2px);
+}
+
+.community_ButtonSubscribe:active {
+    transform: scale(0.95);
+    opacity: 0.7;
+}
+
+/* Стиль для кнопки "Выйти" (активное состояние) */
+.community_ButtonSubscribe_Active {
+    composes: community_ButtonSubscribe;
+    background: #e0e0e0;
+    border-color: #999;
+}
+
+.community_FormDescriptionForum {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    text-align: justify;
+    padding-left: 20px;
+    margin-bottom: 15px;
+}
+
+
+/* === МИНИ-ПОСТ ВНУТРИ КАРТОЧКИ === */
+.miniPostContainer {
+    margin-top: 1.5vh;
+    margin-left: 20px;
+    margin-right: 20px;
+    padding: 1.5vh;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+}
+
+.miniPostHeader {
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #888;
+    margin-bottom: 0.5vh;
+    text-transform: uppercase;
+}
+
+.miniPostContent {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+.miniPostText {
+    font-size: 1rem;
+    color: #333;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.miniPostImage {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid #ccc;
+}
+
+/* === НИЖНЕЕ МЕНЮ === */
+.communities_bottom__panel {
+    border-top: 2px solid rgb(191, 191, 191);
+    background-color: #f2f2f0;
+    padding-top: 1vh;
+    box-sizing: border-box;
+    position: fixed;
+    right: 10vh;
+    left: 10vh;
+    gap: 7vw;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1vh 0;
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+}
+
+.communities_bottom__item {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.communities_bottom__item:hover {
+    transform: scale(1.1);
+}
+
+.communities_plus__img {
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.communities_plus__img:hover {
+    transform: scale(1.1);
+}
+
+.communities_bottom__img {
+    width: 2rem;
+    height: 2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.communities_bottom__img:hover {
+    transform: scale(1.1);
+}
+
+/* === АДАПТИВНОСТЬ === */
+@media (max-width: 768px) {
+    .communities_out_container {
+        padding: 0 0 10vh 0;
+    }
+    
+    .main_container {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .main_header_left {
+        padding-left: 20px;
+    }
+    
+    .main_header_right {
+        padding-right: 20px;
+        gap: 2vw;
+    }
+    
+    .communities_bottom__panel {
+        right: 0;
+        left: 0;
+        gap: 5vw;
+        border-radius: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .main_header__img_logo {
+        height: 3.5rem;
+    }
+    
+    .main_header__img {
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+    
+    .community_FormNameForum {
+        font-size: 1.5rem;
+    }
+}
