@@ -8,13 +8,10 @@ import Registration from './Components/Registration';
 import ProtectedRoute from './Components/ProtectedRoute'
 import { AuthProvider } from './Contexts/AuthContext';
 import NotYourProfile from './Components/NotYourProfile'
-<<<<<<< HEAD
 import NewPost from './Components/NewPost';
-=======
 import MyProfile from './Components/MyProfile'
 import Forums from './Components/Forums';
 import CreateForum from './Components/CreateForum';
->>>>>>> 00d07f1979f36db3cc94d4c9cc1fe4dd0333a899
 function App() {
   return (
     <div className="App">
@@ -27,21 +24,26 @@ function App() {
           <Route path="/registration" element={<Registration/>}></Route>
           <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
           <Route path="/:handle" element={<ProtectedRoute><NotYourProfile part="posts"/></ProtectedRoute>} />
           <Route path="/:handle/friends" element={<ProtectedRoute><NotYourProfile part="friends"/></ProtectedRoute>} />
           <Route path="/:handle/photos" element={<ProtectedRoute><NotYourProfile part="photos"/></ProtectedRoute>} />
            <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
 =======
 <<<<<<< HEAD
+>>>>>>> 0aeccfcea8066b1a3c9771e3d503d0d28b4b7fa1
           <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
           <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
-=======
           <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
+<<<<<<< HEAD
+=======
 >>>>>>> 00d07f1979f36db3cc94d4c9cc1fe4dd0333a899
 >>>>>>> e745273f8ce750214c96a7f5a5477b5c59262571
+>>>>>>> 0aeccfcea8066b1a3c9771e3d503d0d28b4b7fa1
         </Routes>
         </AuthProvider>
         </BrowserRouter>

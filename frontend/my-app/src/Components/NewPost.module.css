@@ -12,7 +12,8 @@ svg {
 header {
     display: flex;
         height: 13vh;
-    justify-content: center;
+    justify-content: space-between;
+    align-items: center;
     background-color: #fffef9;
     border-bottom: 2px solid rgb(191, 191, 191);
 }
@@ -42,4 +43,9 @@ header {
 .EbanayaStrelka {
     width: 10rem;
     height: 10rem;
+}
+
+.Strelka {
+    display: flex;
+    justify-content: flex-end;
 }
