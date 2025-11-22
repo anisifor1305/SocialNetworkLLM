@@ -1,0 +1,106 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: "Onest";
+    box-sizing: "border-box";
+}
+
+svg {
+    fill: rgb(43, 39, 39);
+}
+
+.MyProfileOutContainer {
+    padding: 5vh 10vh 0 10vh;
+    background-color: #fffae4;
+}
+
+.MyProfileContainer {
+    position: relative;
+    background-color: #fffef9;
+    overflow: hidden;
+    border-top: 2px solid black;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-radius: 15px 15px 0 0;
+    height: 100vh;
+}
+
+header {
+    display: flex;
+       height: 13vh;
+    background-color: #fffef9;
+        position: relative;
+    border-bottom: 2px solid rgb(191, 191, 191);
+}
+
+.PageName {
+    font-size: 4rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: 27%;
+}
+
+.StrelkaPlace {
+    position: absolute;
+    top: -20%;
+    left: 90%;
+}
+
+.Strelka {
+    width: 10rem;
+    height: 10rem;
+}
+
+.MyPhoto {
+    width: 25rem;
+    height: 40rem;
+}
+
+.PhotoPlace {
+    position: absolute;
+}
+
+.MyNick {
+    position: absolute;
+    top: 13%;
+    left: 52%;
+    font-size: 3rem;
+}
+
+.MyInformation {
+    position: relative;
+    top: 9%;
+    left: -5%;
+    display: flex;
+    font-size: 2rem;
+    justify-content: center;
+}
+
+.MyData {
+    position: relative;
+    top: 9%;
+    left: 0%;
+    display: flex;
+    font-size: 2rem;
+    justify-content: center;
+}
+
+.AboutMySelf {
+    margin-right: 1rem;
+}
+
+.ButtonPos {
+    position: absolute;
+    top: 80%;
+    left: 40%;
+
+}
+
+.Button {
+    width: 80vh;
+    height: 6rem;
+    border-radius: 25px 25px 25px 25px;
+    font-size: 3rem;
+    background-color: #f6c5a5;
+}
