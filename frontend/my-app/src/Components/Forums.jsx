@@ -7,15 +7,15 @@ function Forums() {
             <div className={styles.forums_container}>
                 <header>
                     <div className={styles.forums_header_left}>
-                        <div className={styles.forums_item}><img className={styles.forums_header__img_logo} src="images/logo.svg" alt="search" /></div>
+                        <div className={styles.forums_item}><img className={styles.forums_header__img_logo} src="/images/logo.svg" alt="search" /></div>
                     </div>
                     <div className={styles.forums_header_right}>
-                        <div className={styles.forums_item}><img className={styles.forums_header__img} src="images/search.svg" alt="search" /></div>
+                        <div className={styles.forums_item}><img className={styles.forums_header__img} src="/images/search.svg" alt="search" /></div>
                         <div className={styles.forums_item}><img className={styles.forums_header__img} src="images/profile.svg" alt="home" /></div>
                     </div>
                 </header>
                 <div className={styles.forums_afterheader}>
-                    <div className={styles.forums_imgShapka}><img className={styles.forums_imgHat} src="images/ForumHatExample.png" alt="The hat didn't load:("></img></div>
+                    <div className={styles.forums_imgShapka}><img className={styles.forums_imgHat} src="/images/ForumHatExample.png" alt="The hat didn't load:("></img></div>
                 </div>
                 <div className={styles.forums_body}>
                     <div className={styles.forums_InfoForum}>

@@ -1,106 +1,145 @@
-*{
+/* Глобальный сброс лучше делать в index.css, но если тут, то ок */
+:global(*) {
     margin: 0;
     padding: 0;
     text-decoration: none;
-    font-family: "Onest";
-    box-sizing: "border-box";
-}
-
-svg {
-    fill: rgb(43, 39, 39);
+    font-family: "Onest", sans-serif;
+    box-sizing: border-box; /* Кавычки здесь были ошибкой */
 }
 
 .MyProfileOutContainer {
-    padding: 5vh 10vh 0 10vh;
+    min-height: 100vh;
     background-color: #fffae4;
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Центрируем карточку по центру экрана */
+    padding: 20px;
 }
 
 .MyProfileContainer {
-    position: relative;
     background-color: #fffef9;
+    border: 2px solid black;
+    border-radius: 15px;
+    width: 100%;
+    max-width: 800px; /* Ограничиваем ширину, чтобы на пк не было растянуто */
+    box-shadow: 10px 10px 0px rgba(0,0,0,0.1); /* Стильная тень */
     overflow: hidden;
-    border-top: 2px solid black;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    border-radius: 15px 15px 0 0;
-    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
-header {
+/* HEADER */
+.Header {
     display: flex;
-       height: 13vh;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
     background-color: #fffef9;
-        position: relative;
     border-bottom: 2px solid rgb(191, 191, 191);
 }
 
 .PageName {
-    font-size: 4rem;
-    margin-left: auto;
-    margin-right: auto;
-    width: 27%;
+    font-size: 2.5rem;
+    font-weight: bold;
+    flex-grow: 1;
+    text-align: center;
 }
 
 .StrelkaPlace {
-    position: absolute;
-    top: -20%;
-    left: 90%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .Strelka {
-    width: 10rem;
-    height: 10rem;
+    width: 40px;
+    height: 40px;
+    transition: transform 0.2s;
 }
 
-.MyPhoto {
-    width: 25rem;
-    height: 40rem;
+.Strelka:hover {
+    transform: scale(1.1);
+}
+
+/* CONTENT BODY */
+.ContentWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+    gap: 20px; /* Расстояние между элементами */
 }
 
 .PhotoPlace {
-    position: absolute;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%; /* Делаем круглым, это стандарт профилей */
+    overflow: hidden;
+    border: 3px solid #333;
+}
+
+.MyPhoto {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Чтобы фото не сплющилось */
 }
 
 .MyNick {
-    position: absolute;
-    top: 13%;
-    left: 52%;
-    font-size: 3rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #333;
 }
 
-.MyInformation {
-    position: relative;
-    top: 9%;
-    left: -5%;
+.InfoBlock {
     display: flex;
-    font-size: 2rem;
-    justify-content: center;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 500px;
+    background: rgba(0,0,0,0.03);
+    padding: 20px;
+    border-radius: 10px;
 }
 
-.MyData {
-    position: relative;
-    top: 9%;
-    left: 0%;
+.Row {
     display: flex;
-    font-size: 2rem;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    border-bottom: 1px dashed #ccc;
+    padding-bottom: 5px;
+}
+
+.Label {
+    font-weight: bold;
+    color: #555;
+}
+
+.Value {
+    color: #000;
+}
+
+/* BUTTON */
+.ButtonPlace {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
     justify-content: center;
-}
-
-.AboutMySelf {
-    margin-right: 1rem;
-}
-
-.ButtonPos {
-    position: absolute;
-    top: 80%;
-    left: 40%;
-
 }
 
 .Button {
-    width: 80vh;
-    height: 6rem;
-    border-radius: 25px 25px 25px 25px;
-    font-size: 3rem;
+    padding: 15px 40px;
+    border-radius: 50px;
+    font-size: 1.5rem;
     background-color: #f6c5a5;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+}
+
+.Button:hover {
+    background-color: #eeb088;
+    border-color: #333;
+    transform: translateY(-2px);
 }
