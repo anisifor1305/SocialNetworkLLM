@@ -12,7 +12,10 @@ import NewPost from './Components/NewPost';
 import MyProfile from './Components/MyProfile'
 import Forums from './Components/Forums';
 import CreateForum from './Components/CreateForum';
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7e3ca7cc8b26121988f0b9a3a8a6250c5e24e6da
 function App() {
   return (
     <div className="App">
@@ -25,10 +28,21 @@ function App() {
           <Route path="/registration" element={<Registration/>}></Route>
           <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
 
+<<<<<<< HEAD
           <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
           <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
 
           <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+=======
+          <Route path="/:handle" element={<ProtectedRoute><NotYourProfile part="posts"/></ProtectedRoute>} />
+          <Route path="/:handle/friends" element={<ProtectedRoute><NotYourProfile part="friends"/></ProtectedRoute>} />
+          <Route path="/:handle/photos" element={<ProtectedRoute><NotYourProfile part="photos"/></ProtectedRoute>} />
+           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
+
+          <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+          <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
+          {/* <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} /> */}
+>>>>>>> 7e3ca7cc8b26121988f0b9a3a8a6250c5e24e6da
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
