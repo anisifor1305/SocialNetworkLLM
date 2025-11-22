@@ -1,0 +1,227 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: 'Onest';
+    position: relative;
+}
+svg {
+    fill: rgb(43, 39, 39);
+}
+.notification_out_container{
+    padding: 10vh 10vh 0 10vh;
+    background-color: #fffae4;
+}
+.notification_container{
+    border-radius: 15px;
+    overflow: hidden;
+    border: 2px solid black;
+    /* height: 100vh; */
+    background-color: #fffef9;
+}
+.notification_header{
+    display: flex;
+    /* justify-content: space-around; */
+    /* width: 96vw;
+    margin-left: 2vw;
+    margin-top: 2vw; */
+    height: 13vh;
+    background-color: #fffef9;
+}
+.notification_afterheader{
+    margin-top: 2vw;
+    height: 5vh;
+    background-color: #fffef9;
+    width: 100%;
+    border-bottom:2px solid rgb(191, 191, 191);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9vw;
+    padding-bottom: 2vh;
+}
+.notification_afterheader__item{
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-bottom: 3px solid transparent;
+    transition: all .2s;
+}
+.notification_header_left{
+    padding-left: 50px;
+    width: 50vw;
+    font-size: 4rem;
+    text-align: center;
+    align-items: center;
+    color: rgb(43, 39, 39);
+    display: flex;
+    justify-content: flex-start;
+}
+.notification_header_right{
+    gap: 3vw;
+    width: 50vw;
+    font-size: 3rem;
+    align-items: center;
+    text-align: center;
+    color: aliceblue;
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 50px;
+}
+.notification_header__img{
+    width: 3rem;
+    height: 3rem;
+}
+.notification_notification_body{
+    /* margin-left: 2vw;
+    margin-right: 2vw; */
+    /* width: 96vw;
+    display: grid;
+    grid-template-columns: 32vw 64vw; */
+}
+.notification_part1{
+    display: flex;
+    flex-direction: column;
+}
+.notification_header__img_logo{
+    height: 4.5rem;
+    width: auto;
+}
+.notification_post{
+    margin-top: 2vw;
+    /* width: 66%; */
+    padding-left: 17%;
+    padding-right: 17%;
+    /* border-bottom: 1px solid rgb(43, 39, 39); */
+    padding-bottom: 2vw;
+}
+.notification_profile__img{
+    height: 2.5rem;
+    width: 2.5rem;
+}
+.notification_post__userinfo{
+    font-size: 1rem;
+    /* color: #fefefe; */
+    display: flex;
+    gap: 20px;
+    justify-content: start;
+}
+.notification_post__username{
+    /* width: 100%; */
+    font-weight: 600;
+}
+.notification_post__user__miniinf{
+    color: rgb(108, 108, 108);
+    gap: 20px;
+    /* width: 100%; */
+    display: flex;
+    justify-content: space-between;
+}
+.notification_post__title{
+    margin-top: 1rem;
+    font-size: 2rem;
+}
+.notification_post__text{
+    width: 100%;
+    margin-top: 1rem;
+    text-align: justify;
+}
+.notification_reactions{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    margin-top: 2%;
+    gap: 5vw;
+}
+.notification_reaction{
+    width: 2rem;
+    height:auto ;
+}
+.notification_bottom__panel{
+    border-top: 2px solid rgb(191, 191, 191);
+    background-color: #f2f2f0;
+    padding-top: 1vh;
+    box-sizing: border-box;
+    position: fixed;
+    right: 10vh;
+    left: 10vh;
+    gap: 7vw;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+.notification_plus__img{
+    width: 3rem;
+    height: 3rem;
+}
+.notification_bottom__img{
+    width: 2rem;
+    height: 2rem;
+}
+
+.notification_afterheader__item:hover{
+    border-bottom: 3px solid rgb(43, 39, 39);
+}
+.notification_heart-svg {
+      width: 120px;
+      cursor: pointer;
+      display: inline-block;
+    }
+
+
+.notification_likes_count{
+    font-size: 1.2rem;
+    color: #F5AF8B;
+}
+.notification_likes{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 5px;
+} 
+
+.notification_menu {
+    display: flex;
+    flex-direction: column;
+    background-color:#dddddd;
+    width: 40vh;
+    height: 60vh;
+    border-radius: 20px 20px 20px 20px;
+    position: absolute;
+    top: 50%;
+    left: 58%;
+    border: 3px solid black;
+}
+
+.notification_menu_glav_border {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 20%;
+    border-bottom: 3px solid rgb(161, 161, 161)
+    
+}
+
+.notification_menu_border {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    height: 15%;
+    border-bottom: 2px solid rgb(161, 161, 161)
+    
+}
+
+.notification_menu_text {
+    font-size: 2rem;
+}
+
+.notification_menu_obj {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    font-size: 1.2rem;
+}
+

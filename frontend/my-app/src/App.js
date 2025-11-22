@@ -12,6 +12,7 @@ import NewPost from './Components/NewPost';
 import MyProfile from './Components/MyProfile'
 import Forums from './Components/Forums';
 import CreateForum from './Components/CreateForum';
+import Notifications from './Components/Notifications'
 function App() {
   return (
     <div className="App">
@@ -42,6 +43,8 @@ function App() {
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
+          <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+
 
         </Routes>
         </AuthProvider>

@@ -61,12 +61,12 @@ function MyProfile() {
                             <span className={styles.Value}></span>
                         </div>
                         <div className={styles.Row}>
-                            <span className={styles.Label}>Дата рождения:</span>
+                            <span className={styles.Label}>Дата рождения: {userdata?.birth_date? userdata.birth_date : "Не найдено"}</span>
                             <span className={styles.Value}></span>
                         </div>
                         <div className={styles.Row}>
                             <span className={styles.Label}>О себе:</span>
-                            <span className={styles.Value}>Software Engineer Student</span>
+                            <span className={styles.Value}>{userdata?.bio? userdata.bio : "Не найдено"}</span>
                         </div>
                     </div>
 

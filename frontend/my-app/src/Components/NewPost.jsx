@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './NewPost.module.css';
-
+import { useNavigate } from 'react-router-dom';
 const NewPost= () => {
+    const navigate = useNavigate();
     const [text, setText] = useState('');
     const [image, setImage] = useState(null);
     const [communityId, setCommunityId] = useState(''); // ID группы (строка, которую превратим в число)
@@ -62,7 +63,18 @@ const NewPost= () => {
     return (
         <div className={styles.out_container}>
         <div className={styles.container}>
+
             <div className={styles.ToButton}>
+             <div className={styles.main_header}>
+                <div className={styles.main_header_left}>
+                    <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
+                </div>
+                <div className={styles.main_header_right}>
+                    <div className={styles.main_item} onClick={(e)=>navigate('/notifications')}><img className={styles.main_header__img} src="images/bell.svg" alt="notification" /></div>
+                    <div className={styles.main_item} onClick={(e)=>navigate('/myprofile/')}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
+                </div>
+            </div>
+
             <h2 className={styles.title}>Создать пост</h2>
             <img className={styles.buttonBack} src="/images/back.svg" alt="Назад"></img>
             </div>
@@ -108,7 +120,7 @@ const NewPost= () => {
                     className={styles.submitBtn} 
                     disabled={status === 'loading'}
                 >
-                    {status === 'loading' ? 'Публикация...' : 'Опубликовать 🚀'}
+                    {status === 'loading' ? 'Публикация...' : 'Опубликовать'}
                 </button>
 
 
