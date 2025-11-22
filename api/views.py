@@ -24,18 +24,34 @@ class ProfileViewSet(viewsets.ModelViewSet):
 
 
 class CommunityViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet для работы с сообществами.
+    """
     queryset = Community.objects.all()
     serializer_class = CommunitySerializer
-    permission_classes = [IsAuthenticated, IsCommunityCreatorOrReadOnly]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
-    filter_backends = [filters.SearchFilter, DjangoFilterBackend]
-    search_fields = ['title', 'description']
+    def get_queryset(self):
+        """
+        Для списка всех сообществ (вкладка "Сообщества") делаем рандомную сортировку.
+        NOTE: order_by('?') тяжелая операция для БД, в реальном HighLoad
+        используют отдельные алгоритмы рекомендаций, но для старта это ОК.
+        """
+        if self.action == 'list':
+            return Community.objects.order_by('?')
+        return Community.objects.all()
 
-    filterset_fields = ['members']
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated], url_path='my')
+    def my_communities(self, request):
+        """
+        Эндпоинт: /api/communities/my/
+        Возвращает только те сообщества, на которые подписан текущий юзер.
+        """
+        user = request.user
+        my_groups = Community.objects.filter(members=user)
 
-    def perform_create(self, serializer):
-        community = serializer.save(creator=self.request.user)
-        community.members.add(self.request.user)
+        serializer = self.get_serializer(my_groups, many=True)
+        return Response(serializer.data)
 
     @action(detail=True, methods=['post'], permission_classes=[IsAuthenticated])
     def join(self, request, pk=None):

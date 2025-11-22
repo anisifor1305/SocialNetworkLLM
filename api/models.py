@@ -12,6 +12,7 @@ class Profile(models.Model):
     bio = models.TextField(max_length=500, blank=True, verbose_name="О себе")
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True, verbose_name="Аватарка")
     status = models.CharField(max_length=100, blank=True, default="В сети", verbose_name="Статус")
+    birth_date = models.DateField(blank=True, null=True, verbose_name="Дата рождения")
 
     def __str__(self):
         return f"Профиль: Имя:{self.nickname} Уникальный Хэндл{self.user.username}"

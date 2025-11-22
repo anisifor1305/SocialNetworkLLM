@@ -146,14 +146,9 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     'SERIALIZERS': {
-        # Говорим Djoser: "Для регистрации используй НАШ класс, а не стандартный"
         'user_create': 'api.serializers.CustomUserCreateSerializer',
-
-        # (Опционально) Чтобы при GET /auth/users/me/ данные тоже были красивыми
-        'current_user': 'api.serializers.UserShortSerializer',
+        'current_user': 'api.serializers.CurrentUserSerializer'
     },
-    # Если хочешь, чтобы логин был по email, раскомментируй:
-    # 'LOGIN_FIELD': 'email',
 }
 
 # --- JWT ---
