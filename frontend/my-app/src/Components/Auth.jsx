@@ -21,18 +21,28 @@ function Auth() {
     }
     const login = async(e)=>{
             e.preventDefault()
+            try{
             const resp = await axios.post(url, {
                 username: username,
                 password: password
             })
-            if(resp.status==200){
+            if(resp.status==200 || resp.status==201){
                 console.log(resp);
                 localStorage.setItem('refresh', resp.data.refresh)
                 localStorage.setItem('access', resp.data.access)
                 navigate('/')
             }
+                        else{
+                const el = document.getElementById('5');
+                el.style.display = 'block';
+            }
+            }
 
-    }
+            catch(e){
+                const el = document.getElementById('5');
+                el.style.display = 'block';
+            }
+        }
     return ( 
         <>
         <div className={styles.auth_out_container}>
@@ -48,6 +58,7 @@ function Auth() {
                 </header>
                 <div className={styles.auth_auth_body}>
                     <div className={styles.auth_Entry}>Вход</div>
+                    <div class={styles.registration_incorrect_data} id='5'>Данные некорректны</div>
                     <form>
                     <div className={styles.auth_EmailForm}>
                         <input className={styles.auth_Email} id='1' onChange={valuesChanged} name="username" type="text" placeholder="Логин"/>
