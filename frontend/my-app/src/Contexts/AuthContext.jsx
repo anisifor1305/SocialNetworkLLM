@@ -1,12 +1,13 @@
 // contexts/AuthContext.jsx
 import { createContext, useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const token = localStorage.getItem('access');
     setIsAuthenticated(!!token);
@@ -16,6 +17,7 @@ export const AuthProvider = ({ children }) => {
   const login = (token) => {
     localStorage.setItem('access', token);
     setIsAuthenticated(true);
+    navigate('/');
   };
 
   const logout = () => {

@@ -3,9 +3,11 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './Communities.module.css';
 import CommunityCard from './CommunityCard';
+import { useAuth } from '../Contexts/AuthContext';
 
 const Communities = () => {
     const navigate = useNavigate();
+    const { logout } = useAuth();
     const [communities, setCommunities] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentUserId, setCurrentUserId] = useState(null); // Храним ID юзера
@@ -53,6 +55,7 @@ const Communities = () => {
                         <div className={styles.main_item}>
                             <img className={styles.main_header__img} src="/images/back.svg" alt="back" onClick={() => navigate(-1)} />
                         </div>
+                        <div className={styles.main_item} onClick={logout}><img className={styles.main_header__img} src="images/logout.svg" alt="home" /></div>
                     </div>
                 </header>
 

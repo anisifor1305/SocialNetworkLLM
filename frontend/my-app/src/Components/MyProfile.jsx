@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Импортируем useNavigate
 import styles from "./MyProfile.module.css";
 import axios from 'axios';
+import { useAuth } from '../Contexts/AuthContext';
 
 function MyProfile() {
     const navigate = useNavigate(); // Хук для навигации
+    const { logout } = useAuth();
     const [userdata, setUserdata] = useState()
     // Функция для перехода назад
     const handleGoBack = () => {
@@ -39,6 +41,7 @@ function MyProfile() {
                             style={{ cursor: 'pointer' }} // Указатель, чтобы показать интерактивность
                         />
                     </div>
+                    <div className={styles.main_item} onClick={logout}><img className={styles.main_header__img} src="images/logout.svg" alt="home" /></div>
                 </header>
 
                 <div className={styles.ContentWrapper}>
