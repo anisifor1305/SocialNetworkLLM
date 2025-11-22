@@ -108,7 +108,7 @@ function NotYourProfile({ part = 'posts' }) {
                     setLoading(false);
                     return;
                 }
-                const result = await axios.get(`http://192.168.3.27:8000/api/profiles/?search=${handle}`, {
+                const result = await axios.get(`http://10.124.215.133:8000/api/profiles/?search=${handle}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 if (!result.data?.results?.length) {

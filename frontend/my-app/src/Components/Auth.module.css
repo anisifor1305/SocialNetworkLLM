@@ -255,3 +255,8 @@ header{
 .auth_BtnFrgtPswrd:hover{
     text-decoration: underline; 
 }
+.registration_incorrect_data{
+    color: rgb(255, 80, 80);
+    padding-left: 5vh;
+    display: none;
+}
