@@ -1,235 +1,615 @@
-*{
+/* === ОСНОВНЫЕ СТИЛИ === */
+* {
     margin: 0;
     padding: 0;
     text-decoration: none;
-    font-family: 'Onest';
+    font-family: 'Onest', sans-serif;
     box-sizing: border-box;
 }
-svg {
-    fill: rgb(43, 39, 39);
-}
-.nyprofile_out_container{
-    padding: 5vh 10vh 0 10vh;
+
+.nyprofile_out_container {
+    padding: 10vh 10vh 15vh 10vh;
     background-color: #fffae4;
-}
-.nyprofile_BlockOfInformation{
-
+    min-height: 100vh;
 }
 
-.nyprofile_container{
-    border-radius: 15px 15px 0 0;
+.nyprofile_container {
+    border-radius: 15px;
     overflow: hidden;
-    border-top: 2px solid black;
-    border-left: 2px solid black;
-    border-right: 2px solid black;
-    /* height: 100vh; */
+    border: 2px solid black;
+    min-height: 100vh;
     background-color: #fffef9;
+    position: relative;
 }
 
-header{
+/* === ШАПКА === */
+header {
     display: flex;
-    /* justify-content: space-around; */
-    /* width: 96vw;
-    margin-left: 2vw;
-    margin-top: 2vw; */
+    justify-content: space-between;
+    align-items: center;
     height: 13vh;
     background-color: #fffef9;
     border-bottom: 2px solid rgb(191, 191, 191);
+    padding: 0 20px;
 }
 
-
-.nyprofile_header_left__item{
-    padding-top: 3vh;
-    padding-left: 50px;
-    width: 50vw;
-    font-size: 4rem;
-    text-align: center;
+.nyprofile_header_left__item {
+    display: flex;
     align-items: center;
-    color: rgb(43, 39, 39);
-    display: flex;
-    justify-content: flex;
 }
-.nyprofile_header_right__item{
-    padding-top: 1vh;
-    gap: 3vw;
-    width: 50vw;
-    font-size: 3rem;
-    align-items: center;
-    text-align: center;
-    color: aliceblue;
-    display: flex;
-    justify-content: flex-end;
-    padding-right: 50px;
-}
-.nyprofile_header__img{
-    width: 3rem;
-    height: 3rem;
-}
-.nyprofile_main_body{
 
-}
-.nyprofile_part1{
+.nyprofile_header_right__item {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 2vw;
 }
-.nyprofile_header__img_logo{
+
+.nyprofile_item {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+.nyprofile_item:hover {
+    transform: scale(1.05);
+    background-color: #f8f8f8;
+}
+
+.nyprofile_header__img_logo {
     height: 4.5rem;
     width: auto;
+    cursor: pointer;
 }
-.nyprofile_post{
-    margin-top: 2vw;
-    width: 66%;
-    padding-left: 17%;
-    padding-right: 17%;
-    border-bottom: 1px solid rgb(43, 39, 39);
-    padding-bottom: 2vw;
+
+.nyprofile_header__img {
+    width: 2.5rem;
+    height: 2.5rem;
+    cursor: pointer;
 }
-.nyprofile_profile__img{
-    height: 4rem;
-    width: 4rem;
+
+/* === БЛОК ИНФОРМАЦИИ О ПОЛЬЗОВАТЕЛЕ === */
+.nyprofile_BlockOfInformation {
+    padding: 30px;
+    text-align: center;
+    background: linear-gradient(135deg, #fffef9 0%, #fdfbf0 100%);
+    border-bottom: 2px solid #e9e9e9;
 }
-.nyprofile_post__userinfo{
-    font-size: 1.5rem;
-    /* color: #fefefe; */
+
+.nyprofile_UserPhoto {
+    margin-bottom: 20px;
+}
+
+.nyprofile_profile__img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    background: #f8f8f8;
+}
+
+.nyprofile_NickName {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 8px;
+}
+
+.nyprofile_Handler {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
+
+.nyprofile_Description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #555;
+    max-width: 600px;
+    margin: 0 auto 25px auto;
+    text-align: center;
+}
+
+/* === СЧЕТЧИКИ === */
+.nyprofile_SomeInfo {
+    display: flex;
+    gap: 40px;
+    margin: 25px 0 30px 0;
+    justify-content: center;
+}
+
+.nyprofile_number_post,
+.nyprofile_number_friends {
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 15px 25px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e9e9e9;
+    min-width: 120px;
+}
+
+.nyprofile_number_post:hover,
+.nyprofile_number_friends:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    background: #fffae4;
+}
+
+.nyprofile_ChisloPostov,
+.nyprofile_ChisloFriends {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    margin-bottom: 4px;
+}
+
+.nyprofile_StringPosts,
+.nyprofile_StringFriends {
+    font-size: 0.95rem;
+    color: #666;
+    font-weight: 500;
+}
+
+/* === КНОПКИ === */
+.nyprofile_ButtonTwo {
+    align-items: center;
     display: flex;
     gap: 20px;
-    justify-content: start;
+    justify-content: center;
+    margin-top: 10px;
 }
-.nyprofile_post__username{
-    /* width: 100%; */
+
+.nyprofile_MakeFriendButton {
+    background: #2c2c2c;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-size: 1rem;
     font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 160px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
-.nyprofile_post__user__miniinf{
-    color: rgb(108, 108, 108);
-    gap: 20px;
-    /* width: 100%; */
+
+.nyprofile_MakeFriendButton:hover:not(:disabled) {
+    background: #444;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.nyprofile_MakeFriendButton:disabled {
+    background: #999;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.nyprofile_MessageButton {
+    background: #fffae4;
+    border: 2px solid #d9d9d9;
+    border-radius: 12px;
+    padding: 14px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c2c2c;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+
+.nyprofile_MessageButton:hover {
+    background: #e4e0cc;
+    border-color: #c9c9c9;
+    transform: translateY(-2px);
+}
+
+/* === МЕНЮ ВКЛАДОК === */
+.nyprofile_afterheader {
     display: flex;
-    justify-content: space-between;
-}
-
-/*  */
-.nyprofile_UserPhoto{
-    display: flex;
     justify-content: center;
-    margin-top:5vh;
-}
-.nyprofile_profile__img{
-    height: 10rem;
-    width: 10rem;
-}
-
-
-.nyprofile_NickName{
-    display: flex;
-    justify-content: center;
-    margin-top:5vh;
-    font-size: 3rem;
-}
-
-.nyprofile_Handler{
-    color:#7b7b7b;
-    display: flex;
-    justify-content: center;
-    margin-top:0.1vh;
-    font-size: 1.5rem;
-}
-
-
-.nyprofile_Description{
-    color:#4d4d4d;
-    display: flex;
-    justify-content: center;
-    margin-top:0.5vh;
-    font-size: 2rem;
-}
-
-.nyprofile_SomeInfo{
-    margin-top:3vh;
-    gap: 10vh;
-    display:flex;
-    justify-content: center;
-}
-.nyprofile_number_post{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.nyprofile_ChisloPostov{
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-size: 2rem;
-}
-.nyprofile_StringPosts{
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-}
-
-.nyprofile_number_friends{
-    display:flex;
-    flex-direction: column;
-    justify-content: center;
-}
-.nyprofile_ChisloFriends{
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-size: 2rem;
-}
-.nyprofile_StringFriends{
-    justify-content: center;
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-}
-
-
-.nyprofile_ButtonTwo{
-    margin-top:5vh;
-    gap: 15vh;
-    display:flex;
-    justify-content: center;
-}
-.nyprofile_MakeFriendButton{
-    border-radius:50px;
-    width: 30vh;
-    height: 7vh;
-    font-size: 1.3rem;
-    background: #caddd0;
-    border: none;
-}
-.nyprofile_MessageButton{
-    border-radius:50px;
-    width: 30vh;
-    height: 7vh;
-    font-size: 1.3rem;
-    background: #f6c5a5;
-    border: none;
-}
-
-
-.nyprofile_afterheader{
-    height: 5vh;
+    gap: 40px;
+    padding: 20px;
     background-color: #fffef9;
-    width: 100%;
-    border-top:2px solid rgb(191, 191, 191);
-    border-bottom:2px solid rgb(191, 191, 191);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 9vw;
-    margin-top: 2vh;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
+    border-bottom: 2px solid #e9e9e9;
 }
-.nyprofile_afterheader__item{
-    font-size: 1.25rem;
+
+.nyprofile_afterheader__item {
+    font-size: 1.3rem;
     font-weight: 600;
+    cursor: pointer;
+    padding: 12px 24px;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    color: #666;
     border-bottom: 3px solid transparent;
-    transition: all .2s;
 }
-.nyprofile_afterheader__item:hover{
-    border-bottom: 3px solid rgb(43, 39, 39);
+
+.nyprofile_afterheader__item:hover {
+    background-color: #f8f8f8;
+    color: #2c2c2c;
+    transform: translateY(-2px);
+}
+
+/* === КОНТЕЙНЕР ПОСТОВ/ДРУЗЕЙ === */
+.postsContainer {
+    padding: 20px;
+    min-height: 400px;
+}
+
+/* === СПИСОК ДРУЗЕЙ === */
+.friendsList {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.friendItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #e9e9e9;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.friendItem:hover {
+    background-color: #f8f8f8;
+    transform: translateX(5px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.friendAvatar {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #f8f8f8;
+}
+
+.friendInfo {
+    flex: 1;
+}
+
+.friendName {
+    font-weight: 600;
+    color: #2c2c2c;
+    margin-bottom: 4px;
+    font-size: 1.1rem;
+}
+
+.friendHandle {
+    font-size: 0.9rem;
+    color: #666;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    display: inline-block;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+.friendHandle:hover {
+    color: #2c2c2c;
+    background-color: #f0f0f0;
+    text-decoration: none;
+}
+
+/* === СПИСОК ПОСТОВ === */
+.postsList {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* === ПУСТЫЕ СОСТОЯНИЯ === */
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+    color: #888;
+    font-size: 1.2rem;
+    background: white;
+    border-radius: 16px;
+    margin: 20px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.emptyState p {
+    margin-bottom: 20px;
+}
+
+/* === ЗАГРУЗКА И ОШИБКИ === */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #fffae4;
+    font-size: 1.2rem;
+    color: #666;
+}
+
+.loading::after {
+    content: '';
+    width: 40px;
+    height: 40px;
+    border: 4px solid #e4e0cc;
+    border-top: 4px solid #2c2c2c;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-top: 16px;
+}
+
+.error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #fffae4;
+    font-size: 1.2rem;
+    color: #d32f2f;
+    text-align: center;
+    padding: 20px;
+}
+
+.error::before {
+    content: '⚠️';
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* === АДАПТИВНОСТЬ === */
+@media (max-width: 768px) {
+    .nyprofile_out_container {
+        padding: 5vh 5vh 12vh 5vh;
+    }
+    
+    header {
+        padding: 0 15px;
+        height: 11vh;
+    }
+    
+    .nyprofile_header__img_logo {
+        height: 3.5rem;
+    }
+    
+    .nyprofile_header__img {
+        width: 2rem;
+        height: 2rem;
+    }
+    
+    .nyprofile_BlockOfInformation {
+        padding: 20px;
+    }
+    
+    .nyprofile_profile__img {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .nyprofile_NickName {
+        font-size: 1.8rem;
+    }
+    
+    .nyprofile_Handler {
+        font-size: 1.1rem;
+    }
+    
+    .nyprofile_SomeInfo {
+        gap: 20px;
+    }
+    
+    .nyprofile_number_post,
+    .nyprofile_number_friends {
+        padding: 12px 20px;
+        min-width: 100px;
+    }
+    
+    .nyprofile_ChisloPostov,
+    .nyprofile_ChisloFriends {
+        font-size: 1.5rem;
+    }
+    
+    .nyprofile_ButtonTwo {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .nyprofile_MakeFriendButton,
+    .nyprofile_MessageButton {
+        width: 200px;
+    }
+    
+    .nyprofile_afterheader {
+        gap: 20px;
+        padding: 15px;
+    }
+    
+    .nyprofile_afterheader__item {
+        font-size: 1.1rem;
+        padding: 10px 20px;
+    }
+    
+    .friendItem {
+        padding: 15px;
+    }
+    
+    .friendAvatar {
+        width: 50px;
+        height: 50px;
+    }
+}
+
+@media (max-width: 480px) {
+    .nyprofile_out_container {
+        padding: 2vh 2vh 10vh 2vh;
+    }
+    
+    .nyprofile_container {
+        border-radius: 10px;
+    }
+    
+    header {
+        padding: 0 10px;
+        height: 10vh;
+    }
+    
+    .nyprofile_header__img_logo {
+        height: 3rem;
+    }
+    
+    .nyprofile_header_right__item {
+        gap: 1.5vw;
+    }
+    
+    .nyprofile_BlockOfInformation {
+        padding: 15px;
+    }
+    
+    .nyprofile_profile__img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .nyprofile_NickName {
+        font-size: 1.5rem;
+    }
+    
+    .nyprofile_Handler {
+        font-size: 1rem;
+    }
+    
+    .nyprofile_Description {
+        font-size: 1rem;
+    }
+    
+    .nyprofile_SomeInfo {
+        gap: 15px;
+    }
+    
+    .nyprofile_number_post,
+    .nyprofile_number_friends {
+        padding: 10px 15px;
+        min-width: 80px;
+    }
+    
+    .nyprofile_ChisloPostov,
+    .nyprofile_ChisloFriends {
+        font-size: 1.3rem;
+    }
+    
+    .nyprofile_StringPosts,
+    .nyprofile_StringFriends {
+        font-size: 0.85rem;
+    }
+    
+    .nyprofile_afterheader {
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .nyprofile_afterheader__item {
+        font-size: 1rem;
+        padding: 8px 16px;
+    }
+    
+    .postsContainer {
+        padding: 15px;
+    }
+    
+    .friendItem {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .friendAvatar {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .friendName {
+        font-size: 1rem;
+    }
+    
+    .friendHandle {
+        font-size: 0.85rem;
+    }
+}
+
+/* === АНИМАЦИИ === */
+.nyprofile_BlockOfInformation {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.nyprofile_afterheader {
+    animation: fadeIn 0.8s ease-out;
+}
+
+.postsContainer {
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* === ХОВЕР-ЭФФЕКТЫ ДЛЯ ИКОНОК === */
+.nyprofile_item img {
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nyprofile_item:hover img {
+    transform: scale(1.1);
+    opacity: 0.9;
+}
+.nyprofile_incorrect_data{
+    color: rgb(255, 80, 80);
+    padding-left: 5vh;
+    display: none;
+}
+/* === ПЛАВНЫЕ ПЕРЕХОДЫ === */
+.nyprofile_BlockOfInformation,
+.nyprofile_afterheader__item,
+.friendItem,
+.nyprofile_number_post,
+.nyprofile_number_friends,
+.nyprofile_MakeFriendButton,
+.nyprofile_MessageButton {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

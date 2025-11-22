@@ -70,7 +70,7 @@ const Communities = () => {
                             <CommunityCard 
                                 key={comm.id} 
                                 community={comm} 
-                                currentUserId={currentUserId} // Передаем ID юзера внутрь
+                                currentUserId={currentUserId} 
                             />
                         ))
                     )}

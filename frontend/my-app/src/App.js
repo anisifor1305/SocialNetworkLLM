@@ -16,6 +16,10 @@ import Notifications from './Components/Notifications'
 import Messanger from './Components/Messanger'
 import EditProfile from './Components/EditProfile';
 
+
+
+import Community from './Components/Community';
+
 function App() {
   return (
     <div className="App">
@@ -48,6 +52,10 @@ function App() {
           <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
           <Route path="/messanger" element={<ProtectedRoute><Messanger /></ProtectedRoute>} />
           <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+
+          <Route path="/communities/:id" element={<ProtectedRoute><Community /></ProtectedRoute>} />
+
+
 
         </Routes>
         </AuthProvider>

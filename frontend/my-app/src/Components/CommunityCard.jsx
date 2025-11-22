@@ -23,6 +23,10 @@ const CommunityCard = ({ community }) => {
     const [lastPost, setLastPost] = useState(null);
 
     useEffect(() => {
+        if (community.is_member==true){
+            console.log(community.is_member);
+            setIsMember(true);
+        }   
         const fetchLastPost = async () => {
             try {
                 const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?community=${community.id}&limit=1`, {

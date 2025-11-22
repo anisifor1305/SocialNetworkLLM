@@ -4,23 +4,24 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import Post from "./Post";
 
-// 1. Добавляем деструктуризацию пропса part (по умолчанию 'posts')
 function NotYourProfile({ part = 'posts' }) {
     const [profile, setProfile] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const[postUserid, setPostUserId] = useState();
+    const [postUserid, setPostUserId] = useState();
     const [friendLoading, setFriendLoading] = useState(false);
+    const [isSubscribed, setIsSubscribed] = useState(false);
     
-    // Состояния для контента
+    // Состояния для контента и счетчиков
     const [userPosts, setUserPosts] = useState([]);
-    const [userFriends, setUserFriends] = useState([]); // 2. State для друзей
+    const [userFriends, setUserFriends] = useState([]);
+    const [postsCount, setPostsCount] = useState(0);
+    const [friendsCount, setFriendsCount] = useState(0);
 
     const { handle } = useParams();
     const navigate = useNavigate();
 
     const getErrorMessage = (error) => {
-        // ... (твоя функция getErrorMessage без изменений) ...
         if (typeof error === 'string') return error;
         if (error?.detail) return error.detail;
         if (error?.message) return error.message;
@@ -34,7 +35,6 @@ function NotYourProfile({ part = 'posts' }) {
         return 'Произошла неизвестная ошибка';
     };
 
-    // ... (функция makeFriend без изменений) ...
     const makeFriend = async (e) => {
         e.preventDefault();
         if (!profile?.results?.[0]?.id) {
@@ -43,21 +43,57 @@ function NotYourProfile({ part = 'posts' }) {
         }
         setFriendLoading(true);
         try {
-            await axios.post('http://192.168.3.27:8000/api/subscriptions/', {
+            await axios.post('http://10.124.215.133:8000/api/subscriptions/', {
                 "target_user_id": profile.results[0].id
             }, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             console.log("Запрос в друзья отправлен");
+            // После отправки запроса обновляем счетчик друзей
+            fetchFriendsCount();
         } catch (err) {
             const errorMessage = getErrorMessage(err.response?.data);
-            setError(errorMessage);
+            e.target.textContent = errorMessage;
+            document.getElementById("10").style.display="block";
+            // setError(errorMessage);
         } finally {
             setFriendLoading(false);
         }
     }
 
-    // ... (функция fetchUserPosts без изменений) ...
+    // Функция для получения количества постов пользователя
+    const fetchPostsCount = async (userId) => {
+        try {
+            const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?author=${userId}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
+            });
+            // Если API возвращает пагинацию с count, используем его, иначе считаем длину массива
+            const count = resp.data.count || (Array.isArray(resp.data) ? resp.data.length : (resp.data.results ? resp.data.results.length : 0));
+            setPostsCount(count);
+        } catch (err) {
+            console.error('Ошибка при загрузке количества постов:', err);
+            setPostsCount(0);
+        }
+    }
+
+    // Функция для получения количества друзей/подписок пользователя
+    const fetchFriendsCount = async () => {
+        if (!profile?.results?.[0]?.id) return;
+        const id = profile.results[0].id;
+        
+        try {
+            const resp = await axios.get(`http://10.124.215.133:8000/api/subscriptions/?subscriber=${id}`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
+            });
+            // Аналогично постам - используем count или длину массива
+            const count = resp.data.count || (Array.isArray(resp.data) ? resp.data.length : (resp.data.results ? resp.data.results.length : 0));
+            setFriendsCount(count);
+        } catch (err) {
+            console.error('Ошибка при загрузке количества друзей:', err);
+            setFriendsCount(0);
+        }
+    }
+
     const fetchUserPosts = async () => {
         if (!profile?.results?.[0]?.id) return;
         const id = profile.results[0].id;
@@ -65,36 +101,37 @@ function NotYourProfile({ part = 'posts' }) {
             const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?author=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
-            setUserPosts(resp.data.results || resp.data || []);
+            const posts = resp.data.results || resp.data || [];
+            setUserPosts(posts);
+            // Обновляем счетчик постов
+            setPostsCount(posts.length);
         } catch (err) {
             console.error('Ошибка при загрузке постов:', err);
+            setPostsCount(0);
         }
     }
 
-    // 3. Новая функция для загрузки друзей
     const fetchUserFriends = async () => {
         if (!profile?.results?.[0]?.id) return;
         const id = profile.results[0].id;
 
         try {
-            // ВАЖНО: Проверь URL. Обычно список друзей - это подписки этого пользователя.
-            // Я предполагаю, что мы ищем, на кого подписан этот user (subscriber=id).
             const resp = await axios.get(`http://10.124.215.133:8000/api/subscriptions/?subscriber=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             
-            console.log("Друзья получены:", resp.data);
-            // Сохраняем массив из results, если API возвращает пагинацию
-            setUserFriends(resp.data.results || resp.data || []);
+            const friends = resp.data.results || resp.data || [];
+            setUserFriends(friends);    
+            // Обновляем счетчик друзей
+            setFriendsCount(friends.length);
         } catch (err) {
             console.error('Ошибка при загрузке друзей:', err);
+            setFriendsCount(0);
         }
     }
 
-    // ... (функции навигации handleBack, handleLogoClick без изменений) ...
     const handleBack = () => navigate(-1);
     const handleLogoClick = () => navigate("/");
-
 
     // Загрузка профиля
     useEffect(() => {
@@ -115,7 +152,18 @@ function NotYourProfile({ part = 'posts' }) {
                     setError("Профиль не найден");
                     return;
                 }
+                else{
+                    console.log(result.data.results[0].is_subscribed);
+                    if(result.data.results[0].is_subscribed==true){
+                        setIsSubscribed(true);
+                    }
+                }
                 setProfile(result.data);
+                
+                // После загрузки профиля загружаем счетчики
+                const userId = result.data.results[0].id;
+                await fetchPostsCount(userId);
+                await fetchFriendsCount();
             } catch (err) {
                 setError(getErrorMessage(err.response?.data));
             } finally {
@@ -129,7 +177,7 @@ function NotYourProfile({ part = 'posts' }) {
         }
     }, [handle]);
 
-    // 4. Логика выбора, что загружать: Посты или Друзей
+    // Логика выбора, что загружать: Посты или Друзей
     useEffect(() => {
         if (profile?.results?.[0]?.id) {
             setPostUserId(profile?.results?.[0]?.id);
@@ -139,7 +187,7 @@ function NotYourProfile({ part = 'posts' }) {
                 fetchUserPosts();
             }
         }
-    }, [profile, part]); // Добавили part в зависимости
+    }, [profile, part]);
 
     if (loading) return <div className={styles.loading}>Загрузка профиля...</div>;
     if (error) return <div className={styles.error}>Ошибка: {error}</div>;
@@ -150,7 +198,7 @@ function NotYourProfile({ part = 'posts' }) {
     return (
         <div className={styles.nyprofile_out_container}>
             <div className={styles.nyprofile_container}>
-                {/* Header без изменений */}
+                {/* Header */}
                 <header>
                     <div className={styles.nyprofile_header_left__item}>
                          <div className={styles.nyprofile_item}>
@@ -158,15 +206,19 @@ function NotYourProfile({ part = 'posts' }) {
                         </div>
                     </div>
                     <div className={styles.nyprofile_header_right__item}>
-                        <div className={styles.nyprofile_item}><img className={styles.nyprofile_header__img} src="/images/bell.svg" alt="notifications" /></div>
-                        <div className={styles.nyprofile_item}><img className={styles.nyprofile_header__img} src="/images/profile.svg" alt="profile" /></div>
+                        <div className={styles.nyprofile_item}>
+                            <img className={styles.nyprofile_header__img} src="/images/bell.svg" alt="notifications" onClick={() => navigate('/notifications')} />
+                        </div>
+                        <div className={styles.nyprofile_item}>
+                            <img className={styles.nyprofile_header__img} src="/images/profile.svg" alt="profile" onClick={() => navigate('/myprofile')} />
+                        </div>
                         <div className={styles.nyprofile_item}>
                             <img className={styles.nyprofile_header__img} src="/images/back.svg" alt="back" onClick={handleBack} style={{ cursor: 'pointer' }} />
                         </div>
                     </div>
                 </header>
                 
-                {/* Блок информации о пользователе без изменений */}
+                {/* Блок информации о пользователе */}
                 <div className={styles.nyprofile_BlockOfInformation} id={userData.id}>
                     <div className={styles.nyprofile_UserPhoto}>
                         <img 
@@ -180,69 +232,86 @@ function NotYourProfile({ part = 'posts' }) {
                     <div className={styles.nyprofile_Handler}>@{userData.handle || "user"}</div>
                     <div className={styles.nyprofile_Description}>{userData.bio || "Нет описания"}</div>
                     
+                    {/* Блок с реальными счетчиками */}
                     <div className={styles.nyprofile_SomeInfo}>
                         <div className={styles.nyprofile_number_post}>
-
-                            <div className={styles.nyprofile_ChisloPostov}>{profile.posts_count || 0}</div>
+                            <div className={styles.nyprofile_ChisloPostov}>{postsCount}</div>
                             <div className={styles.nyprofile_StringPosts}>Посты</div>
                         </div>
                         <div className={styles.nyprofile_number_friends}>
-                            <div className={styles.nyprofile_ChisloFriends}>{profile.friends_count || 0}</div>
+                            <div className={styles.nyprofile_ChisloFriends}>{friendsCount}</div>
                             <div className={styles.nyprofile_StringFriends}>Друзья</div>
                         </div>
                     </div>
                     
                     <div className={styles.nyprofile_ButtonTwo}>
+                        <div id="10" className={styles.nyprofile_incorrect_data}>Запрос уже отправлен!</div>
                         <button 
                             className={styles.nyprofile_MakeFriendButton} 
-                            onClick={makeFriend}
+                            onClick={(e)=>makeFriend(e)}
                             disabled={friendLoading}
                         >
-                            {friendLoading ? "Отправка..." : "Подружиться"}
+                            {isSubscribed ? "Заявка отправлена" : "Добавить в друзья"}
                         </button>
-                        <button className={styles.nyprofile_MessageButton}>Написать</button>
+                        <button className={styles.nyprofile_MessageButton}>Сообщение</button>
                     </div>
                 </div>
                 
-                {/* Меню вкладок - здесь можно добавить визуальное выделение активной вкладки */}
+                {/* Меню вкладок */}
                 <div className={styles.nyprofile_afterheader}>
                     <div 
                         className={styles.nyprofile_afterheader__item}
-                        style={{ fontWeight: part !== 'friends' ? 'bold' : 'normal' }} onClick={(e)=>navigate(`/${handle}`)}
+                        style={{ 
+                            fontWeight: part !== 'friends' ? 'bold' : 'normal',
+                            borderBottom: part !== 'friends' ? '2px solid #2c2c2c' : 'none'
+                        }} 
+                        onClick={() => navigate(`/${handle}`)}
                     >
-                        Posts
+                        Посты
                     </div>
                     <div 
                         className={styles.nyprofile_afterheader__item}
-                        style={{ fontWeight: part === 'friends' ? 'bold' : 'normal' }} onClick={(e)=>navigate(`/${handle}/friends`)}
+                        style={{ 
+                            fontWeight: part === 'friends' ? 'bold' : 'normal',
+                            borderBottom: part === 'friends' ? '2px solid #2c2c2c' : 'none'
+                        }} 
+                        onClick={() => navigate(`/${handle}/friends`)}
                     >
-                        Friends
+                        Друзья
                     </div>
-                    {/* <div className={styles.nyprofile_afterheader__item}>Photos</div> */}
                 </div>
 
-                {/* 5. Условный рендеринг контента */}
+                {/* Условный рендеринг контента */}
                 <div className={styles.postsContainer}>
                     {part === 'friends' ? (
                         // === БЛОК ДРУЗЕЙ ===
                         <div className={styles.friendsList}>
                             {userFriends.length > 0 ? (
                                 userFriends.map((item) => (
-                                    // Предполагаем, что item содержит target_user (тот, на кого подписаны)
-                                    <div key={item.id} className={styles.friendItem} style={{ padding: '10px', borderBottom: '1px solid #333', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                    <div key={item.id} className={styles.friendItem}>
                                         <img 
                                             src={item.target_user?.avatar || "/images/profile.svg"} 
                                             alt="avatar" 
-                                            style={{ width: '40px', height: '40px', borderRadius: '50%' }}
+                                            className={styles.friendAvatar}
+                                            onError={(e) => { e.target.src = "/images/profile.svg"; }}
                                         />
-                                        <div>
-                                            <div style={{ fontWeight: 'bold' }}>{item.target_user?.nickname}</div>
-                                            <div style={{ fontSize: '0.8em', color: '#888' }} onClick={(e)=>navigate(`/${e.target.textContent.slice(1)}`)}>@{item.target_user?.handle}</div>
+                                        <div className={styles.friendInfo}>
+                                            <div className={styles.friendName}>
+                                                {item.target_user?.nickname || "Без имени"}
+                                            </div>
+                                            <div 
+                                                className={styles.friendHandle}
+                                                onClick={() => navigate(`/${item.target_user?.handle}`)}
+                                            >
+                                                @{item.target_user?.handle}
+                                            </div>
                                         </div>
                                     </div>
                                 ))
                             ) : (
-                                <p style={{ textAlign: 'center', color: '#888' }}>Список друзей пуст</p>
+                                <div className={styles.emptyState}>
+                                    <p>Список друзей пуст</p>
+                                </div>
                             )}
                         </div>
                     ) : (
@@ -253,8 +322,9 @@ function NotYourProfile({ part = 'posts' }) {
                                     <Post key={post.id} data={post} />
                                 ))
                             ) : (
-                                <p style={{ textAlign: 'center', color: '#888' }}>Постов нет</p>
-
+                                <div className={styles.emptyState}>
+                                    <p>Постов нет</p>
+                                </div>
                             )}
                         </div>
                     )}
