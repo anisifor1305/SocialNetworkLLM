@@ -62,7 +62,7 @@ function NotYourProfile({ part = 'posts' }) {
         if (!profile?.results?.[0]?.id) return;
         const id = profile.results[0].id;
         try {
-            const resp = await axios.get(`http://192.168.3.27:8000/api/posts/?author=${id}`, {
+            const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?author=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             setUserPosts(resp.data.results || resp.data || []);
@@ -79,7 +79,7 @@ function NotYourProfile({ part = 'posts' }) {
         try {
             // ВАЖНО: Проверь URL. Обычно список друзей - это подписки этого пользователя.
             // Я предполагаю, что мы ищем, на кого подписан этот user (subscriber=id).
-            const resp = await axios.get(`http://192.168.3.27:8000/api/subscriptions/?subscriber=${id}`, {
+            const resp = await axios.get(`http://10.124.215.133:8000/api/subscriptions/?subscriber=${id}`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             

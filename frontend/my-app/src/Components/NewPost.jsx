@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styles from './NewPost.module.css';
 import { useNavigate } from 'react-router-dom';
-const NewPost= () => {
+
+const NewPost = () => {
     const navigate = useNavigate();
     const [text, setText] = useState('');
     const [image, setImage] = useState(null);
-    const [communityId, setCommunityId] = useState(''); // ID группы (строка, которую превратим в число)
+    const [communityId, setCommunityId] = useState('');
     const [status, setStatus] = useState('idle'); // idle, loading, success, error
 
     // Обработка выбора файла
@@ -20,7 +21,7 @@ const NewPost= () => {
         e.preventDefault();
         setStatus('loading');
 
-        // 💡 Ключевой момент: используем FormData для файлов
+        // 💡 FormData необходима для отправки файлов
         const formData = new FormData();
         formData.append('text', text);
         
@@ -28,18 +29,17 @@ const NewPost= () => {
             formData.append('image', image);
         }
 
-        // Логика: добавляем community только если ID введен
+        // Добавляем community, только если ID введен
         if (communityId) {
             formData.append('community', communityId);
         }
 
         try {
-            // Замени URL на свой реальный адрес API
-            const response = await axios.post('http://127.0.0.1:8000/api/posts/', formData, {
+            const response = await axios.post('http://10.124.215.133:8000/api/posts/', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    // Не забудь добавить Authorization, если нужна аутентификация:
-                    // 'Authorization': `Bearer ${token}`, 
+                    // Если используешь JWT токены, раскомментируй строку ниже и добавь логику получения токена
+                    'Authorization': `Bearer ${localStorage.getItem('access')}`, 
                 },
             });
 
@@ -51,8 +51,11 @@ const NewPost= () => {
             setImage(null);
             setCommunityId('');
             
-            // Сброс статуса через 3 секунды
-            setTimeout(() => setStatus('idle'), 3000);
+            // Сброс статуса и (опционально) редирект через 2 секунды
+            setTimeout(() => {
+                setStatus('idle');
+                // navigate(-1); // Можно вернуть пользователя назад после успеха
+            }, 3000);
 
         } catch (error) {
             console.error('Error creating post:', error);
@@ -63,19 +66,26 @@ const NewPost= () => {
     return (
         <div className={styles.out_container}>
             <div className={styles.container}>
-                 <div className={styles.main_header}>
+                
+                {/* Хедер */}
+                <div className={styles.main_header}>
                     <div className={styles.main_header_left}>
-                        <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
+                        {/* Логотип ведет на главную */}
+                        <div className={styles.main_item} onClick={() => navigate('/')}>
+                            <img className={styles.main_header__img_logo} src="images/logo.svg" alt="logo" />
+                        </div>
                     </div>
                     <div className={styles.main_header_right}>
-                        {/* TODO сделай переход бека не на главную, а на предыдущую страницу */}
-                        <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img} src="images/back.svg" alt="back" /></div>
+                        {/* ✅ Исправлено: возврат на предыдущую страницу */}
+                        <div className={styles.main_item} onClick={() => navigate(-1)}>
+                            <img className={styles.main_header__img} src="images/back.svg" alt="back" />
+                        </div>
                     </div>
                 </div>
+
                 <h2 className={styles.title}>Создать пост</h2>
 
                 <form onSubmit={handleSubmit} className={styles.form}>
-
                     {/* Текстовое поле */}
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Текст поста</label>
@@ -88,17 +98,22 @@ const NewPost= () => {
                         />
                     </div>
 
+
                     {/* Загрузка картинки */}
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>Изображение</label>
-                        <input 
-                            type="file" 
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className={styles.fileInput}
-                        />
+                        <div className={styles.fileInputWrapper}>
+                            <input 
+                                type="file" 
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                className={styles.fileInput}
+                                id="file-upload"
+                            />
+                            {/* Кастомная метка для файла, если нужно стилизовать input type="file" */}
+                        </div>
+                        {image && <div className={styles.previewName}>Выбран файл: {image.name}</div>}
                     </div>
-
 
                     {/* ID Сообщества (опционально) */}
                     <div className={styles.inputGroup}>
@@ -117,10 +132,8 @@ const NewPost= () => {
                         className={styles.submitBtn} 
                         disabled={status === 'loading'}
                     >
-                        {status === 'loading' ? 'Публикация...' : 'Опубликовать'}
+                        {status === 'loading' ? 'Публикация...' : 'Опубликовать 🚀'}
                     </button>
-
-
 
                     {/* Сообщения о статусе */}
                     {status === 'success' && (
