@@ -29,7 +29,7 @@ function Post(props) {
 
         try {
             const resp = await axios.post(
-                `http://110.124.215.133:8000/api/posts/${props.data.id}/like/`,
+                `http://10.124.215.133:8000/api/posts/${props.data.id}/like/`,
                 {},
                 {
                     headers: {

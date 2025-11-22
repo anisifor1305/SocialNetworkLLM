@@ -184,11 +184,11 @@ function NotYourProfile({ part = 'posts' }) {
                         <div className={styles.nyprofile_number_post}>
 
                             <div className={styles.nyprofile_ChisloPostov}>{profile.posts_count || 0}</div>
-                            <div className={styles.nyprofile_StringPosts}>Posts</div>
+                            <div className={styles.nyprofile_StringPosts}>Посты</div>
                         </div>
                         <div className={styles.nyprofile_number_friends}>
                             <div className={styles.nyprofile_ChisloFriends}>{profile.friends_count || 0}</div>
-                            <div className={styles.nyprofile_StringFriends}>Friends</div>
+                            <div className={styles.nyprofile_StringFriends}>Друзья</div>
                         </div>
                     </div>
                     
@@ -198,9 +198,9 @@ function NotYourProfile({ part = 'posts' }) {
                             onClick={makeFriend}
                             disabled={friendLoading}
                         >
-                            {friendLoading ? "Отправка..." : "Make Friend"}
+                            {friendLoading ? "Отправка..." : "Подружиться"}
                         </button>
-                        <button className={styles.nyprofile_MessageButton}>Message</button>
+                        <button className={styles.nyprofile_MessageButton}>Написать</button>
                     </div>
                 </div>
                 
