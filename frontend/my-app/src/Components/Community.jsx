@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./Community.module.css";
+import NotificationBell from "./NotificationBell";
 
 function Community() {
     const { id } = useParams();
@@ -81,7 +82,7 @@ function Community() {
                     </div>
                     <div className={styles.main_header_right}>
                         <div className={styles.main_item} onClick={() => navigate('/notifications')}>
-                            <img className={styles.main_header__img} src="/images/bell.svg" alt="уведомления" />
+                            <NotificationBell/>
                         </div>
                         <div className={styles.main_item} onClick={() => navigate('/myprofile/')}>
                             <img className={styles.main_header__img} src="/images/profile.svg" alt="профиль" />

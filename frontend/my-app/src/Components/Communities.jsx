@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import styles from './Communities.module.css';
 import CommunityCard from './CommunityCard';
 import { useAuth } from '../Contexts/AuthContext';
+import NotificationBell from './NotificationBell';
 
 const Communities = () => {
     const navigate = useNavigate();
@@ -50,7 +51,7 @@ const Communities = () => {
                     </div>
                     <div className={styles.main_header_right}>
                         <div className={styles.main_item} onClick={() => navigate('/notifications')}>
-                            <img className={styles.main_header__img } src="/images/bell.svg" alt="notifications" />
+                            <NotificationBell/>
                         </div>
                         <div className={styles.main_item}>
                             <img className={styles.main_header__img} src="/images/back.svg" alt="back" onClick={() => navigate(-1)} />

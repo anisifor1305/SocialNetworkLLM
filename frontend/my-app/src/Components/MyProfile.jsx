@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'; // Импортируем useNav
 import styles from "./MyProfile.module.css";
 import axios from 'axios';
 import { useAuth } from '../Contexts/AuthContext';
+import NotificationBell from './NotificationBell';
 
 function MyProfile() {
     const navigate = useNavigate(); // Хук для навигации
@@ -42,6 +43,7 @@ function MyProfile() {
                         />
                     </div>
                     <div className={styles.main_item} onClick={logout}><img className={styles.main_header__img} src="images/logout.svg" alt="home" /></div>
+                    <div className={styles.main_item} onClick={logout}><NotificationBell/></div>
                 </header>
 
                 <div className={styles.ContentWrapper}>

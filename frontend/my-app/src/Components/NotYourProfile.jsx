@@ -3,6 +3,7 @@ import styles from "./NotYourProfile.module.css"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import Post from "./Post";
+import NotificationBell from "./NotificationBell";
 
 function NotYourProfile({ part = 'posts' }) {
     const [profile, setProfile] = useState(null);
@@ -207,7 +208,7 @@ function NotYourProfile({ part = 'posts' }) {
                     </div>
                     <div className={styles.nyprofile_header_right__item}>
                         <div className={styles.nyprofile_item}>
-                            <img className={styles.nyprofile_header__img} src="/images/bell.svg" alt="notifications" onClick={() => navigate('/notifications')} />
+                            <NotificationBell/>
                         </div>
                         <div className={styles.nyprofile_item}>
                             <img className={styles.nyprofile_header__img} src="/images/profile.svg" alt="profile" onClick={() => navigate('/myprofile')} />
