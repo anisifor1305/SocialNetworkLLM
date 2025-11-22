@@ -41,7 +41,7 @@ function Community() {
     const handleLike = async (postId, isCurrentlyLiked) => {
         try {
             if (isCurrentlyLiked) {
-                await axios.post(`http://10.124.215.133:8000/api/posts/${postId}/like/`, {
+                await axios.post(`http://10.124.215.133:8000/api/posts/${postId}/like/`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
                 });
             } else {
