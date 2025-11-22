@@ -4,15 +4,16 @@ import styles from "./Messanger.module.css"
 import { useNavigate } from "react-router-dom"
 
 
+
 function Messanger() {
-    
+    const navigate = useNavigate();
     return ( 
         <>
         <div className={styles.msngr_out_container}>
             <div className={styles.msngr_container}>
                 <div className={styles.msngr_leftSide}>
                     <div className={styles.msngr_headLeft}>
-                    <div className={styles.msngr_logo}><img className={styles.msngr_logoImg} src="images/logo.svg" alt="logo"/></div>
+                    <div className={styles.msngr_logo} onClick={() => navigate('/')}><img className={styles.msngr_logoImg} src="images/logo.svg" alt="logo"/></div>
                     <div className={styles.msngr_search}><img className={styles.msngr_searchImg} src="images/searchZh.svg" alt="search"/></div>
                     </div>
                     <div className={styles.msngr_chats}>

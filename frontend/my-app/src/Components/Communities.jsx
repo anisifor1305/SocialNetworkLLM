@@ -47,8 +47,8 @@ const Communities = () => {
                         </div>
                     </div>
                     <div className={styles.main_header_right}>
-                        <div className={styles.main_item}>
-                            <img className={styles.main_header__img} src="/images/bell.svg" alt="notifications" />
+                        <div className={styles.main_item} onClick={() => navigate('/notifications')}>
+                            <img className={styles.main_header__img } src="/images/bell.svg" alt="notifications" />
                         </div>
                         <div className={styles.main_item}>
                             <img className={styles.main_header__img} src="/images/back.svg" alt="back" onClick={() => navigate(-1)} />
@@ -59,7 +59,7 @@ const Communities = () => {
                 <div className={styles.main_afterheader}>
                     <div className={styles.main_afterheader__item} onClick={() => navigate('/')}>Главная</div>
                     <div className={styles.main_afterheader__item} style={{borderBottom: '3px solid rgb(43, 39, 39)'}}>Сообщества</div>
-                    <div className={styles.main_afterheader__item} onClick={() => navigate('/messages')}>Сообщения</div>
+                    <div className={styles.main_afterheader__item} onClick={() => navigate('/messanger')}>Сообщения</div>
                 </div>
 
                 <div className={styles.communities_body}>
@@ -85,10 +85,10 @@ const Communities = () => {
                     <div className={styles.communities_bottom__item} onClick={() => navigate('/newpost')}>
                         <img className={styles.communities_plus__img} src="/images/plus.svg" alt="plus" />
                     </div>
-                    <div className={styles.communities_bottom__item} onClick={() => navigate('/messages')}>
+                    <div className={styles.communities_bottom__item} onClick={() => navigate('/messanger')}>
                         <img className={styles.communities_bottom__img} src="/images/message.svg" alt="messages" />
                     </div>
-                    <div className={styles.communities_bottom__item} onClick={() => navigate('/profile')}>
+                    <div className={styles.communities_bottom__item} onClick={() => navigate('/myprofile')}>
                         <img className={styles.communities_bottom__img} src="/images/profile.svg" alt="profile" />
                     </div>
                 </div>
