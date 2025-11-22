@@ -46,7 +46,7 @@ function Main() {
                 <div className={styles.main_afterheader}>
                     <div className={styles.main_afterheader__item} onClick={(e)=>navigate('/')}>Главная</div>
                     <div className={styles.main_afterheader__item} onClick={(e)=>navigate('/communities')}>Сообщества</div>
-                    <div className={styles.main_afterheader__item}>Сообщения</div>
+                    <div className={styles.main_afterheader__item}onClick={(e)=>navigate('/messanger')}>Сообщения</div>
                 </div>
                 <div className={styles.main_body}>
                     {/* <Post/>   */}
@@ -59,7 +59,7 @@ function Main() {
                 <div className={styles.main_bottom__panel}>    
                 <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} onClick={(e)=>navigate('/search')} src="images/searchZh.svg" alt="" /></div>
                 <div className={styles.main_bottom__item}><img className={styles.main_plus__img} onClick={(e)=>navigate('/newpost')} src="images/plus.svg" alt="" /></div>
-                <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} onClick={(e)=>navigate('/messages')} src="images/message.svg" alt="" /></div>
+                <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} onClick={(e)=>navigate('/messanger')} src="images/message.svg" alt="" /></div>
                 </div>
             </div>
         </div>

@@ -46,8 +46,8 @@ function App() {
 
           <Route path="/messanger" element={<ProtectedRoute><Messanger /></ProtectedRoute>} />
           <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
-
-
+          <Route path="/messanger" element={<ProtectedRoute><Messanger /></ProtectedRoute>} />
+          <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
 
         </Routes>
         </AuthProvider>
