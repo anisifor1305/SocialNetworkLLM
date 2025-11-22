@@ -25,6 +25,12 @@ function App() {
           <Route path="/registration" element={<Registration/>}></Route>
           <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
 
+
+          <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+          <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
+
+          <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+=======
           <Route path="/:handle" element={<ProtectedRoute><NotYourProfile part="posts"/></ProtectedRoute>} />
           <Route path="/:handle/friends" element={<ProtectedRoute><NotYourProfile part="friends"/></ProtectedRoute>} />
           <Route path="/:handle/photos" element={<ProtectedRoute><NotYourProfile part="photos"/></ProtectedRoute>} />
@@ -33,6 +39,7 @@ function App() {
           <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
           <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
           {/* <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} /> */}
+
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />

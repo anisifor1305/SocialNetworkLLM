@@ -61,73 +61,76 @@ const NewPost= () => {
     };
 
     return (
-        <div className={styles.container}>
-             <div className={styles.main_header}>
-                <div className={styles.main_header_left}>
-                    <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
+        <div className={styles.out_container}>
+            <div className={styles.container}>
+                 <div className={styles.main_header}>
+                    <div className={styles.main_header_left}>
+                        <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img_logo} src="images/logo.svg" alt="search" /></div>
+                    </div>
+                    <div className={styles.main_header_right}>
+                        {/* TODO сделай переход бека не на главную, а на предыдущую страницу */}
+                        <div className={styles.main_item} onClick={(e)=>navigate('/')}><img className={styles.main_header__img} src="images/back.svg" alt="back" /></div>
+                    </div>
                 </div>
-                <div className={styles.main_header_right}>
-                    <div className={styles.main_item} onClick={(e)=>navigate('/notifications')}><img className={styles.main_header__img} src="images/bell.svg" alt="notification" /></div>
-                    <div className={styles.main_item} onClick={(e)=>navigate('/myprofile/')}><img className={styles.main_header__img} src="images/profile.svg" alt="home" /></div>
-                </div>
+                <h2 className={styles.title}>Создать пост</h2>
+
+                <form onSubmit={handleSubmit} className={styles.form}>
+
+                    {/* Текстовое поле */}
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Текст поста</label>
+                        <textarea 
+                            className={styles.textarea}
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            placeholder="О чем думаете?"
+                            required
+                        />
+                    </div>
+
+                    {/* Загрузка картинки */}
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>Изображение</label>
+                        <input 
+                            type="file" 
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className={styles.fileInput}
+                        />
+                    </div>
+
+
+                    {/* ID Сообщества (опционально) */}
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>ID Сообщества (необязательно)</label>
+                        <input 
+                            type="number" 
+                            value={communityId}
+                            onChange={(e) => setCommunityId(e.target.value)}
+                            placeholder="Например: 1"
+                            className={styles.input}
+                        />
+                    </div>
+
+                    <button 
+                        type="submit" 
+                        className={styles.submitBtn} 
+                        disabled={status === 'loading'}
+                    >
+                        {status === 'loading' ? 'Публикация...' : 'Опубликовать'}
+                    </button>
+
+
+
+                    {/* Сообщения о статусе */}
+                    {status === 'success' && (
+                        <div className={styles.successMsg}>Пост успешно создан! ✅</div>
+                    )}
+                    {status === 'error' && (
+                        <div className={styles.errorMsg}>Ошибка при создании поста ❌</div>
+                    )}
+                </form>
             </div>
-            <h2 className={styles.title}>Создать пост</h2>
-            
-            <form onSubmit={handleSubmit} className={styles.form}>
-                
-                {/* Текстовое поле */}
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>Текст поста</label>
-                    <textarea 
-                        className={styles.textarea}
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        placeholder="О чем думаете?"
-                        required
-                    />
-                </div>
-
-                {/* Загрузка картинки */}
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>Изображение</label>
-                    <input 
-                        type="file" 
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        className={styles.fileInput}
-                    />
-                </div>
-
-                {/* ID Сообщества (опционально) */}
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>ID Сообщества (необязательно)</label>
-                    <input 
-                        type="number" 
-                        value={communityId}
-                        onChange={(e) => setCommunityId(e.target.value)}
-                        placeholder="Например: 1"
-                        className={styles.input}
-                    />
-                </div>
-
-                <button 
-                    type="submit" 
-                    className={styles.submitBtn} 
-                    disabled={status === 'loading'}
-                >
-                    {status === 'loading' ? 'Публикация...' : 'Опубликовать'}
-                </button>
-
-
-
-                {/* Сообщения о статусе */}
-                {status === 'success' && (
-                    <div className={styles.successMsg}>Пост успешно создан! ✅</div>
-                )}
-                {status === 'error' && (
-                    <div className={styles.errorMsg}>Ошибка при создании поста ❌</div>
-                )}
-            </form>
         </div>
     );
 };
