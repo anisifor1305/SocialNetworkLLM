@@ -5,7 +5,7 @@ import styles from  "./Main.module.css"
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../Contexts/AuthContext';
 import NotificationBell from "./NotificationBell";
-import {API_CONFIG} from '../config' //1
+import { API_CONFIG } from '../config' //1
 
 function Main() {
     const { logout } = useAuth();
@@ -15,7 +15,7 @@ function Main() {
         const parseData = async() => {
             try {
                 const token = localStorage.getItem('access')
-                const response = await axios.get(`${API_CONFIG}/api/posts/feed/`, { //2
+                const response = await axios.get(`${API_CONFIG.BASE_URL}/api/posts/feed/`, { //2
                 headers: {
                     'Authorization': `Bearer ${token}`,
                 }
