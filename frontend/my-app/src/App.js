@@ -14,6 +14,7 @@ import Communities from './Components/Communities';
 import CreateForum from './Components/CreateForum';
 import Notifications from './Components/Notifications'
 import EditProfile from './Components/EditProfile';
+import Community from './Components/Community';
 function App() {
   return (
     <div className="App">
@@ -42,6 +43,7 @@ function App() {
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
           <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+          <Route path="/communities/:id" element={<ProtectedRoute><Community /></ProtectedRoute>} />
 
 
         </Routes>
