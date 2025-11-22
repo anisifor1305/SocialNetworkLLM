@@ -60,9 +60,12 @@ const NewPost= () => {
     };
 
     return (
+        <div className={styles.out_container}>
         <div className={styles.container}>
+            <div className={styles.ToButton}>
             <h2 className={styles.title}>Создать пост</h2>
-            
+            <img className={styles.buttonBack} src="/images/back.svg" alt="Назад"></img>
+            </div>
             <form onSubmit={handleSubmit} className={styles.form}>
                 
                 {/* Текстовое поле */}
@@ -118,6 +121,7 @@ const NewPost= () => {
                     <div className={styles.errorMsg}>Ошибка при создании поста ❌</div>
                 )}
             </form>
+        </div>
         </div>
     );
 };
