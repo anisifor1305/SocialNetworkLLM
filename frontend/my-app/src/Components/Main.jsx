@@ -45,7 +45,7 @@ function Main() {
                 </div>
                 <div className={styles.main_afterheader}>
                     <div className={styles.main_afterheader__item} onClick={(e)=>navigate('/')}>Главная</div>
-                    <div className={styles.main_afterheader__item} onClick={(e)=>navigate('/forums')}>Форум</div>
+                    <div className={styles.main_afterheader__item} onClick={(e)=>navigate('/communities')}>Сообщества</div>
                     <div className={styles.main_afterheader__item}>Сообщения</div>
                 </div>
                 <div className={styles.main_body}>
@@ -56,12 +56,10 @@ function Main() {
                     )}
                     
                 </div>
-                <div className={styles.main_bottom__panel}>
-                        {/* <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/home.svg" alt="" /></div> */}
-                        <div className={styles.main_bottom__item}><img className={styles.main_bottom__img}  src="images/searchZh.svg" alt="" /></div>
-                        <div className={styles.main_bottom__item} onClick={(e)=>navigate('/newpost')}><img className={styles.main_plus__img} src="images/plus.svg" alt="" /></div>
-                        <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/message.svg" alt="" /></div>
-                        {/* <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} src="images/message.svg" alt="" /></div> */}
+                <div className={styles.main_bottom__panel}>    
+                <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} onClick={(e)=>navigate('/search')} src="images/searchZh.svg" alt="" /></div>
+                <div className={styles.main_bottom__item}><img className={styles.main_plus__img} onClick={(e)=>navigate('/newpost')} src="images/plus.svg" alt="" /></div>
+                <div className={styles.main_bottom__item}><img className={styles.main_bottom__img} onClick={(e)=>navigate('/messages')} src="images/message.svg" alt="" /></div>
                 </div>
             </div>
         </div>

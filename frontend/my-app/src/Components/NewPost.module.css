@@ -68,7 +68,7 @@ html, body {
     transition: all .2s;
 }
 .main_header_left{
-    padding-left: 50px;
+    padding-left: 25px;
     width: 50vw;
     font-size: 4rem;
     text-align: center;
@@ -86,7 +86,6 @@ html, body {
     color: aliceblue;
     display: flex;
     justify-content: flex-end;
-    padding-right: 50px;
 }
 .main_header__img{
     width: 3rem;

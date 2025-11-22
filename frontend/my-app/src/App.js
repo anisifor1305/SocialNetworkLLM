@@ -10,10 +10,14 @@ import { AuthProvider } from './Contexts/AuthContext';
 import NotYourProfile from './Components/NotYourProfile'
 import NewPost from './Components/NewPost';
 import MyProfile from './Components/MyProfile'
-import Forums from './Components/Forums';
+import Communities from './Components/Communities';
 import CreateForum from './Components/CreateForum';
 import Notifications from './Components/Notifications'
+<<<<<<< HEAD
 import Messanger from './Components/Messanger'
+=======
+import EditProfile from './Components/EditProfile';
+>>>>>>> 161b7a3f633ff90cfd6585c5426fa6f7ca7bf260
 function App() {
   return (
     <div className="App">
@@ -30,22 +34,23 @@ function App() {
           <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
           <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
 
-          <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
-=======
           <Route path="/:handle" element={<ProtectedRoute><NotYourProfile part="posts"/></ProtectedRoute>} />
           <Route path="/:handle/friends" element={<ProtectedRoute><NotYourProfile part="friends"/></ProtectedRoute>} />
           <Route path="/:handle/photos" element={<ProtectedRoute><NotYourProfile part="photos"/></ProtectedRoute>} />
-           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
 
           <Route path="/handler" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
           <Route path="/newpost" element={<ProtectedRoute><NewPost /></ProtectedRoute>} />
-          {/* <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} /> */}
 
           <Route path="/myprofile" element={<ProtectedRoute><MyProfile /></ProtectedRoute>} />
-          <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
+          <Route path="/communities" element={<ProtectedRoute><Communities /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
+<<<<<<< HEAD
           <Route path="/messanger" element={<ProtectedRoute><Messanger /></ProtectedRoute>} />
+=======
+          <Route path="/profile/edit" element={<ProtectedRoute><EditProfile /></ProtectedRoute>} />
+
+>>>>>>> 161b7a3f633ff90cfd6585c5426fa6f7ca7bf260
 
         </Routes>
         </AuthProvider>
