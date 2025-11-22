@@ -44,8 +44,10 @@ html, body {
     /* width: 96vw;
     margin-left: 2vw;
     margin-top: 2vw; */
-    height: 13vh;
+    height: 8vh;
     background-color: #fffef9;
+    border-bottom: 2px solid #3c3c3c;
+    margin-bottom: 1vh;
 }
 .main_afterheader{
     margin-top: 2vw;
@@ -179,10 +181,13 @@ html, body {
     justify-content: space-between;
     align-items: center;
 }
-.buttonBack{
+.main_header__img{
     height: 40px;
     transition: transform 0.2s;
 }
-.buttonBack:hover{
+.main_header__img:hover{
     transform: scale(1.1);
+}
+.main_header__img_logo{
+    height:5rem;
 }
