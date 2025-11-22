@@ -5,7 +5,7 @@ import styles from './Communities.module.css';
 import {API_CONFIG} from '../config' //1
 
 const MiniPost = ({ post }) => {
-    if (!post) return null; // Если поста нет, просто ничего не показываем, чтобы не портить дизайн
+    if (!post) return null; 
     
     return (
         <div className={styles.miniPostContainer}>

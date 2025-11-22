@@ -14,13 +14,39 @@ function Community() {
     const [posts, setPosts] = useState([]);
     const [community, setCommunity] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [communityId, setCommunityId] = useState(null)
+    const [isMember, setIsMember] = useState(false)
 
+    const handleJoin = async (e) => {
+        console.log('dfdjfhudfhuf');
+        // e.stopPropagation();
+        console.log(e.target);
+        console.log(isMember);
+        try {
+            if(isMember){
+                await axios.post(`${API_CONFIG.BASE_URL}/api/communities/${communityId}/leave/`, {}, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
+            });
+            setIsMember(false)
+            e.target.textContent = "Подписаться"
+            }
+            else{
+                await axios.post(`${API_CONFIG.BASE_URL}/api/communities/${communityId}/join/`, {}, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
+            });
+            setIsMember(true)
+            e.target.textContent = "Отписаться"
+            }
+
+        } catch (err) { console.error(err); }
+    };
     const fetchCommunityInfo = async () => {
         try {
             const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/communities/${id}/`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
-            setCommunity(resp.data);
+            setIsMember(resp.data.is_member)
+            setCommunityId(resp.data.id)
         } catch (err) {
             console.error("Err loading community", err);
         }
@@ -42,20 +68,26 @@ function Community() {
 
     const handleLike = async (postId, isCurrentlyLiked) => {
         try {
+            console.log(isMember);
             if (isCurrentlyLiked) {
                 await axios.post(`${API_CONFIG.BASE_URL}/api/posts/${postId}/like/`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
                 });
+                document.getElementById("12").textContent="dddd";
+                isMember = false;
             } else {
                 await axios.post(`${API_CONFIG.BASE_URL}/api/posts/${postId}/like/`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
                 });
+                document.getElementById("12").textContent="dddd";
+                isMember=true;
             }
             fetchPosts();
         } catch (err) {
             console.error("Err with like", err);
         }
     };
+
 
     useEffect(() => {
         fetchCommunityInfo();
@@ -119,8 +151,8 @@ function Community() {
                                 </div>
                             </div>
                             <div className={styles.community_FormButtonSubscribe}>
-                                <button className={styles.community_ButtonSubscribe}>
-                                    {community?.is_member ? 'Отписаться' : 'Подписаться'}
+                                <button className={styles.community_ButtonSubscribe} id="12" onClick={(e)=>handleJoin(e)}> 
+                                    {isMember ? 'Отписаться' : 'Подписаться'}
                                 </button>
                             </div>
                         </div>

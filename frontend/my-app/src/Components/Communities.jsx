@@ -12,7 +12,7 @@ const Communities = () => {
     const { logout } = useAuth();
     const [communities, setCommunities] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [currentUserId, setCurrentUserId] = useState(null); // Храним ID юзера
+    const [currentUserId, setCurrentUserId] = useState(null); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -20,13 +20,11 @@ const Communities = () => {
                 setLoading(true);
                 const token = localStorage.getItem('access');
                 
-                // 1. Узнаем, кто мы (чтобы правильно рисовать кнопки "Вступить/Выйти")
                 const meResp = await axios.get(`${API_CONFIG.BASE_URL}/auth/users/me/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 setCurrentUserId(meResp.data.id);
 
-                // 2. Грузим сообщества
                 const commResp = await axios.get(`${API_CONFIG.BASE_URL}/api/communities/`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
