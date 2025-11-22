@@ -1,3 +1,5 @@
+from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from rest_framework import viewsets, filters, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -40,6 +42,9 @@ class CommunityViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return Community.objects.order_by('?')
         return Community.objects.all()
+
+    def perform_create(self, serializer):
+        serializer.save(creator=self.request.user)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
     def randon_communities(self, request):
@@ -283,7 +288,13 @@ class NotificationViewSet(viewsets.ModelViewSet):
         self.get_queryset().update(is_read=True)
         return Response({'status': 'All marked as read'})
 
+    @action(detail=False, methods=['get'])
+    def auto_read(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        queryset.filter(is_read=False).update(is_read=True)
 
+        return Response(serializer.data)
 
 class TopicViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Topic.objects.all()
@@ -325,56 +336,69 @@ class MessageViewSet(viewsets.ModelViewSet):
     @action(detail=False, methods=['get'])
     def conversation(self, request):
         """
-        Получить переписку с конкретным пользователем.
-        Использование: /api/messages/conversation/?with=ID_SOBESEDNIKA
+        Получить переписку с пользователем.
+        Можно искать по ID (?with=123) или по Handle (?handle=username).
         """
         user = request.user
         partner_id = request.query_params.get('with')
+        partner_handle = request.query_params.get('handle')
 
-        if not partner_id:
-            return Response({'detail': 'Параметр "with" обязателен (ID собеседника).'},
-                            status=status.HTTP_400_BAD_REQUEST)
+        target_user = None
 
+        # 1. Пытаемся найти пользователя
+        if partner_id:
+            target_user = get_object_or_404(User, id=partner_id)
+        elif partner_handle:
+            target_user = get_object_or_404(User, username=partner_handle)
+        else:
+            return Response(
+                {'detail': 'Укажите ?with=ID или ?handle=USERNAME собеседника.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 2. Загружаем сообщения
         messages = Message.objects.filter(
-            Q(sender=user, receiver_id=partner_id) |
-            Q(sender_id=partner_id, receiver=user)
+            Q(sender=user, receiver=target_user) |
+            Q(sender=target_user, receiver=user)
         ).order_by('created_at')
 
+        # 3. Отмечаем прочитанными (только входящие)
         unread_messages = messages.filter(receiver=user, is_read=False)
         unread_messages.update(is_read=True)
 
         serializer = self.get_serializer(messages, many=True)
-        return Response(serializer.data)
+
+        # 4. Добавляем инфу о собеседнике (чтобы фронт мог сразу отрисовать шапку)
+        # Используем UserShortSerializer для краткой инфы
+        partner_data = UserShortSerializer(target_user, context={'request': request}).data
+
+        return Response({
+            'partner': partner_data,
+            'messages': serializer.data
+        })
 
     @action(detail=False, methods=['get'])
     def inbox(self, request):
         """
         Список диалогов (Inbox).
-        Возвращает список пользователей, с которыми была переписка,
-        плюс последнее сообщение от каждого.
         """
         user = request.user
 
-
+        # Получаем последние сообщения для каждого диалога
+        # (Это упрощенная версия, для продакшена лучше использовать annotate и Subquery)
         messages = Message.objects.filter(
             Q(sender=user) | Q(receiver=user)
         ).order_by('-created_at')
-
 
         conversations = []
         processed_partners = set()
 
         for message in messages:
-
-            if message.sender == user:
-                partner = message.receiver
-            else:
-                partner = message.sender
+            partner = message.receiver if message.sender == user else message.sender
 
             if partner.id not in processed_partners:
-
                 conversations.append({
-                    'partner': UserShortSerializer(partner).data,
+                    'partner': UserShortSerializer(partner, context={'request': request}).data,
                     'last_message': {
                         'text': message.text,
                         'is_read': message.is_read,
