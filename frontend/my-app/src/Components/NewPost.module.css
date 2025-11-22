@@ -1,3 +1,27 @@
+*{
+    margin: 0;
+    padding: 0;
+    text-decoration: none;
+    font-family: 'Onest';
+    box-sizing: border-box;
+}
+#root{
+}
+html, body {
+  height: 100%;
+  margin: 0; /* Убирает стандартные отступы браузера */
+  padding: 0;
+}
+
+.out_container{
+    width: 100%;      /* Задаем ширину 100% */
+  height: 100vh;    /* Высота контейнера на 100% высоты экрана */
+  display: flex;    /* Используем flexbox для выравнивания */
+  justify-content: center; /* Горизонтальное выравнивание */
+  align-items: center;    /* Вертикальное выравнивание */
+  background-color: #fffae4; /* Цвет фона для наглядности */
+}
+
 .container {
     max-width: 600px;
     margin: 0 auto;
@@ -20,8 +44,10 @@
     /* width: 96vw;
     margin-left: 2vw;
     margin-top: 2vw; */
-    height: 13vh;
+    height: 8vh;
     background-color: #fffef9;
+    border-bottom: 2px solid #3c3c3c;
+    margin-bottom: 1vh;
 }
 .main_afterheader{
     margin-top: 2vw;
@@ -70,7 +96,6 @@
 .title {
     font-family: "Onest", sans-serif;
     text-align: center;
-    margin-bottom: 25px;
     font-size: 2rem;
 }
 
@@ -93,6 +118,8 @@
 }
 
 .input, .textarea {
+    resize: none;
+    height: 10vh;
     padding: 12px;
     border: 2px solid #ccc;
     border-radius: 8px;
@@ -148,4 +175,19 @@
     color: red;
     text-align: center;
     font-weight: bold;
+}
+.ToButton{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.main_header__img{
+    height: 40px;
+    transition: transform 0.2s;
+}
+.main_header__img:hover{
+    transform: scale(1.1);
+}
+.main_header__img_logo{
+    height:5rem;
 }
