@@ -4,6 +4,7 @@ import styles from "./MyProfile.module.css";
 import axios from 'axios';
 import { useAuth } from '../Contexts/AuthContext';
 import NotificationBell from './NotificationBell';
+import {API_CONFIG} from '../config' //1
 
 function MyProfile() {
     const navigate = useNavigate(); // Хук для навигации
@@ -16,7 +17,7 @@ function MyProfile() {
 
     useEffect(()=>{
         const resp = async()=>{
-             await axios.get('http://10.124.215.133:8000/auth/users/me/', {
+             await axios.get(`${API_CONFIG.BASE_URL}/auth/users/me/`, {
             headers:{
                 "Authorization": `Bearer ${localStorage.getItem('access')}`
             }

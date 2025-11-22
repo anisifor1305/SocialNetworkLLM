@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import styles from './NotificationBell.module.css';
+import {API_CONFIG} from '../config' //1
 
 const NotificationBell = () => {
     const navigate = useNavigate();
@@ -48,7 +49,7 @@ const NotificationBell = () => {
         try {
             const token = localStorage.getItem('access');
             const url = reset 
-                ? 'http://10.124.215.133:8000/api/notifications/' 
+                ? `${API_CONFIG.BASE_URL}/api/notifications/` 
                 : nextPage;
 
             const resp = await axios.get(url, {
@@ -78,7 +79,7 @@ const NotificationBell = () => {
         e.stopPropagation();
         try {
             const token = localStorage.getItem('access');
-            await axios.post('http://10.124.215.133:8000/api/notifications/mark_all_read/', {}, {
+            await axios.post(`${API_CONFIG.BASE_URL}/api/notifications/mark_all_read/`, {}, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             

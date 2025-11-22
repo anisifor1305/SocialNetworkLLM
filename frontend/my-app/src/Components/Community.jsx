@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./Community.module.css";
 import NotificationBell from "./NotificationBell";
+import {API_CONFIG} from '../config' //1
 
 function Community() {
     const { id } = useParams();
@@ -16,7 +17,7 @@ function Community() {
 
     const fetchCommunityInfo = async () => {
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/communities/${id}/`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/communities/${id}/`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             setCommunity(resp.data);
@@ -27,7 +28,7 @@ function Community() {
 
     const fetchPosts = async () => {
         try {
-            const resp = await axios.get(`http://10.124.215.133:8000/api/posts/?community=${id}&limit=5`, {
+            const resp = await axios.get(`${API_CONFIG.BASE_URL}/api/posts/?community=${id}&limit=5`, {
                 headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
             });
             const postsResp = resp.data.results || resp.data;
@@ -42,11 +43,11 @@ function Community() {
     const handleLike = async (postId, isCurrentlyLiked) => {
         try {
             if (isCurrentlyLiked) {
-                await axios.post(`http://10.124.215.133:8000/api/posts/${postId}/like/`, {}, {
+                await axios.post(`${API_CONFIG.BASE_URL}/api/posts/${postId}/like/`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
                 });
             } else {
-                await axios.post(`http://10.124.215.133:8000/api/posts/${postId}/like/`, {}, {
+                await axios.post(`${API_CONFIG.BASE_URL}/api/posts/${postId}/like/`, {}, {
                     headers: { 'Authorization': `Bearer ${localStorage.getItem('access')}` }
                 });
             }

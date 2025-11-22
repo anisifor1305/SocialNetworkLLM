@@ -3,6 +3,7 @@ import { useState } from "react"
 import styles from "./Auth.module.css"
 import { useNavigate } from "react-router-dom"
 import { useAuth } from "../Contexts/AuthContext"
+import {API_CONFIG} from '../config' //1
 
 function Auth() {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function Auth() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     
-    const url = "http://10.124.215.133:8000/auth/jwt/create/"
+    const url = `${API_CONFIG.BASE_URL}/auth/jwt/create/`
     const valuesChanged = ()=>{
         setUsername(document.getElementById('1').value)
         setPassword(document.getElementById('3').value)

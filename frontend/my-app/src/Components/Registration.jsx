@@ -2,6 +2,7 @@ import styles from  "./Registration.module.css"
 import axios from "axios"
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
+import {API_CONFIG} from '../config' //1
 
 function Registration() {
     const navigate = useNavigate();
@@ -11,7 +12,7 @@ function Registration() {
     const [password, setPassword] = useState('')
     const [birthYear, setBirthYear] = useState('');
 
-    const url = "http://10.124.215.133:8000/auth/users/"
+    const url = `${API_CONFIG.BASE_URL}/auth/users/`
     const valuesChanged = ()=>{
         setNickname(document.getElementById('1').value)   
         setUsername(document.getElementById('2').value)
