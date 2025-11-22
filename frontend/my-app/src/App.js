@@ -20,7 +20,9 @@ function App() {
           <Route path="/auth" element={<Auth/>}></Route>
           <Route path="/registration" element={<Registration/>}></Route>
           <Route path="/" element={<ProtectedRoute><Main /></ProtectedRoute>} />
-          <Route path="/:handle" element={<ProtectedRoute><NotYourProfile /></ProtectedRoute>} />
+          <Route path="/:handle" element={<ProtectedRoute><NotYourProfile part="posts"/></ProtectedRoute>} />
+          <Route path="/:handle/friends" element={<ProtectedRoute><NotYourProfile part="friends"/></ProtectedRoute>} />
+          <Route path="/:handle/photos" element={<ProtectedRoute><NotYourProfile part="photos"/></ProtectedRoute>} />
            <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
         </Routes>
         </AuthProvider>
