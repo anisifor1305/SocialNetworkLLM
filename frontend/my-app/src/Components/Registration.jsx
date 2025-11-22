@@ -9,13 +9,15 @@ function Registration() {
     const [username, setUsername] = useState('')
     const [nickname, setNickname] = useState('')
     const [password, setPassword] = useState('')
-    
-    const url = "http://192.168.3.27:8000/auth/users/"
+    const [birthYear, setBirthYear] = useState('');
+
+    const url = "http://10.124.215.133:8000/auth/users/"
     const valuesChanged = ()=>{
         setNickname(document.getElementById('1').value)   
         setUsername(document.getElementById('2').value)
         setEmail(document.getElementById('3').value)
         setPassword(document.getElementById('4').value)
+        setBirthYear(document.getElementById('6').value)
     }
     const reg = async(e)=>{
             e.preventDefault()
@@ -25,6 +27,7 @@ function Registration() {
                 email: email,
                 nickname: nickname,
                 password: password,
+                birth_date: birthYear,
             })
             if(resp.status==201){
                 console.log(resp);
@@ -70,6 +73,9 @@ function Registration() {
                 </div>
                 <div className={styles.registration_EmailForm}>
                     <input className={styles.registration_Email} type="password" id='4' name='password' onChange={valuesChanged} placeholder="Пароль"/>
+                </div>
+                <div className={styles.registration_EmailForm}>
+                    <input className={styles.registration_Email} type="date" id='6' name='birth_date' onChange={valuesChanged} placeholder="Год рождения"/>
                 </div>
                 {/* <div className={styles.registration_PasswordForm}>
                     <input className={styles.registration_Password} type="text" placeholder="Пароль"/>
