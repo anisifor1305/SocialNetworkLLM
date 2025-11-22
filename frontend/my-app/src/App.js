@@ -13,6 +13,7 @@ import MyProfile from './Components/MyProfile'
 import Forums from './Components/Forums';
 import CreateForum from './Components/CreateForum';
 import Notifications from './Components/Notifications'
+import Messanger from './Components/Messanger'
 function App() {
   return (
     <div className="App">
@@ -44,7 +45,7 @@ function App() {
           <Route path="/forums" element={<ProtectedRoute><Forums /></ProtectedRoute>} />
           <Route path="/createforum" element={<ProtectedRoute><CreateForum /></ProtectedRoute>} />
           <Route path="/notifications" element={<ProtectedRoute><Notifications /></ProtectedRoute>} />
-
+          <Route path="/messanger" element={<ProtectedRoute><Messanger /></ProtectedRoute>} />
 
         </Routes>
         </AuthProvider>
