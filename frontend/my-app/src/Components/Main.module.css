@@ -7,6 +7,12 @@
 svg {
     fill: rgb(43, 39, 39);
 }
+
+.main_item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
 .main_out_container{
     padding: 10vh 10vh 0 10vh;
     background-color: #fffae4;
@@ -25,6 +31,7 @@ svg {
     margin-left: 2vw;
     margin-top: 2vw; */
     height: 13vh;
+    border-bottom: 2px solid rgb(191, 191, 191);
     background-color: #fffef9;
 }
 .main_afterheader{
