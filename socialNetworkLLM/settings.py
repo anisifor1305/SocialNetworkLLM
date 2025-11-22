@@ -6,25 +6,18 @@ from pathlib import Path
 import os
 from datetime import timedelta
 
-# --- 1. БАЗОВЫЕ НАСТРОЙКИ ПУТЕЙ ---
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# --- 2. БЕЗОПАСНОСТЬ ---
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-change-me-at-hackathon-please'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Разрешаем всем стучаться (для хакатона и тестов с другом)
 ALLOWED_HOSTS = ['*']
 
 
-# --- 3. ПРИЛОЖЕНИЯ (APPS) ---
 INSTALLED_APPS = [
-    # Стандартные
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,7 +25,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Сторонние библиотеки
     'rest_framework',
     'djoser',
     'rest_framework_simplejwt',
@@ -44,9 +36,8 @@ INSTALLED_APPS = [
 ]
 
 
-# --- 4. MIDDLEWARE (Охрана) ---
+
 MIDDLEWARE = [
-    # CORS должен быть первым!
     'corsheaders.middleware.CorsMiddleware',
 
     'django.middleware.security.SecurityMiddleware',
@@ -81,7 +72,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'socialNetworkLLM.wsgi.application'
 
 
-# --- 5. БАЗА ДАННЫХ ---
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -90,7 +80,6 @@ DATABASES = {
 }
 
 
-# --- 6. ВАЛИДАЦИЯ ПАРОЛЕЙ ---
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -107,32 +96,23 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# --- 7. ИНТЕРНАЦИОНАЛИЗАЦИЯ ---
-LANGUAGE_CODE = 'ru-ru'  # Можно поставить русский
+LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
 
-# --- 8. СТАТИКА (CSS, JS) ---
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles') # Для collectstatic
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
-# --- 9. МЕДИА (КАРТИНКИ) ---
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-# --- 10. НАСТРОЙКИ ID ---
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-# ==========================================
-#      НАСТРОЙКИ БИБЛИОТЕК (DRF, JWT)
-# ==========================================
-
-# --- DRF ---
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -151,7 +131,7 @@ DJOSER = {
     },
 }
 
-# --- JWT ---
+
 SIMPLE_JWT = {
    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
@@ -162,8 +142,7 @@ SIMPLE_JWT = {
 
 
 
-# --- CORS ---
-# Разрешаем всё на время хакатона
+
 CORS_ALLOW_ALL_ORIGINS = True
 # Если нужно будет закрыть, раскомментируй это и закомментируй строку выше:
 # CORS_ALLOWED_ORIGINS = [

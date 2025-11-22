@@ -40,7 +40,6 @@ class Community(models.Model):
     def __str__(self):
         return self.title
 
-
 class Subscription(models.Model):
     subscriber = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
     target_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')

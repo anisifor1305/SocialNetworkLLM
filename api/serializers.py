@@ -13,9 +13,12 @@ class UserShortSerializer(serializers.ModelSerializer):
     nickname = serializers.CharField(source='profile.nickname', read_only=True)
     handle = serializers.CharField(source='username', read_only=True)
 
+
     class Meta:
         model = User
         fields = ['id', 'handle', 'nickname', 'avatar', 'status']
+
+
 
 
 class CustomUserCreateSerializer(BaseUserCreateSerializer):
@@ -45,18 +48,32 @@ class CustomUserCreateSerializer(BaseUserCreateSerializer):
         return attrs
 
     def validate_birth_date(self, value):
-        """Валидация и конвертация даты из формата DD.MM.YYYY или YYYY-MM-DD"""
+        """Валидация даты рождения: формат и проверка на будущее"""
         date_formats = ['%d.%m.%Y', '%Y-%m-%d']
+        parsed_date = None
 
         for date_format in date_formats:
             try:
-                return datetime.strptime(value, date_format).date()
+                parsed_date = datetime.strptime(value, date_format).date()
+                break
             except ValueError:
                 continue
 
-        raise serializers.ValidationError(
-            "Неверный формат даты. Используйте формат ДД.ММ.ГГГГ (13.05.2007) или ГГГГ-ММ-ДД (2007-05-13)"
-        )
+        if not parsed_date:
+            raise serializers.ValidationError(
+                "Неверный формат даты. Используйте формат ДД.ММ.ГГГГ (13.05.2007) или ГГГГ-ММ-ДД (2007-05-13)"
+            )
+
+        if parsed_date > datetime.now().date():
+            raise serializers.ValidationError("Дата рождения не может быть в будущем! Вы кто за шта?")
+
+        minimal_age_to_use_app = 12
+        if parsed_date.year < datetime.now().date().year - minimal_age_to_use_app:
+            raise serializers.ValidationError("Для регистрации вам должно быть больше 12 лет!")
+
+        return parsed_date
+
+
 
     def create(self, validated_data):
         nickname = validated_data.pop('nickname', '')
@@ -73,17 +90,13 @@ class CustomUserCreateSerializer(BaseUserCreateSerializer):
 
 
 class CurrentUserSerializer(serializers.ModelSerializer):
-    # ===============================================================
-    # 1. ПОЛЯ, КОТОРЫЕ МЫ МЕНЯЕМ (Profile)
-    # ===============================================================
-    # Убираем read_only, ставим required=False для PATCH-запросов
 
     nickname = serializers.CharField(source='profile.nickname', required=False)
     bio = serializers.CharField(source='profile.bio', required=False, allow_blank=True)
     status = serializers.CharField(source='profile.status', required=False, allow_blank=True)
     avatar = serializers.ImageField(source='profile.avatar', required=False, allow_null=True)
 
-    # Дата рождения (с защитой от кривых форматов)
+
     birth_date = serializers.DateField(
         source='profile.birth_date',
         required=False,
@@ -92,9 +105,7 @@ class CurrentUserSerializer(serializers.ModelSerializer):
         input_formats=['%Y-%m-%d', '%d.%m.%Y', 'iso-8601']  # Как принимаем
     )
 
-    # ===============================================================
-    # 2. ПОЛЯ, КОТОРЫЕ МЫ НЕ ТРОГАЕМ (User) -> ВСЕ READ_ONLY
-    # ===============================================================
+
 
     username = serializers.CharField(read_only=True)  # Handle
     email = serializers.EmailField(read_only=True)
@@ -105,11 +116,12 @@ class CurrentUserSerializer(serializers.ModelSerializer):
     is_active = serializers.BooleanField(read_only=True)
     is_staff = serializers.BooleanField(read_only=True)
     is_superuser = serializers.BooleanField(read_only=True)
+    is_subscribed = serializers.SerializerMethodField()
+    is_friend = serializers.SerializerMethodField()
 
-    # Алиас для удобства фронта (handle = username)
     handle = serializers.CharField(source='username', read_only=True)
 
-    # Ваши счетчики (Read only)
+
     posts_count = serializers.SerializerMethodField()
     friends_count = serializers.SerializerMethodField()
     friends = serializers.SerializerMethodField()
@@ -121,28 +133,33 @@ class CurrentUserSerializer(serializers.ModelSerializer):
             'nickname', 'bio', 'avatar', 'status', 'birth_date',
             'posts_count', 'friends_count', 'friends',
             'first_name', 'last_name', 'date_joined', 'last_login',
-            'is_active', 'is_staff', 'is_superuser'
+            'is_active', 'is_staff', 'is_superuser', 'is_subscribed',
+            'is_friend'
         ]
 
-    # ===============================================================
-    # 3. ЛОГИКА ОБНОВЛЕНИЯ (Только профиль!)
-    # ===============================================================
+
     def update(self, instance, validated_data):
-
         profile_data = validated_data.pop('profile', {})
-
-
-
         profile = instance.profile
-
-        # Проходим по всем полям, которые прислал фронт (nickname, bio, etc.)
         for attr, value in profile_data.items():
             setattr(profile, attr, value)
-
-        # Сохраняем ТОЛЬКО профиль
         profile.save()
 
         return instance
+
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request', {}).user
+        if user and not user.is_anonymous:
+            return Subscription.objects.filter(subscriber=user, target_user=obj).exists()
+        return False
+
+    def get_is_friend(self, obj):
+        user = self.context.get('request', {}).user
+        if user and not user.is_anonymous:
+            i_follow = Subscription.objects.filter(subscriber=user, target_user=obj).exists()
+            he_follows = Subscription.objects.filter(subscriber=obj, target_user=user).exists()
+            return i_follow and he_follows
+        return False
 
     def get_posts_count(self, obj):
         return obj.posts.filter(is_published=True).count()
@@ -173,6 +190,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     friends_count = serializers.SerializerMethodField()
     friends = serializers.SerializerMethodField()
 
+    is_subscribed = serializers.SerializerMethodField()
+    is_friend = serializers.SerializerMethodField()
+
+
     birth_date = serializers.DateField(
         format='%d.%m.%Y',
         input_formats=['%d.%m.%Y', '%Y-%m-%d', 'iso-8601']
@@ -182,7 +203,23 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = ['id', 'handle', 'nickname', 'email', 'bio', 'avatar', 'status',
                   'birth_date',
-                  'posts_count', 'friends_count', 'friends']
+                  'posts_count', 'friends_count', 'friends', 'is_subscribed', 'is_friend']
+
+    def get_is_subscribed(self, obj):
+        user = self.context.get('request', {}).user
+        if user and not user.is_anonymous:
+            # ИСПРАВЛЕНО: используем obj.user вместо obj
+            return Subscription.objects.filter(subscriber=user, target_user=obj.user).exists()
+        return False
+
+    def get_is_friend(self, obj):
+        user = self.context.get('request', {}).user
+        if user and not user.is_anonymous:
+            # ИСПРАВЛЕНО: везде используем obj.user
+            i_follow = Subscription.objects.filter(subscriber=user, target_user=obj.user).exists()
+            he_follows = Subscription.objects.filter(subscriber=obj.user, target_user=user).exists()
+            return i_follow and he_follows
+        return False
 
     def get_posts_count(self, obj):
         return obj.user.posts.filter(is_published=True).count()

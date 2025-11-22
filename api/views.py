@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db.models import Q
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
 from .models import Profile, Community, Post, Subscription, Like, Topic, Notification, Message
 from .serializers import (
@@ -40,6 +40,13 @@ class CommunityViewSet(viewsets.ModelViewSet):
         if self.action == 'list':
             return Community.objects.order_by('?')
         return Community.objects.all()
+
+    @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated])
+    def randon_communities(self, request):
+        user = request.user
+        groups = Community.objects.all()
+        serializer = self.get_serializer(groups, many=True)
+        return Response(serializer.data)
 
     @action(detail=False, methods=['get'], permission_classes=[IsAuthenticated], url_path='my')
     def my_communities(self, request):
@@ -184,8 +191,24 @@ class PostViewSet(viewsets.ModelViewSet):
             'results': serializer.data
         })
 
+    @action(detail=False, methods=['get'])
+    def random(self, request):
+        """
+        Эндпоинт: /api/posts/random/
+        Возвращает ОДИН случайный пост (объект, не список).
+        """
+        random_post = self.get_queryset().order_by('?').first()
 
-# --- 4. ПОДПИСКИ ---
+        if not random_post:
+            return Response(
+                {"detail": "В базе пока нет постов 😔"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = self.get_serializer(random_post)
+        return Response(serializer.data)
+
+
 class SubscriptionViewSet(viewsets.ModelViewSet):
     queryset = Subscription.objects.all()
     serializer_class = SubscriptionSerializer
@@ -194,20 +217,30 @@ class SubscriptionViewSet(viewsets.ModelViewSet):
     filterset_fields = ['subscriber', 'target_user']
 
     def perform_create(self, serializer):
-        target_id = self.request.data.get('target_user_id')
-        if target_id and int(target_id) == self.request.user.id:
-            raise PermissionDenied("Нельзя подписаться на себя")
+        target_user = serializer.validated_data.get('target_user')
 
-        if target_id:
-            already_subscribed = Subscription.objects.filter(
-                subscriber=self.request.user,
-                target_user_id=int(target_id)
-            ).exists()
+        if target_user == self.request.user:
+            raise ValidationError({"detail": "Нельзя подписаться на самого себя"})
 
-            if already_subscribed:
-                raise PermissionDenied("Вы уже подписаны на этого пользователя")
+        if Subscription.objects.filter(subscriber=self.request.user, target_user=target_user).exists():
+            raise ValidationError({"detail": "Вы уже подписаны на этого пользователя"})
 
         serializer.save(subscriber=self.request.user)
+
+        # target_id = self.request.data.get('target_user_id')
+        # if target_id and int(target_id) == self.request.user.id:
+        #     raise PermissionDenied("Нельзя подписаться на себя")
+        #
+        # if target_id:
+        #     already_subscribed = Subscription.objects.filter(
+        #         subscriber=self.request.user,
+        #         target_user_id=int(target_id)
+        #     ).exists()
+        #
+        #     if already_subscribed:
+        #         raise PermissionDenied("Вы уже подписаны на этого пользователя")
+        #
+        # serializer.save(subscriber=self.request.user)
 
     @action(detail=False, methods=['post'], permission_classes=[IsAuthenticated])
     def unfollow(self, request):
